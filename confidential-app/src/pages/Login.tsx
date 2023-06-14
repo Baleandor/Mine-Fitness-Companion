@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-// import { userOne } from '../mockBackend/users'
+import { userOne } from '../mockBackend/users'
 
 
 const LoginSchema = z.object({
@@ -18,9 +18,9 @@ export default function Login() {
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormSchemaType>({ resolver: zodResolver(LoginSchema) })
     const onSubmit: SubmitHandler<LoginFormSchemaType> = (data) => {
-        // if (userOne.get('email') === data.email) {
-        //     console.log('WINNER WINNER CHICKEN DINNER')
-        // }
+        if (userOne.get('email') === data.email) {
+            console.log('WINNER WINNER CHICKEN DINNER')
+        }
     }
 
 

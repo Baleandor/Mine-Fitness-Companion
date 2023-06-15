@@ -31,7 +31,7 @@ export default function Register() {
 
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(RegisterSchema) })
     const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
-       
+        setTimeout(() => { console.log(data) }, 2000)
     }
 
 

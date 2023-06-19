@@ -8,6 +8,7 @@ import Root from './pages/Root';
 import Register from './pages/Register';
 import { store } from './store';
 import { Provider } from 'react-redux';
+import UserProfile from './pages/UserProfile';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+      },
+      {
+        path: "user-profile",
+        element: <UserProfile />,
       },
     ]
   },

@@ -14,9 +14,8 @@ type LoginFormSchemaType = z.infer<typeof LoginSchema>
 
 export default function Login() {
 
-
-
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormSchemaType>({ resolver: zodResolver(LoginSchema) })
+    
     const onSubmit: SubmitHandler<LoginFormSchemaType> = (data) => {
         if (userOne.get('email') === data.email) {
             console.log('WINNER WINNER CHICKEN DINNER')

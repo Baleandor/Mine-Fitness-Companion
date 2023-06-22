@@ -6,7 +6,7 @@ userOne.set('email', 'jotaro@oraora.com')
 userOne.set('password', 'jolyne')
 userOne.set('role', 'user')
 userOne.set('gender', 'male')
-userOne.set('dateOfBirth', '1')
+userOne.set('dateOfBirth', '01-01-1986')
 userOne.set('height', '195')
 
 

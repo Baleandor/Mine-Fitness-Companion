@@ -9,6 +9,8 @@ import Register from './pages/Register';
 import { store } from './store';
 import { Provider } from 'react-redux';
 import UserProfile from './pages/UserProfile';
+import UpdateMeasurements from './pages/UpdateMeasurements';
+import UpdateUserBasicInfo from './pages/UpdateUserBasicInfo';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,14 @@ const router = createBrowserRouter([
       {
         path: "user-profile",
         element: <UserProfile />,
+      },
+      {
+        path: "user-profile/update-measurements",
+        element: <UpdateMeasurements />,
+      },
+      {
+        path: "user-profile/update-basic-info",
+        element: <UpdateUserBasicInfo />,
       },
     ]
   },

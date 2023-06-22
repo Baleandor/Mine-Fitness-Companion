@@ -13,6 +13,8 @@
     "@hookform/resolvers": "^3.1.1",
     "@reduxjs/toolkit": "^1.9.5",
     "@types/react-redux": "^7.1.25",
+    "antd": "^5.6.2",
+    "dayjs": "^1.11.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.3",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@types/react": "^18.0.37",
+    "@types/react-datepicker": "^4.11.2",
     "@types/react-dom": "^18.0.11",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",

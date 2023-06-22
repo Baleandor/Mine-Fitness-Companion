@@ -1,12 +1,12 @@
 export const exercise = new Map()
 
-exercise.set('Id', '1')
-exercise.set('ExerciseType', 'Deadlift')
-exercise.set('Sets', '4')
-exercise.set('Repetitions', '10') //optional
-exercise.set('Weight', '420') //optional
-exercise.set('Time', '') //optional
-exercise.set('Distance', '') //optional
+exercise.set('id', '1')
+exercise.set('exerciseType', 'deadlift')
+exercise.set('sets', '4')
+exercise.set('repetitions', '10') //optional
+exercise.set('weight', '420') //optional
+exercise.set('time', '') //optional
+exercise.set('distance', '') //optional
 
 
 

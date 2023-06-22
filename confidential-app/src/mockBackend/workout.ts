@@ -1,9 +1,9 @@
 export const workout = new Map()
 
-workout.set('Id', '1')
-workout.set('User', 'Jotaro')
-workout.set('Exercises', 'Deadlift')
-workout.set('Date', '06-06-2026')
+workout.set('id', '1')
+workout.set('user', 'Jotaro')
+workout.set('exercises', ['deadlift'])
+workout.set('date', [1685960814668])
 
 
 

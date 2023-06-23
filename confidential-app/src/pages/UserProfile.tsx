@@ -72,6 +72,9 @@ export default function UserProfile() {
                 <div>
                     <button className="p-1 border rounded border-red-700" onClick={() => navigate('update-measurements')}>Update Measurements</button>
                 </div>
+                <div>
+                    <button className="p-1 border rounded border-red-700" onClick={() => navigate('measurements-over-time')}>Check Measurements Timeline</button>
+                </div>
             </div>
 
             <div className="flex flex-col p-1">

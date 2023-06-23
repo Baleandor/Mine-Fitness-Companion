@@ -12,6 +12,7 @@ import UserProfile from './pages/UserProfile';
 import UpdateMeasurements from './pages/UpdateMeasurements';
 import UpdateUserBasicInfo from './pages/UpdateUserBasicInfo';
 import MeasurementsOverTime from './pages/MeasurementsOverTime';
+import ExerciseLibrary from './pages/ExerciseLibrary';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "user-profile/measurements-over-time",
         element: <MeasurementsOverTime />,
+      },
+      {
+        path: "exercise-library",
+        element: <ExerciseLibrary />,
       },
     ]
   },

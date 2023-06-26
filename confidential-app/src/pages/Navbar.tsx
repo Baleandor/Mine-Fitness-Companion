@@ -19,6 +19,9 @@ export default function Navbar() {
                     <Link to={'/register'} className="p-2">Register</Link>
                 </div>
             }
+            <div>
+                <Link to={'/exercise-library'} className="p-2">Exercise Library</Link>
+            </div>
 
         </nav>
     )

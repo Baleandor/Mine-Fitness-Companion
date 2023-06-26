@@ -25,7 +25,7 @@ export default function Login() {
     const user = useAppSelector((state) => state.user.value)
     const onSubmit: SubmitHandler<LoginFormSchemaType> = (data) => {
         if (userOne.get('email') === data.email) {
-            dispatch(login({ name: data.name, email: data.email }))
+            dispatch(login({ name: data.name, email: data.email}))
             console.log(user)
         }
     }

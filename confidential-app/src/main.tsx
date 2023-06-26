@@ -13,6 +13,7 @@ import UpdateMeasurements from './pages/UpdateMeasurements';
 import UpdateUserBasicInfo from './pages/UpdateUserBasicInfo';
 import MeasurementsOverTime from './pages/MeasurementsOverTime';
 import ExerciseLibrary from './pages/ExerciseLibrary';
+import ExerciseLibraryEditExercise from './pages/ExerciseLibraryEditExercise';
 
 const router = createBrowserRouter([
   {
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
         path: "exercise-library",
         element: <ExerciseLibrary />,
       },
+      {
+        path: 'exercise-library/edit/:exercise_id',
+        element: <ExerciseLibraryEditExercise />
+      }
     ]
   },
 ]);

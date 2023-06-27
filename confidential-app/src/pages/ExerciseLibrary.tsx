@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"
 
 
 
+
 export default function ExerciseLibrary() {
 
     const [searchParams, setSearchParams] = useState('')
@@ -21,6 +22,8 @@ export default function ExerciseLibrary() {
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchParams(event.target.value.toLocaleLowerCase())
     }
+
+   
 
     const search = () => {
         const search = []

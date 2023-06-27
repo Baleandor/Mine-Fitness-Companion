@@ -1,17 +1,17 @@
 import { useNavigate } from "react-router-dom"
 import { measurementEvent } from "../mockBackend/measurementEvent"
 import { userOne } from "../mockBackend/users"
-import { workout } from "../mockBackend/workout"
+import { workoutOne } from "../mockBackend/workout"
 import dayjs from "dayjs"
 
 
 export default function UserProfile() {
 
-    const exercises = workout.get('exercises')
+    const exercises = workoutOne.get('exercises')
 
     const measurementDate = dayjs(measurementEvent.get('date')[measurementEvent.get('date').length - 1]).format('DD/MM/YYYY')
 
-    const workoutDate = dayjs(workout.get('date')[workout.get('date').length - 1]).format('DD/MM/YYYY')
+    const workoutDate = dayjs(workoutOne.get('date')[workoutOne.get('date').length - 1]).format('DD/MM/YYYY')
 
     const birthDate = dayjs(userOne.get('dateOfBirth')[userOne.get('dateOfBirth').length - 1]).format('DD/MM/YYYY')
 
@@ -92,6 +92,9 @@ export default function UserProfile() {
                 </div>
                 <div>
                     <span>Date: {workoutDate}</span>
+                </div>
+                <div>
+                    <button className="p-1 border rounded border-red-700" onClick={() => navigate('/workouts')}>View Workouts</button>
                 </div>
             </div>
         </div>

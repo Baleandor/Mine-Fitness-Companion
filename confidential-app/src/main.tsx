@@ -14,6 +14,8 @@ import UpdateUserBasicInfo from './pages/UpdateUserBasicInfo';
 import MeasurementsOverTime from './pages/MeasurementsOverTime';
 import ExerciseLibrary from './pages/ExerciseLibrary';
 import ExerciseLibraryEditExercise from './pages/ExerciseLibraryEditExercise';
+import EditWorkout from './pages/Workouts';
+import Workouts from './pages/Workouts';
 
 const router = createBrowserRouter([
   {
@@ -52,7 +54,16 @@ const router = createBrowserRouter([
       {
         path: 'exercise-library/edit/:exercise_id',
         element: <ExerciseLibraryEditExercise />
-      }
+      },
+      {
+        path: 'workouts',
+        element: <Workouts />
+      },
+      {
+        path: 'workouts/edit/:workout_id',
+        element: <EditWorkout />
+      },
+    
     ]
   },
 ]);

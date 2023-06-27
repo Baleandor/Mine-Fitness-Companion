@@ -12,14 +12,6 @@ const initialState: userStateType = {
     value: initialStateValue
 }
 
-//TODO ask about the async thunk login
-// export const loginUser = createAsyncThunk(
-//     'user/loginUser',
-//     async (data) => {
-//         //This is where axios or RTK query would go. Can't implement, for now, with how mock BE is setup.
-//         localStorage.setItem('user', JSON.stringify(data))
-//     }
-// )
 
 export const userSlice = createSlice({
     name: 'user',

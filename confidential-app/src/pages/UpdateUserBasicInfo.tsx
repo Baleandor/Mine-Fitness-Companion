@@ -102,7 +102,7 @@ export default function UpdateUserBasicInfo() {
 
             </div>
             <div className='p-1 flex flex-col'>
-                <button className="p-1 border rounded border-red-700">Update Measurements</button>
+                <button className="p-1 border rounded border-red-700">Update Info</button>
             </div>
         </form>
     )

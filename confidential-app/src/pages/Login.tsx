@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { userOne } from '../mockBackend/users'
 import { useAppDispatch, useAppSelector } from '../hooks/hooks'
 import { login } from '../features/userSlice'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -19,6 +20,8 @@ type LoginFormSchemaType = z.infer<typeof LoginSchema>
 
 export default function Login() {
 
+const navigate = useNavigate()
+
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormSchemaType>({ resolver: zodResolver(LoginSchema) })
 
     const dispatch = useAppDispatch()
@@ -26,7 +29,7 @@ export default function Login() {
     const onSubmit: SubmitHandler<LoginFormSchemaType> = (data) => {
         if (userOne.get('email') === data.email) {
             dispatch(login({ name: data.name, email: data.email}))
-            console.log(user)
+            navigate('/user-profile')
         }
     }
 

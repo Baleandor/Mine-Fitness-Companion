@@ -16,6 +16,7 @@ import ExerciseLibrary from './pages/ExerciseLibrary';
 import ExerciseLibraryEditExercise from './pages/ExerciseLibraryEditExercise';
 import EditWorkout from './pages/Workouts';
 import Workouts from './pages/Workouts';
+import WeightChartsOverTime from './pages/WeightChartsOverTime';
 
 const router = createBrowserRouter([
   {
@@ -63,7 +64,10 @@ const router = createBrowserRouter([
         path: 'workouts/edit/:workout_id',
         element: <EditWorkout />
       },
-    
+      {
+        path: "user-profile/weight-over-time",
+        element: <WeightChartsOverTime />,
+      },
     ]
   },
 ]);

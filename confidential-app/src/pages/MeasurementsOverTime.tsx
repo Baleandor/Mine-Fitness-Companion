@@ -1,37 +1,69 @@
+import { useState } from "react"
+import { measurementData } from "../mockBackend/measurementEvent"
+import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
 import dayjs from "dayjs"
-import { measurementEvent } from "../mockBackend/measurementEvent"
-
 
 export default function MeasurementsOverTime() {
-    const measurementDates = measurementEvent.get('date')
+
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
+    const [chartDateRange, setChartDateRange] = useState([])
+
+    const [showChart, setShowChart] = useState(false)
+
+    const handleStartDateOnChange = (event) => {
+        setStartDate(event.target.value)
+    }
+
+    const handleEndDateOnChange = (event) => {
+        setEndDate(event.target.value)
+    }
+
+    const getDateRange = () => {
+        const dateRage: string[] = []
+        measurementData.forEach((line) => {
+            dateRage.push(line.date)
+        })
+    }
+
+    const toggleChart = () => {
+        getDateRange()
+        setShowChart(!showChart)
+        // console.log(dayjs(startDate).format('DD/MM/YYYY'), dayjs(endDate).format('DD/MM/YYYY'))
+    }
+
 
     return (
         <div className="flex flex-col justify-center items-center">
-            <div>
+            <div className="p-1">
                 <span>Measurements Over Time</span>
             </div>
-            <div>
-                <span>Weight: {measurementEvent.get('weight').join(" ")}</span>
+            <div className="flex">
+                <div className="p-1">
+                    <span className="p-1">Start Date</span>
+                    <input type="date" onChange={handleStartDateOnChange}></input>
+                </div>
+                <div className="p-1">
+                    <span className="p-1">Start Date</span>
+                    <input type="date" onChange={handleEndDateOnChange}></input>
+                </div>
+                <button className="p-1 border rounded-md border-red-700" onClick={toggleChart}>Show Chart</button>
             </div>
-            <div>
-                <span>Chest: {measurementEvent.get('chest').join(" ")}</span>
-            </div>
-            <div>
-                <span>Waist: {measurementEvent.get('waist').join(" ")}</span>
-            </div>
-            <div>
-                <span>Hips: {measurementEvent.get('hips').join(" ")}</span>
-            </div>
-            <div>
-                <span>Biceps: {measurementEvent.get('biceps').join(" ")}</span>
-            </div>
-            <div>
-                <span>Dates:</span>
-                {measurementDates.map((day) => {
-                    return <span className="p-1" key={day}>{dayjs(day).format('DD/MM/YYYY')}</span>
-                })}
-
-            </div>
+            {
+                showChart &&
+                <LineChart width={600} height={300} data={measurementData}>
+                    <Line type={"monotone"} dataKey={'weight'} stroke="red" strokeWidth={2}></Line>
+                    <Line type={"monotone"} dataKey={'chest'} stroke="blue" strokeWidth={2}></Line>
+                    <Line type={"monotone"} dataKey={'waist'} stroke="yellow" strokeWidth={2}></Line>
+                    <Line type={"monotone"} dataKey={'hips'} stroke="brown" strokeWidth={2}></Line>
+                    <Line type={"monotone"} dataKey={'biceps'} stroke="magenta" strokeWidth={2}></Line>
+                    <CartesianGrid stroke="#ccc" />
+                    <XAxis dataKey={'date'} />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                </LineChart>
+            }
         </div>
     )
 }

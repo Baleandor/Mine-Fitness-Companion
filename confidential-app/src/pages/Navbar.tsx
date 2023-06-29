@@ -1,17 +1,24 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 
 export default function Navbar() {
 
+   
+
+
     const user = localStorage.getItem('user')
 
+    const logout = () => {
+        localStorage.clear()
+    }
 
     return (
         <nav className="flex">
             {user ?
                 <div>
                     <Link to={'/user-profile'} className="p-2">Profile</Link>
-                    <Link to={'/'} className="p-2">Logout</Link>
+                    <Link to={'/'} className="p-2" onClick={logout}>Logout</Link>
 
                 </div> :
                 <div>

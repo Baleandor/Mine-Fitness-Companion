@@ -94,6 +94,9 @@ export default function UserProfile() {
                     <span>Date: {workoutDate}</span>
                 </div>
                 <div>
+                    <button className="p-1 border rounded border-red-700" onClick={() => navigate('weight-over-time')}>View Weight Over Time</button>
+                </div>
+                <div>
                     <button className="p-1 border rounded border-red-700" onClick={() => navigate('/workouts')}>View Workouts</button>
                 </div>
             </div>

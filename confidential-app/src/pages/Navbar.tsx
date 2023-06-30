@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { logout } from "../features/userSlice";
+import { logout } from "../redux/userSlice";
 import { ROUTE_PATH } from "../util/urls";
 
 
@@ -11,7 +11,6 @@ export default function Navbar() {
     const user = useAppSelector((state) => state.user.value.name)
 
     const userLogout = () => {
-        localStorage.clear()
         dispatch(logout())
     }
 

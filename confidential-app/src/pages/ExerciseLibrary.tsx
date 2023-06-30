@@ -4,15 +4,11 @@ import { useNavigate } from "react-router-dom"
 import { useAppSelector } from "../hooks/hooks"
 
 
-
-
-
-
 export default function ExerciseLibrary() {
 
     const [searchParams, setSearchParams] = useState('')
 
-    const [searchResult, setSearchResult] = useState([])
+    const [searchResult, setSearchResult] = useState<string[]>([])
 
     const navigate = useNavigate()
 
@@ -24,8 +20,7 @@ export default function ExerciseLibrary() {
     }
 
 
-
-    const search = () => {
+    const findExercise = () => {
         const search = []
         for (let key in exerciseTypes) {
             if (searchParams.includes(exerciseTypes[key].name.toLocaleLowerCase())) {
@@ -38,12 +33,13 @@ export default function ExerciseLibrary() {
         setSearchResult(search)
     }
 
+
     return (
         <div className="flex flex-col items-center p-2">
             <div>
                 <span className="p-1">Search Exercise</span>
                 <input type="search" onChange={handleOnChange} className="p-1" ></input>
-                <button onClick={search} className="p-1 border border-red-400 rounded-md">Find</button>
+                <button onClick={findExercise} className="p-1 border border-red-400 rounded-md">Find</button>
             </div>
             <div className="p-1">
                 {searchResult.length > 0 && searchResult.map((result) => {
@@ -55,7 +51,6 @@ export default function ExerciseLibrary() {
                         </div>
                     )
                 })}
-
             </div>
         </div>
     )

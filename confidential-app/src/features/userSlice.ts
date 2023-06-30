@@ -21,11 +21,9 @@ export const userSlice = createSlice({
             const { name, email } = action.payload
             state.value.name = name
             state.value.email = email
-            localStorage.setItem('user', JSON.stringify(action.payload))
         },
         logout: (state) => {
             state.value = initialStateValue
-            localStorage.clear()
         }
     }
 })

@@ -1,12 +1,12 @@
 import './index.css'
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "./index.css";
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
+import { store } from './store';
+import { Provider } from 'react-redux';
+import { ROUTE_PATH } from './util/urls';
 import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import Root from './pages/Root';
 import Register from './pages/Register';
-import { store } from './store';
-import { Provider } from 'react-redux';
 import UserProfile from './pages/UserProfile';
 import UpdateMeasurements from './pages/UpdateMeasurements';
 import UpdateUserBasicInfo from './pages/UpdateUserBasicInfo';
@@ -18,62 +18,23 @@ import Workouts from './pages/Workouts';
 import WeightChartsOverTime from './pages/WeightChartsOverTime';
 
 
-
 export default function App() {
 
-    const router = createBrowserRouter([
-        {
-            path: "/",
-            element: <Root />,
-            errorElement: <NotFound />,
-            children: [
-                {
-                    path: "login",
-                    element: <Login />,
-                },
-                {
-                    path: "register",
-                    element: <Register />,
-                },
-                {
-                    path: "user-profile",
-                    element: <UserProfile />,
-                },
-                {
-                    path: "user-profile/update-measurements",
-                    element: <UpdateMeasurements />,
-                },
-                {
-                    path: "user-profile/update-basic-info",
-                    element: <UpdateUserBasicInfo />,
-                },
-                {
-                    path: "user-profile/measurements-over-time",
-                    element: <MeasurementsOverTime />,
-                },
-                {
-                    path: "exercise-library",
-                    element: <ExerciseLibrary />,
-                },
-                {
-                    path: 'exercise-library/edit/:exercise_id',
-                    element: <ExerciseLibraryEditExercise />
-                },
-                {
-                    path: 'workouts',
-                    element: <Workouts />
-                },
-                {
-                    path: 'workouts/edit/:workout_id',
-                    element: <EditWorkout />
-                },
-                {
-                    path: "user-profile/weight-over-time",
-                    element: <WeightChartsOverTime />,
-                },
-            ]
-        },
-    ]);
+    const router = createBrowserRouter(createRoutesFromElements(
+        <Route path={ROUTE_PATH.HOME} element={<Root />} errorElement={<NotFound />}>
+            <Route path={ROUTE_PATH.LOGIN} element={<Login />} />
+            <Route path={ROUTE_PATH.REGISTER} element={<Register />} />
+            <Route path={ROUTE_PATH.USER_PROFILE} element={<UserProfile />} />
+            <Route path={ROUTE_PATH.USER_PROFILE_MEASUREMENTS} element={<UpdateMeasurements />} />
+            <Route path={ROUTE_PATH.USER_PROFILE_BASIC_INFO} element={<UpdateUserBasicInfo />} />
+            <Route path={ROUTE_PATH.USER_PROFILE_MEASUREMENTS_OVER_TIME} element={<MeasurementsOverTime />} />
+            <Route path={ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME} element={<WeightChartsOverTime />} />
+            <Route path={ROUTE_PATH.EXERCISE_LIBRARY} element={<ExerciseLibrary />} />
+            <Route path={ROUTE_PATH.EXERCISE_LIBRARY_EDIT_EXERCISE} element={<ExerciseLibraryEditExercise />} />
+            <Route path={ROUTE_PATH.WORKOUTS} element={<Workouts />} />
+            <Route path={ROUTE_PATH.EDIT_WORKOUT} element={<EditWorkout />} />
+        </Route>
+    ))
 
 
     return (

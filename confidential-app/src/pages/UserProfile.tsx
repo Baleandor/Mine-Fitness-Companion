@@ -3,6 +3,7 @@ import { measurementEvent } from "../mockBackend/measurementEvent"
 import { userOne } from "../mockBackend/users"
 import { workoutOne } from "../mockBackend/workout"
 import dayjs from "dayjs"
+import { ROUTE_PATH } from "../util/urls"
 
 
 export default function UserProfile() {
@@ -40,7 +41,7 @@ export default function UserProfile() {
                     <span>Height: {userOne.get('height')}</span>
                 </div>
                 <div>
-                    <button className="p-1 border rounded border-red-700" onClick={() => navigate('update-basic-info')}>Update Basic Info</button>
+                    <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_BASIC_INFO)}>Update Basic Info</button>
                 </div>
             </div>
 
@@ -70,10 +71,10 @@ export default function UserProfile() {
                     <span>Date: {measurementDate}</span>
                 </div>
                 <div>
-                    <button className="p-1 border rounded border-red-700" onClick={() => navigate('update-measurements')}>Update Measurements</button>
+                    <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS)}>Update Measurements</button>
                 </div>
                 <div>
-                    <button className="p-1 border rounded border-red-700" onClick={() => navigate('measurements-over-time')}>Check Measurements Timeline</button>
+                    <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS_OVER_TIME)}>Check Measurements Timeline</button>
                 </div>
             </div>
 
@@ -94,10 +95,10 @@ export default function UserProfile() {
                     <span>Date: {workoutDate}</span>
                 </div>
                 <div>
-                    <button className="p-1 border rounded border-red-700" onClick={() => navigate('weight-over-time')}>View Weight Over Time</button>
+                    <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME)}>View Weight Over Time</button>
                 </div>
                 <div>
-                    <button className="p-1 border rounded border-red-700" onClick={() => navigate('/workouts')}>View Workouts</button>
+                    <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.WORKOUTS)}>View Workouts</button>
                 </div>
             </div>
         </div>

@@ -3,6 +3,7 @@ import { exerciseTypes } from "../mockBackend/exerciseType"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+import { ROUTE_PATH } from "../util/urls"
 
 
 const UpdateExerciseSchema = z.object({
@@ -33,7 +34,7 @@ export default function ExerciseLibraryEditExercise() {
     const onSubmit: SubmitHandler<UpdateExerciseSchemaType> = (data) => {
         currentExerciseToEdit.name = data.exerciseName
         currentExerciseToEdit.muscleGroups = [data.muscleGroups.toLowerCase()]
-        navigate('/exercise-library')
+        navigate(ROUTE_PATH.EXERCISE_LIBRARY)
     }
 
 

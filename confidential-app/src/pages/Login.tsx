@@ -6,8 +6,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/hooks'
 import { login } from '../features/userSlice'
 import { useNavigate } from 'react-router-dom'
 import { loadUserName } from '../util/loadUser'
-
-
+import { ROUTE_PATH } from '../util/urls'
 
 
 const LoginSchema = z.object({
@@ -26,14 +25,11 @@ export default function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormSchemaType>({ resolver: zodResolver(LoginSchema) })
 
     const dispatch = useAppDispatch()
-    const user = useAppSelector((state) => state.user.value.name)
-
 
     const onSubmit: SubmitHandler<LoginFormSchemaType> = (data) => {
         if (userOne.get('email') === data.email) {
             dispatch(login({ name: data.name, email: data.email }))
-            loadUserName(user)
-            navigate('/user-profile')
+            navigate(ROUTE_PATH.USER_PROFILE)
         }
     }
 

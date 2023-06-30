@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { exerciseTypes } from "../mockBackend/exerciseType"
 import { useNavigate } from "react-router-dom"
+import { useAppSelector } from "../hooks/hooks"
 
 
 
@@ -15,15 +16,14 @@ export default function ExerciseLibrary() {
 
     const navigate = useNavigate()
 
-    let user = localStorage.getItem('user')
-    // user = JSON.parse(user)
+    const user = useAppSelector((state) => state.user.value.name)
 
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchParams(event.target.value.toLocaleLowerCase())
     }
 
-   
+
 
     const search = () => {
         const search = []
@@ -51,7 +51,7 @@ export default function ExerciseLibrary() {
                         <div key={result.id}>
                             <span >{result.name}</span>
                             <span className="ml-2">{result.muscleGroups.join(" ")}</span>
-                            {user && user.name === 'Jotaro' ? <button className="p-1 border border-red-400 rounded-md" onClick={() => navigate(`edit/${result.id}`)}>Edit</button> : ''}
+                            {user && user === 'Jotaro' ? <button className="p-1 border border-red-400 rounded-md" onClick={() => navigate(`edit/${result.id}`)}>Edit</button> : ''}
                         </div>
                     )
                 })}

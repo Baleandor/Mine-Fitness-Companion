@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
+import { ROUTE_PATH } from '../util/urls'
 
 
 enum GenderOptions {
@@ -34,7 +35,7 @@ export default function Register() {
 
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(registerSchema) })
     const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
-        navigate('/')
+        navigate(ROUTE_PATH.HOME)
         setTimeout(() => { console.log(data) }, 2000)
     }
 

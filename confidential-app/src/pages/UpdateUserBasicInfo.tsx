@@ -4,6 +4,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import { userOne } from "../mockBackend/users"
 import RHFDatePicker from "../components/RHFDatePicker"
+import { ROUTE_PATH } from "../util/urls"
 
 enum GenderOptions {
     'male',
@@ -49,7 +50,7 @@ export default function UpdateUserBasicInfo() {
             userOne.set(key, updateData[key])
         }
         console.log(userOne)
-        navigate('/user-profile')
+        navigate(ROUTE_PATH.USER_PROFILE)
     }
 
 

@@ -16,12 +16,14 @@ import ExerciseLibraryEditExercise from './pages/ExerciseLibraryEditExercise';
 import EditWorkout from './pages/Workouts';
 import Workouts from './pages/Workouts';
 import WeightChartsOverTime from './pages/WeightChartsOverTime';
+import Home from './pages/Home';
 
 
 export default function App() {
 
     const router = createBrowserRouter(createRoutesFromElements(
         <Route path={ROUTE_PATH.HOME} element={<Root />} errorElement={<NotFound />}>
+            <Route index element={<Home />} />
             <Route path={ROUTE_PATH.LOGIN} element={<Login />} />
             <Route path={ROUTE_PATH.REGISTER} element={<Register />} />
             <Route path={ROUTE_PATH.USER_PROFILE} element={<UserProfile />} />

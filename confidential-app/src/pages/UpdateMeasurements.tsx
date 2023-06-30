@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from "react-router-dom"
 import RHFDatePicker from "../components/RHFDatePicker"
+import { ROUTE_PATH } from '../util/urls'
 
 
 const UpdateMeasurementsSchema = z.object({
@@ -31,7 +32,7 @@ export default function UpdateMeasurements() {
             measurementEvent.set(key, [...measurementEvent.get(key), data[key]])
         }
         console.log(measurementEvent)
-        navigate('/user-profile')
+        navigate(ROUTE_PATH.USER_PROFILE)
     }
 
 

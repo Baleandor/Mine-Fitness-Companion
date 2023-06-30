@@ -1,6 +1,6 @@
 import './index.css'
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
-import { store } from './store';
+import { store } from './redux/store';
 import { Provider } from 'react-redux';
 import { ROUTE_PATH } from './util/urls';
 import NotFound from './pages/NotFound';

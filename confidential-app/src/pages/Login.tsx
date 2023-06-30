@@ -2,10 +2,9 @@ import { z } from 'zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { userOne } from '../mockBackend/users'
-import { useAppDispatch, useAppSelector } from '../hooks/hooks'
-import { login } from '../features/userSlice'
+import { useAppDispatch } from '../hooks/hooks'
+import { login } from '../redux/userSlice'
 import { useNavigate } from 'react-router-dom'
-import { loadUserName } from '../util/loadUser'
 import { ROUTE_PATH } from '../util/urls'
 
 

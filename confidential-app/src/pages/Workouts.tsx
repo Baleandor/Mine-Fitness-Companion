@@ -22,7 +22,7 @@ export default function Workouts() {
         setFilterByDate(!filterByDate)
     }
 
-    const handleOnChange = (event) => {
+    const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFilteredWorkout(event.target.value)
 
     }
@@ -46,7 +46,7 @@ export default function Workouts() {
     }
 
     const filterWorkoutByDate = () => {
-        workoutOne.get('date').map((date) => {
+        workoutOne.get('date').map((date: number | string) => {
             if (dayjs(date).format('DD/MM/YYYY') === dayjs(filteredWorkout).format('DD/MM/YYYY')) {
                 setDisplayedWorkout(workoutOne)
             }
@@ -76,7 +76,7 @@ export default function Workouts() {
                     displayedWorkout && displayedWorkout != undefined &&
                     <div className="p-1 flex flex-col border rounder rounded-sm">
                         <span>Exercises:</span>
-                        {displayedWorkout.get('exercises').map((exercise) => {
+                        {displayedWorkout.get('exercises').map((exercise: string) => {
                             return (
                                 <div key={exercise.length} className="p-1">
                                     <span className="p-1">{exercise}</span>

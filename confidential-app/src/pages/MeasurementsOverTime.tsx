@@ -11,11 +11,11 @@ export default function MeasurementsOverTime() {
 
     const [showChart, setShowChart] = useState(false)
 
-    const handleStartDateOnChange = (event) => {
+    const handleStartDateOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setStartDate(event.target.value)
     }
 
-    const handleEndDateOnChange = (event) => {
+    const handleEndDateOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEndDate(event.target.value)
     }
 

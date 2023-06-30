@@ -1,24 +1,26 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../hooks/hooks";
+import { logout } from "../features/userSlice";
 
 
 export default function Navbar() {
 
-   
+    const dispatch = useAppDispatch()
 
+    const user = useAppSelector((state) => state.user.value.name)
 
-    const user = localStorage.getItem('user')
-
-    const logout = () => {
+    const userLogout = () => {
         localStorage.clear()
+        dispatch(logout())
     }
+
 
     return (
         <nav className="flex">
-            {user ?
+            {user.length > 1 ?
                 <div>
                     <Link to={'/user-profile'} className="p-2">Profile</Link>
-                    <Link to={'/'} className="p-2" onClick={logout}>Logout</Link>
+                    <Link to={'/'} className="p-2" onClick={userLogout}>Logout</Link>
 
                 </div> :
                 <div>

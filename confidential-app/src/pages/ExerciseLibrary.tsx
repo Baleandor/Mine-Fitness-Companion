@@ -16,7 +16,7 @@ export default function ExerciseLibrary() {
     const navigate = useNavigate()
 
     let user = localStorage.getItem('user')
-    user = JSON.parse(user)
+    // user = JSON.parse(user)
 
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {

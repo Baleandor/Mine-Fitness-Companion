@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate } from 'react-router-dom'
 
 
 enum GenderOptions {
@@ -9,7 +10,7 @@ enum GenderOptions {
 }
 
 
-const RegisterSchema = z.object({
+const registerSchema = z.object({
     name: z.string().min(4, 'Name must be at least 4 characters long!'),
     email: z.string().email(),
     password: z.string().min(6),
@@ -24,14 +25,17 @@ const RegisterSchema = z.object({
 )
 
 
-type RegisterFormSchemaType = z.infer<typeof RegisterSchema>
+type RegisterFormSchemaType = z.infer<typeof registerSchema>
 
 
 export default function Register() {
 
-    const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(RegisterSchema) })
+    const navigate = useNavigate()
+
+    const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(registerSchema) })
     const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
-        setTimeout(() => { data }, 2000)
+        navigate('/')
+        setTimeout(() => { console.log(data) }, 2000)
     }
 
 

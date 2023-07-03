@@ -37,7 +37,8 @@ export default function Login() {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="bg-slate-700 flex flex-col flex-wrap content-center justify-center p-2 text-slate-200">
             <div className='p-1 flex flex-col'>
-                <label>Name</label>
+                <label htmlFor='name'>Name</label> 
+                
                 <input {...register('name')}></input>
                 {errors.name && <p className='text-red-500 p-1'>{errors.name.message}</p>}
                 <label>Login email</label>

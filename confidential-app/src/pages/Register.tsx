@@ -37,6 +37,7 @@ export default function Register() {
     const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
         navigate(ROUTE_PATH.HOME)
         setTimeout(() => { console.log(data) }, 2000)
+        //dispatch register, set promises with timeout for improvised calls
     }
 
 

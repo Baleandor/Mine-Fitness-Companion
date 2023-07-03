@@ -14,13 +14,7 @@ workoutTwo.set('date', [1685960814668])
 
 
 
-export const exercise = new Map()
-
-exercise.set('id', '1')
-exercise.set('exerciseType', 'deadlift')
-exercise.set('sets', '4')
-exercise.set('repetitions', '10') //optional
-exercise.set('weight', '420') //optional
-exercise.set('time', '') //optional
-exercise.set('distance', '') //optional
-
+export const workoutByIdMap = new Map([
+    [1, { user: 'Jotaro', exercises: [['deadlift', 'bench press']], date: [1685960814668] }],
+    [2, { user: 'Dio', exercises: [['squat', 'sprint']], date: [1685960814668] }],
+])

@@ -3,7 +3,8 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE_PATH } from '../util/urls'
-
+import { useAppDispatch, useAppSelector } from '../hooks/hooks'
+import { registerUser } from '../redux/authSlice'
 
 enum GenderOptions {
     'male',
@@ -33,10 +34,17 @@ export default function Register() {
 
     const navigate = useNavigate()
 
+    const dispatch = useAppDispatch()
+
+    const { user, isLoading, isError, isSuccess, message } = useAppSelector((state) => state.auth)
+
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(registerSchema) })
     const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
+        const { name, email, password, gender, dateOfBirth, height } = data
+        const userData = { name, email, password, gender, dateOfBirth, height }
+
+        dispatch(registerUser(userData))
         navigate(ROUTE_PATH.HOME)
-        setTimeout(() => { console.log(data) }, 2000)
         //dispatch register, set promises with timeout for improvised calls
     }
 

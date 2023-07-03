@@ -1,6 +1,8 @@
 
 // const workoutOne = new Map()
 
+import { workoutByIdMap } from "./workout"
+
 // workoutOne.set('id', '1')
 // workoutOne.set('user', 'Jotaro')
 // workoutOne.set('exercises', [exerciseTypes.deadlift, exerciseTypes.squat])
@@ -21,6 +23,6 @@ userOne.set('workouts', '[workoutOne]')
 
 
 export const usersByIdMap = new Map([
-    [1, { name: 'Jotaro', email: 'jotaro@oraora.com', password: 'jolyne', role: 'user', gender: 'male', dateOfBirth: '01-01-1986', height: 195, workouts: '' }],
-    [2, { name: 'Dio', email: 'dio@oraora.com', password: 'joseph', role: 'admin', gender: 'male', dateOfBirth: '01-01-1986', height: 195, workouts: '' }]
+    [1, { name: 'Jotaro', email: 'jotaro@oraora.com', password: 'jolyne', role: 'user', gender: 'male', dateOfBirth: 504910800, height: 195, workouts: [] }],
+    [2, { name: 'Dio', email: 'dio@oraora.com', password: 'joseph', role: 'admin', gender: 'male', dateOfBirth: 504910800, height: 195, workouts: [] }]
 ])

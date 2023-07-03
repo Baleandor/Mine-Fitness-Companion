@@ -45,7 +45,6 @@ export default function Register() {
 
         dispatch(registerUser(userData))
         navigate(ROUTE_PATH.HOME)
-        //dispatch register, set promises with timeout for improvised calls
     }
 
 

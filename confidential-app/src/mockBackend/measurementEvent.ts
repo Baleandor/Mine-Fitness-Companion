@@ -24,10 +24,10 @@ export const measurementEventByIdMap = new Map([
         imageUrl: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fyt3.ggpht.com%2Fa%2FAATXAJyXIyQ8hWmx6Z-4x5l_-qJVjObcudPNrImXt3I4eg%3Ds900-c-k-c0xffffffff-no-rj-mo&f=1&nofb=1&ipt=5aaf02fce7babdc256a9be0c68a98e58c9de24dbcf84cb5d3f45971bebaed610&ipo=images',
         weight: [100, 102, 104, 107],
         chest: [120, 122, 125, 128],
-        waits: [70, 70, 71, 71],
+        waist: [70, 70, 71, 71],
         hips: [85, 85, 87, 89],
         biceps: [45, 46, 48, 50],
-        date: [1685960814668]
+        date: [1685960814668, 1696539600000, 1687208400000, 1688072400000]
     }]
 ])
 

@@ -6,7 +6,7 @@ import { useAppDispatch } from '../hooks/hooks'
 import { loginUser } from '../redux/authSlice'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE_PATH } from '../util/urls'
-import { UserLoginDataType } from '../api/userAuth'
+
 
 
 const LoginSchema = z.object({
@@ -25,11 +25,11 @@ export default function Login() {
 
     const dispatch = useAppDispatch()
 
-    const onSubmit: SubmitHandler<LoginFormSchemaType> = (data: UserLoginDataType) => {
+    const onSubmit: SubmitHandler<LoginFormSchemaType> = (data) => {
 
         usersByIdMap.forEach((user) => {
             if (user.email === data.email && user.password === data.password) {
-                dispatch(loginUser(data))
+                dispatch(loginUser(user))
                 navigate(ROUTE_PATH.USER_PROFILE)
             }
         })

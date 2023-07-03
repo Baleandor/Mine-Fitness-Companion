@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { UserRegisterDataType, authService } from '../api/userAuth'
+import { UserDataType, authService } from '../api/userAuth'
 
 
 const user = JSON.parse(localStorage.getItem('user'))
@@ -26,7 +26,7 @@ const initialState: UserStateType = {
     value: initialStateValue
 }
 
-export const registerUser = createAsyncThunk('auth/register', async (user: UserRegisterDataType, thunkAPI) => {
+export const registerUser = createAsyncThunk('auth/register', async (user: UserDataType, thunkAPI) => {
     try {
         return await authService.register(user)
     } catch (error) {
@@ -40,7 +40,7 @@ export const registerUser = createAsyncThunk('auth/register', async (user: UserR
     }
 })
 
-export const loginUser = createAsyncThunk('auth/login', async (user: UserRegisterDataType, thunkAPI) => {
+export const loginUser = createAsyncThunk('auth/login', async (user: UserDataType, thunkAPI) => {
     try {
         return await authService.login(user)
     } catch (error) {

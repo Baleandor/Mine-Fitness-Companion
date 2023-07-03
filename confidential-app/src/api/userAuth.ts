@@ -2,23 +2,20 @@ import dayjs from "dayjs"
 import { usersByIdMap } from "../mockBackend/users"
 
 
-export type UserRegisterDataType = {
+export type UserDataType = {
     name: string,
     email: string,
     password: string,
     dateOfBirth: number,
     gender: string,
     height: number,
-    role: string,
-    workouts: []
+    role?: string,
+    workouts?: []
 }
 
-export type UserLoginDataType = {
-    email: string
-    password: string
-}
 
-const register = async (userRegisterData: UserRegisterDataType) => {
+
+const register = async (userRegisterData: UserDataType) => {
 
     const dateOfBirth = dayjs(userRegisterData.dateOfBirth).unix()
     usersByIdMap.set(usersByIdMap.size + 1,
@@ -38,7 +35,7 @@ const register = async (userRegisterData: UserRegisterDataType) => {
     return userRegisterData
 }
 
-const login = async (userData: UserLoginDataType) => {
+const login = async (userData: UserDataType) => {
     localStorage.setItem('user', JSON.stringify(userData))
 }
 

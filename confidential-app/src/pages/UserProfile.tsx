@@ -1,20 +1,19 @@
 import { useNavigate } from "react-router-dom"
 import { measurementEvent } from "../mockBackend/measurementEvent"
-import { userOne } from "../mockBackend/users"
 import { workoutOne } from "../mockBackend/workout"
 import dayjs from "dayjs"
 import { ROUTE_PATH } from "../util/urls"
 
+import { userPermittedActions } from "../api/userPermittedActions"
+
 
 export default function UserProfile() {
 
-    const exercises = workoutOne.get('exercises')
+    const userBasicInfo = userPermittedActions.getUserBasicInfo()
 
-    const measurementDate = dayjs(measurementEvent.get('date')[measurementEvent.get('date').length - 1]).format('DD/MM/YYYY')
+    const userMeasurementInfo = userPermittedActions.getUserMeasurements()
 
-    const workoutDate = dayjs(workoutOne.get('date')[workoutOne.get('date').length - 1]).format('DD/MM/YYYY')
-
-    const birthDate = dayjs(userOne.get('dateOfBirth')[userOne.get('dateOfBirth').length - 1]).format('DD/MM/YYYY')
+    const userWorkouts = userPermittedActions.getUserWorkouts()
 
     const navigate = useNavigate()
 
@@ -26,19 +25,19 @@ export default function UserProfile() {
                     <span>Basic Personal Data</span>
                 </div>
                 <div>
-                    <span>Name: {userOne.get('name')}</span>
+                    <span>Name: {userBasicInfo.name}</span>
                 </div>
                 <div>
-                    <span>Email: {userOne.get('email')}</span>
+                    <span>Email: {userBasicInfo.email}</span>
                 </div>
                 <div>
-                    <span>Gender: {userOne.get('gender')}</span>
+                    <span>Gender: {userBasicInfo.gender}</span>
                 </div>
                 <div>
-                    <span>Date of Birth: {birthDate}</span>
+                    <span>Date of Birth: {dayjs(userBasicInfo.dateOfBirth).format('DD/MM/YYYY')}</span>
                 </div>
                 <div>
-                    <span>Height: {userOne.get('height')}</span>
+                    <span>Height: {userBasicInfo.height}</span>
                 </div>
                 <div>
                     <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_BASIC_INFO)}>Update Basic Info</button>
@@ -50,28 +49,28 @@ export default function UserProfile() {
                     <span>Current Progress</span>
                 </div>
                 <div>
-                    <img src={measurementEvent.get('imageUrl')[measurementEvent.get('imageUrl').length - 1]} className="h-[150px] w-[150px]"></img>
+                    <img src={userMeasurementInfo.imageUrl} className="h-[150px] w-[150px]"></img>
                 </div>
                 <div>
-                    <span>Weight: {measurementEvent.get('weight')[measurementEvent.get('weight').length - 1]}</span>
+                    <span>Weight: {userMeasurementInfo.weight[userMeasurementInfo.weight.length - 1]}</span>
                 </div>
                 <div>
-                    <span>Chest: {measurementEvent.get('chest')[measurementEvent.get('chest').length - 1]}</span>
+                    <span>Chest: {userMeasurementInfo.chest[userMeasurementInfo.chest.length - 1]}</span>
                 </div>
                 <div>
-                    <span>Waist: {measurementEvent.get('waist')[measurementEvent.get('waist').length - 1]}</span>
+                    <span>Waist: {userMeasurementInfo.waist[userMeasurementInfo.waist.length - 1]}</span>
                 </div>
                 <div>
-                    <span>Hips: {measurementEvent.get('hips')[measurementEvent.get('hips').length - 1]}</span>
+                    <span>Hips: {userMeasurementInfo.hips[userMeasurementInfo.hips.length - 1]}</span>
                 </div>
                 <div>
-                    <span>Biceps: {measurementEvent.get('biceps')[measurementEvent.get('biceps').length - 1]}</span>
+                    <span>Biceps: {userMeasurementInfo.biceps[userMeasurementInfo.biceps.length - 1]}</span>
                 </div>
                 <div>
-                    <span>Date: {measurementDate}</span>
+                    <span>Date: {dayjs(userMeasurementInfo.date[userMeasurementInfo.date.length - 1]).format('DD/MM/YYYY')}</span>
                 </div>
                 <div>
-                    <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS)}>Update Measurements</button>
+                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS)}>Add Measurements</button>
                 </div>
                 <div>
                     <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS_OVER_TIME)}>Check Measurements Timeline</button>
@@ -80,22 +79,25 @@ export default function UserProfile() {
 
             <div className="flex flex-col p-1">
                 <div>
-                    <span>Workouts</span>
+                    <span>Workouts: {userWorkouts.exercises.length}</span>
                 </div>
                 <div>
                     <span>Exercises:</span>
-                    <ul>
-                        {exercises.map((exercise: string) => {
-
-                            return <li key={exercise}>{exercise}</li>
+                    <div>
+                        {userWorkouts.exercises.map((exercise: string[]) => {
+                            return <ul key={exercise.length} className="border rounded-md border-red-400 p-1 mb-1">
+                                {exercise.map((element) => {
+                                    return <li key={element.length}>{element}</li>
+                                })}
+                            </ul>
                         })}
-                    </ul>
+                    </div>
                 </div>
                 <div>
-                    <span>Date: {workoutDate}</span>
+                    <span>Date: {dayjs(userWorkouts.date[userWorkouts.date.length - 1]).format('DD/MM/YYYY')}</span>
                 </div>
                 <div>
-                    <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME)}>View Weight Over Time</button>
+                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME)}>View Weight Over Time</button>
                 </div>
                 <div>
                     <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.WORKOUTS)}>View Workouts</button>

@@ -17,6 +17,7 @@ import EditWorkout from './pages/Workouts';
 import Workouts from './pages/Workouts';
 import WeightChartsOverTime from './pages/WeightChartsOverTime';
 import Home from './pages/Home';
+import CheckAllMeasurements from './pages/CheckAllMeasurements';
 
 
 export default function App() {
@@ -35,6 +36,7 @@ export default function App() {
             <Route path={ROUTE_PATH.EXERCISE_LIBRARY_EDIT_EXERCISE} element={<ExerciseLibraryEditExercise />} />
             <Route path={ROUTE_PATH.WORKOUTS} element={<Workouts />} />
             <Route path={ROUTE_PATH.EDIT_WORKOUT} element={<EditWorkout />} />
+            <Route path={ROUTE_PATH.CHECK_ALL_MEASUREMENTS} element={<CheckAllMeasurements />} />
         </Route>
     ))
 

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { userOne } from "../mockBackend/users"
 import RHFDatePicker from "../components/RHFDatePicker"
 import { ROUTE_PATH } from "../util/urls"
+import { userPermittedActions } from "../api/userPermittedActions"
 
 enum GenderOptions {
     'male',
@@ -39,17 +40,13 @@ type UpdateUserBasicInfoType = z.infer<typeof UpdateUserBasicInfoSchema>
 export default function UpdateUserBasicInfo() {
 
     const navigate = useNavigate()
-
+    const updateUserInfo = userPermittedActions.updateUserBasicInfo
     const { register, handleSubmit, formState: { errors }, control } = useForm<UpdateUserBasicInfoType>({ resolver: zodResolver(UpdateUserBasicInfoSchema) })
 
     const onSubmit: SubmitHandler<UpdateUserBasicInfoType> = (data) => {
         const { name, email, password, gender, dateOfBirth, height } = data
         const updateData = { name, email, password, gender, dateOfBirth, height }
-
-        for (let key in updateData) {
-            userOne.set(key, updateData[key])
-        }
-        console.log(userOne)
+        updateUserInfo(updateData)
         navigate(ROUTE_PATH.USER_PROFILE)
     }
 

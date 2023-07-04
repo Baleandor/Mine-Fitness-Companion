@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from "react-router-dom"
 import RHFDatePicker from "../components/RHFDatePicker"
 import { ROUTE_PATH } from '../util/urls'
+import { userPermittedActions } from '../api/userPermittedActions'
 
 
 const UpdateMeasurementsSchema = z.object({
@@ -28,11 +29,11 @@ export default function UpdateMeasurements() {
     const { register, handleSubmit, formState: { errors }, control } = useForm<UpdateMeasurementsFormType>({ resolver: zodResolver(UpdateMeasurementsSchema) })
 
     const onSubmit: SubmitHandler<UpdateMeasurementsFormType> = (data) => {
-        for (let key in data) {
-            measurementEvent.set(key, [...measurementEvent.get(key), data[key]])
-        }
-        console.log(measurementEvent)
-        navigate(ROUTE_PATH.USER_PROFILE)
+        // for (let key in data) {
+        //     measurementEvent.set(key, [...measurementEvent.get(key), data[key]])
+        // }
+        userPermittedActions.addUserMeasurements(data)
+        // navigate(ROUTE_PATH.USER_PROFILE)
     }
 
 

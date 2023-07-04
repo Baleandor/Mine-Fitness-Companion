@@ -2,17 +2,19 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import z from 'zod'
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
-import { userOne } from "../mockBackend/users"
 import RHFDatePicker from "../components/RHFDatePicker"
 import { ROUTE_PATH } from "../util/urls"
 import { userPermittedActions } from "../api/userPermittedActions"
+
 
 enum GenderOptions {
     'male',
     'female'
 }
 
-const UpdateUserBasicInfoSchema = z.object({
+const user = JSON.parse(localStorage.getItem('user'))
+
+const updateUserBasicInfoSchema = z.object({
     name: z.string({ required_error: 'Name is required!' }).min(4, 'Name must be at least 4 characters long!'),
     email: z.string({ required_error: 'Email is required!' }).email({ message: 'Enter a valid email!' }),
     currentPassword: z.string().min(1, { message: 'You must enter your current password!' }),
@@ -22,7 +24,7 @@ const UpdateUserBasicInfoSchema = z.object({
     dateOfBirth: z.number({ required_error: "A date of birth is required!" }),
     height: z.number({ invalid_type_error: "You must enter a number" }).min(145, 'You must be at least 145 tall to join the gym!')
 }).refine(
-    (data) => data.currentPassword === userOne.get('password'), {
+    (data) => data.currentPassword === user.password, {
     message: 'Incorrect current password',
     path: ['currentPassword']
 }
@@ -34,14 +36,16 @@ const UpdateUserBasicInfoSchema = z.object({
 )
 
 
-type UpdateUserBasicInfoType = z.infer<typeof UpdateUserBasicInfoSchema>
+type UpdateUserBasicInfoType = z.infer<typeof updateUserBasicInfoSchema>
 
 
 export default function UpdateUserBasicInfo() {
 
     const navigate = useNavigate()
+
     const updateUserInfo = userPermittedActions.updateUserBasicInfo
-    const { register, handleSubmit, formState: { errors }, control } = useForm<UpdateUserBasicInfoType>({ resolver: zodResolver(UpdateUserBasicInfoSchema) })
+
+    const { register, handleSubmit, formState: { errors }, control } = useForm<UpdateUserBasicInfoType>({ resolver: zodResolver(updateUserBasicInfoSchema) })
 
     const onSubmit: SubmitHandler<UpdateUserBasicInfoType> = (data) => {
         const { name, email, password, gender, dateOfBirth, height } = data

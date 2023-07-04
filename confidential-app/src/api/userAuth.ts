@@ -3,14 +3,15 @@ import { usersByIdMap } from "../mockBackend/users"
 
 
 export type UserDataType = {
+    id: number,
     name: string,
     email: string,
     password: string,
     dateOfBirth: number,
     gender: string,
     height: number,
-    role?: string,
-    workouts?: []
+    role: string,
+    workouts: string[]
 }
 
 
@@ -20,6 +21,7 @@ const register = async (userRegisterData: UserDataType) => {
     const dateOfBirth = dayjs(userRegisterData.dateOfBirth).unix()
     usersByIdMap.set(usersByIdMap.size + 1,
         {
+            id: usersByIdMap.size + 1,
             name: userRegisterData.name,
             email: userRegisterData.email,
             password: userRegisterData.password,

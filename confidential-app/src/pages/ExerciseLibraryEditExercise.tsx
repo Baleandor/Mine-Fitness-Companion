@@ -1,17 +1,17 @@
 import { useNavigate, useParams } from "react-router-dom"
-import { exerciseTypes } from "../mockBackend/exerciseType"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { ROUTE_PATH } from "../util/urls"
+import { userPermittedActions } from "../api/userPermittedActions"
 
 
-const UpdateExerciseSchema = z.object({
+const updateExerciseSchema = z.object({
     exerciseName: z.string().nonempty({ message: 'Exercise Name  required!' }),
     muscleGroups: z.string().nonempty({ message: 'Muscle Groups required!' })
 })
 
-type UpdateExerciseSchemaType = z.infer<typeof UpdateExerciseSchema>
+type UpdateExerciseSchemaType = z.infer<typeof updateExerciseSchema>
 
 
 export default function ExerciseLibraryEditExercise() {
@@ -20,21 +20,15 @@ export default function ExerciseLibraryEditExercise() {
 
     const navigate = useNavigate()
 
-    let currentExerciseToEdit
+    const exerciseById = userPermittedActions.getExerciseType(Number(exercise_id))
 
-    for (let exercise in exerciseTypes) {
-
-        if (exerciseTypes[exercise].id === Number(exercise_id)) {
-            currentExerciseToEdit = exerciseTypes[exercise]
-        }
-    }
-
-    const { register, handleSubmit, formState: { errors } } = useForm<UpdateExerciseSchemaType>({ resolver: zodResolver(UpdateExerciseSchema) })
+    const { register, handleSubmit, formState: { errors } } = useForm<UpdateExerciseSchemaType>({ resolver: zodResolver(updateExerciseSchema) })
 
     const onSubmit: SubmitHandler<UpdateExerciseSchemaType> = (data) => {
-        currentExerciseToEdit.name = data.exerciseName
-        currentExerciseToEdit.muscleGroups = [data.muscleGroups.toLowerCase()]
-        navigate(ROUTE_PATH.EXERCISE_LIBRARY)
+        if (exerciseById) {
+            userPermittedActions.updateExerciseTypeById(exerciseById.id, data)
+            navigate(ROUTE_PATH.EXERCISE_LIBRARY)
+        }
     }
 
 
@@ -43,13 +37,13 @@ export default function ExerciseLibraryEditExercise() {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center p-1">
             <div className="p-1">
                 <span className="p-1">Exercise Name</span>
-                <input {...register('exerciseName')} placeholder={currentExerciseToEdit.name} className="p-1"></input>
+                <input {...register('exerciseName')} placeholder={exerciseById?.name} className="p-1"></input>
                 {errors.exerciseName && <p className='text-red-500 p-1'>{errors.exerciseName.message}</p>}
 
             </div>
             <div className="p-1">
                 <span className="p-1">Exercise Target Muscles</span>
-                <input {...register('muscleGroups')} placeholder={currentExerciseToEdit.muscleGroups} className="p-1"></input>
+                <input {...register('muscleGroups')} placeholder={exerciseById?.muscleGroups.join(', ')} className="p-1"></input>
                 {errors.muscleGroups && <p className='text-red-500 p-1'>{errors.muscleGroups.message}</p>}
 
             </div>

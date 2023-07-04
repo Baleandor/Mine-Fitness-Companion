@@ -15,6 +15,6 @@ workoutTwo.set('date', [1685960814668])
 
 
 export const workoutByIdMap = new Map([
-    [1, { user: 'Jotaro', exercises: [['deadlift', 'bench press']], date: [1685960814668] }],
-    [2, { user: 'Dio', exercises: [['squat', 'sprint']], date: [1685960814668] }],
+    [1, { user: 'Jotaro', exercises: ['deadlift', 'bench press'], date: [1685960814668] }],
+    [2, { user: 'Dio', exercises: ['squat', 'sprint'], date: [1685960814668] }],
 ])

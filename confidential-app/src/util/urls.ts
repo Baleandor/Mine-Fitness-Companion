@@ -13,4 +13,5 @@ export enum ROUTE_PATH {
     EDIT_WORKOUT = '/workouts/edit/:id',
     NOT_FOUND = '*',
     CHECK_ALL_MEASUREMENTS = '/user-profile/check-all-measurements',
+    CREATE_EXERCISE_TYPE = '/exercise-library/create',
 }

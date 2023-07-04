@@ -28,6 +28,16 @@ export const measurementEventByIdMap = new Map([
         hips: [85, 85, 87, 89],
         biceps: [45, 46, 48, 50],
         date: [1685960814668, 1696539600000, 1687208400000, 1688072400000]
+    }],
+    [2, {
+        user: 'Dio',
+        imageUrl: ['https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.anmosugoi.com%2Fwp-content%2Fuploads%2F2020%2F03%2FJoJos-Bizarre-Adventure-dio-1.jpg&f=1&nofb=1&ipt=d36704be4e5874edbac79eb3d72973263421fc36ba4d4cca49ef2955ba89ea33&ipo=images'],
+        weight: [100, 102, 104, 107],
+        chest: [120, 122, 125, 128],
+        waist: [70, 70, 71, 71],
+        hips: [85, 85, 87, 89],
+        biceps: [45, 46, 48, 50],
+        date: [1685960814668, 1696539600000, 1687208400000, 1688072400000]
     }]
 ])
 

@@ -1,8 +1,9 @@
-import { workoutOne } from "../mockBackend/workout"
-import { exerciseTypes } from "../mockBackend/exerciseType"
+import { workoutByIdMap, workoutOne } from "../mockBackend/workout"
+import { exerciseTypes, exerciseTypesByIdMap } from "../mockBackend/exerciseType"
 import { useNavigate } from "react-router-dom"
 import dayjs from "dayjs"
 import { useState } from "react"
+import { userPermittedActions } from "../api/userPermittedActions"
 
 
 
@@ -27,22 +28,34 @@ export default function Workouts() {
 
     }
 
+
+    exerciseTypesByIdMap
+    workoutByIdMap
+
     const filterWorkout = () => {
-        if (exerciseTypes.hasOwnProperty(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes[filteredWorkout].name)) {
-            setDisplayedWorkout(workoutOne)
-        }
+        // if (exerciseTypes.hasOwnProperty(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes[filteredWorkout].name)) {
+        //     setDisplayedWorkout(workoutOne)
+        // }
 
-        if (exerciseTypes.deadlift.muscleGroups.includes(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes.deadlift.name)) {
-            setDisplayedWorkout(workoutOne)
-        }
 
-        if (exerciseTypes.benchPress.muscleGroups.includes(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes.benchPress.name)) {
-            setDisplayedWorkout(workoutOne)
-        }
 
-        if (exerciseTypes.squat.muscleGroups.includes(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes.squat.name)) {
-            setDisplayedWorkout(workoutOne)
-        }
+        setDisplayedWorkout(userPermittedActions.getWorkout(filteredWorkout))
+
+
+
+
+
+        // if (exerciseTypes.deadlift.muscleGroups.includes(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes.deadlift.name)) {
+        //     setDisplayedWorkout(workoutOne)
+        // }
+
+        // if (exerciseTypes.benchPress.muscleGroups.includes(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes.benchPress.name)) {
+        //     setDisplayedWorkout(workoutOne)
+        // }
+
+        // if (exerciseTypes.squat.muscleGroups.includes(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes.squat.name)) {
+        //     setDisplayedWorkout(workoutOne)
+        // }
     }
 
     const filterWorkoutByDate = () => {
@@ -76,7 +89,7 @@ export default function Workouts() {
                     displayedWorkout && displayedWorkout != undefined &&
                     <div className="p-1 flex flex-col border rounder rounded-sm">
                         <span>Exercises:</span>
-                        {displayedWorkout.get('exercises').map((exercise: string) => {
+                        {displayedWorkout.exercises.map((exercise: string) => {
                             return (
                                 <div key={exercise.length} className="p-1">
                                     <span className="p-1">{exercise}</span>
@@ -84,7 +97,7 @@ export default function Workouts() {
                             )
                         })}
                         <span>Date</span>
-                        <span className="p-1">{dayjs(Number(displayedWorkout.get('date'))).format('DD/MM/YYYY')}</span>
+                        <span className="p-1">{dayjs(Number(displayedWorkout.date)).format('DD/MM/YYYY')}</span>
                         <button className="p-1 border rounded border-red-700" onClick={() => navigate(`edit/${workoutOne.get('id')}`)}>Edit workout</button>
                         <button className="p-1 border rounded border-red-700" onClick={() => navigate(`edit/${workoutOne.get('id')}`)}>Duplicate workout</button>
                     </div>

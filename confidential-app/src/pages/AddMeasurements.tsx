@@ -1,5 +1,4 @@
 import z from 'zod'
-import { measurementEvent } from "../mockBackend/measurementEvent"
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from "react-router-dom"
@@ -8,7 +7,7 @@ import { ROUTE_PATH } from '../util/urls'
 import { userPermittedActions } from '../api/userPermittedActions'
 
 
-const UpdateMeasurementsSchema = z.object({
+const updateMeasurementsSchema = z.object({
     imageUrl: z.string().url({ message: 'You must provide a valid link!' }),
     weight: z.number({ invalid_type_error: "You must provide a valid number" }),
     chest: z.number({ invalid_type_error: "You must provide a valid number" }),
@@ -18,7 +17,7 @@ const UpdateMeasurementsSchema = z.object({
     date: z.number({ required_error: "A date is required!" })
 })
 
-type UpdateMeasurementsFormType = z.infer<typeof UpdateMeasurementsSchema>
+type UpdateMeasurementsFormType = z.infer<typeof updateMeasurementsSchema>
 
 
 export default function UpdateMeasurements() {
@@ -26,14 +25,11 @@ export default function UpdateMeasurements() {
 
     const navigate = useNavigate()
 
-    const { register, handleSubmit, formState: { errors }, control } = useForm<UpdateMeasurementsFormType>({ resolver: zodResolver(UpdateMeasurementsSchema) })
+    const { register, handleSubmit, formState: { errors }, control } = useForm<UpdateMeasurementsFormType>({ resolver: zodResolver(updateMeasurementsSchema) })
 
     const onSubmit: SubmitHandler<UpdateMeasurementsFormType> = (data) => {
-        // for (let key in data) {
-        //     measurementEvent.set(key, [...measurementEvent.get(key), data[key]])
-        // }
         userPermittedActions.addUserMeasurements(data)
-        // navigate(ROUTE_PATH.USER_PROFILE)
+        navigate(ROUTE_PATH.USER_PROFILE)
     }
 
 

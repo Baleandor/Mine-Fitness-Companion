@@ -1,87 +1,113 @@
 
+import { exerciseTypesByIdMap } from "../mockBackend/exerciseType"
 import { measurementEventByIdMap } from "../mockBackend/measurementEvent"
 import { usersByIdMap } from "../mockBackend/users"
 import { workoutByIdMap } from "../mockBackend/workout"
 
 const user = JSON.parse(localStorage.getItem('user'))
 
-const getUserBasicInfo = () => {
-    let userBasicData
-    if (user != null) {
-        usersByIdMap.forEach((userInDatabase) => {
-            if (user.email === userInDatabase.email) {
-                userBasicData = userInDatabase
-                return
-            }
-        })
-    }
 
-    return userBasicData
+const getUserBasicInfo = () => {
+    if (user != null) {
+        return usersByIdMap.get(user.id)
+    }
 }
 
 const getUserMeasurements = () => {
-    let userMeasurementEvent
-    measurementEventByIdMap.forEach((measurementEvent) => {
-        if (measurementEvent.user === user.name) {
-            userMeasurementEvent = measurementEvent
-            return
-        }
-    })
-
-    return userMeasurementEvent
+    if (user != null) {
+        return measurementEventByIdMap.get(user.id)
+    }
 }
 
 const getUserWorkouts = () => {
-    let userWorkouts
-    workoutByIdMap.forEach((workoutByUser) => {
-        if (workoutByUser.user === user.name) {
-            userWorkouts = workoutByUser
+    if (user != null) {
+        return workoutByIdMap.get(user.id)
+    }
+
+}
+
+
+const updateUserBasicInfo = (userData: { name: string; email: string; password: any; gender: string; dateOfBirth: number; height: number }) => {
+    usersByIdMap.set(user.id,
+        {
+            id: user.id,
+            name: userData.name,
+            email: userData.email,
+            password: userData.password,
+            role: user.role,
+            gender: userData.gender,
+            dateOfBirth: userData.dateOfBirth,
+            height: userData.height,
+            workouts: []
+        })
+}
+
+
+const addUserMeasurements = (measurementData: { biceps: number; chest: number; date: number; hips: number; imageUrl: string; waist: number; weight: number }) => {
+    measurementEventByIdMap.set(user.id, {
+        user: user.name,
+        imageUrl: [measurementEventByIdMap.get(user.id), measurementData.imageUrl],
+        biceps: [measurementEventByIdMap.get(user.id), measurementData.biceps],
+        chest: [measurementEventByIdMap.get(user.id), measurementData.chest],
+        date: [measurementEventByIdMap.get(user.id), measurementData.date],
+        hips: [measurementEventByIdMap.get(user.id), measurementData.hips],
+        waist: [measurementEventByIdMap.get(user.id), measurementData.waist],
+        weight: [measurementEventByIdMap.get(user.id), measurementData.weight],
+        workouts: []
+    })
+}
+
+const getAllExerciseTypes = () => {
+
+    const allExerciseTypes = []
+
+    exerciseTypesByIdMap.forEach((exerciseType) => {
+
+        allExerciseTypes.push(exerciseType)
+    })
+    return allExerciseTypes
+}
+
+const getExerciseType = (id: number) => {
+    return exerciseTypesByIdMap.get(id)
+}
+
+const updateExerciseTypeById = (id: number, data: { exerciseName: string; muscleGroups: string }) => {
+    return exerciseTypesByIdMap.set(id, { id: id, name: data.exerciseName, muscleGroups: [data.muscleGroups] })
+}
+
+const deleteExerciseTypeById = (id: number) => {
+    return exerciseTypesByIdMap.delete(id)
+}
+
+const createExerciseType = (data: { exerciseName: string; muscleGroups: string }) => {
+    const newEntryKey = exerciseTypesByIdMap.size + 1
+    exerciseTypesByIdMap.set(newEntryKey, { id: newEntryKey, name: data.exerciseName, muscleGroups: [data.muscleGroups] })
+}
+
+const getWorkout = (filteredWorkout: string) => {
+    let selectedWorkout
+
+    workoutByIdMap.forEach((workout) => {
+        if (workout.exercises.includes(filteredWorkout) && workout.user === user.name) {
+            selectedWorkout = workout
             return
         }
     })
 
-    return userWorkouts
-}
-
-
-const updateUserBasicInfo = (userData) => {
-
-    usersByIdMap.forEach((userInDatabase) => {
-
-        if (userInDatabase.name === user.name) {
-            for (let userInfo in userInDatabase) {
-
-                if (userInfo === 'role') {
-                    userInfo = userInDatabase[userInfo]
-                } else if (userInfo === 'workouts') {
-
-                    userInfo = userInDatabase[userInfo]
-                } else {
-
-                    console.log(userInfo, userData[userInfo])
-                    userInfo = userData[userInfo]
+    exerciseTypesByIdMap.forEach((exercise) => {
+        if (exercise.muscleGroups.includes(filteredWorkout)) {
+            workoutByIdMap.forEach((workout) => {
+                if (workout.exercises.includes(exercise.name) && workout.user === user.name) {
+                    selectedWorkout = workout
+                    return
                 }
-            }
-
+            })
         }
     })
 
+    return selectedWorkout
 }
-
-const addUserMeasurements = (measurementData: { biceps: number; chest: number; date: number; hips: number; imageUrl: string; waist: number; weight: number }) => {
-    measurementEventByIdMap.forEach((measurementEvent) => {
-        if (measurementEvent.user === user.name) {
-            measurementEvent.biceps.push(measurementData.biceps)
-            measurementEvent.chest.push(measurementData.chest)
-            measurementEvent.date.push(measurementData.date)
-            measurementEvent.hips.push(measurementData.hips)
-            measurementEvent.imageUrl.push(measurementData.imageUrl)
-            measurementEvent.waist.push(measurementData.waist)
-            measurementEvent.weight.push(measurementData.weight)
-        }
-    })
-}
-
 
 
 
@@ -90,5 +116,11 @@ export const userPermittedActions = {
     getUserMeasurements,
     getUserWorkouts,
     updateUserBasicInfo,
-    addUserMeasurements
+    addUserMeasurements,
+    getAllExerciseTypes,
+    getExerciseType,
+    updateExerciseTypeById,
+    deleteExerciseTypeById,
+    createExerciseType,
+    getWorkout
 }

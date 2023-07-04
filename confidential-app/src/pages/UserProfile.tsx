@@ -84,13 +84,11 @@ export default function UserProfile() {
                 <div>
                     <span>Exercises:</span>
                     <div>
-                        {userWorkouts.exercises.map((exercise: string[]) => {
-                            return <ul key={exercise.length} className="border rounded-md border-red-400 p-1 mb-1">
-                                {exercise.map((element) => {
-                                    return <li key={element.length}>{element}</li>
-                                })}
-                            </ul>
-                        })}
+                        <ul className="border rounded-md border-blue-700 p-1 mb-1">
+                            {userWorkouts?.exercises.map((exercise) => {
+                                return <li key={exercise}>{exercise}</li>
+                            })}
+                        </ul>
                     </div>
                 </div>
                 <div>

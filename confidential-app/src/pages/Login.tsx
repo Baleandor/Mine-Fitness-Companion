@@ -9,19 +9,19 @@ import { ROUTE_PATH } from '../util/urls'
 
 
 
-const LoginSchema = z.object({
+const loginSchema = z.object({
     email: z.string({ invalid_type_error: "You must provide a valid email!" }).email(),
     password: z.string().min(1, 'You must provide a password!')
 })
 
-type LoginFormSchemaType = z.infer<typeof LoginSchema>
+type LoginFormSchemaType = z.infer<typeof loginSchema>
 
 
 export default function Login() {
 
     const navigate = useNavigate()
 
-    const { register, handleSubmit, formState: { errors } } = useForm<LoginFormSchemaType>({ resolver: zodResolver(LoginSchema) })
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginFormSchemaType>({ resolver: zodResolver(loginSchema) })
 
     const dispatch = useAppDispatch()
 

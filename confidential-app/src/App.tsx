@@ -8,7 +8,7 @@ import Login from './pages/Login';
 import Root from './pages/Root';
 import Register from './pages/Register';
 import UserProfile from './pages/UserProfile';
-import UpdateMeasurements from './pages/UpdateMeasurements';
+import UpdateMeasurements from './pages/AddMeasurements';
 import UpdateUserBasicInfo from './pages/UpdateUserBasicInfo';
 import MeasurementsOverTime from './pages/MeasurementsOverTime';
 import ExerciseLibrary from './pages/ExerciseLibrary';
@@ -18,6 +18,7 @@ import Workouts from './pages/Workouts';
 import WeightChartsOverTime from './pages/WeightChartsOverTime';
 import Home from './pages/Home';
 import CheckAllMeasurements from './pages/CheckAllMeasurements';
+import CreateExerciseType from './pages/CreateExerciseType';
 
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
             <Route path={ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME} element={<WeightChartsOverTime />} />
             <Route path={ROUTE_PATH.EXERCISE_LIBRARY} element={<ExerciseLibrary />} />
             <Route path={ROUTE_PATH.EXERCISE_LIBRARY_EDIT_EXERCISE} element={<ExerciseLibraryEditExercise />} />
+            <Route path={ROUTE_PATH.CREATE_EXERCISE_TYPE} element={<CreateExerciseType />} />
             <Route path={ROUTE_PATH.WORKOUTS} element={<Workouts />} />
             <Route path={ROUTE_PATH.EDIT_WORKOUT} element={<EditWorkout />} />
             <Route path={ROUTE_PATH.CHECK_ALL_MEASUREMENTS} element={<CheckAllMeasurements />} />

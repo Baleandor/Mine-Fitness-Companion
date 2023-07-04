@@ -6,11 +6,11 @@ const user = JSON.parse(localStorage.getItem('user'))
 
 export type UserStateType = {
     value: {
-        user: string | null,
+        user: UserDataType | null | any,
         isError: boolean,
         isSuccess: boolean,
         isLoading: boolean,
-        message: string
+        message: string | any
     }
 }
 
@@ -29,7 +29,7 @@ const initialState: UserStateType = {
 export const registerUser = createAsyncThunk('auth/register', async (user: UserDataType, thunkAPI) => {
     try {
         return await authService.register(user)
-    } catch (error) {
+    } catch (error: any) {
         const message =
             (error.response &&
                 error.response.data &&
@@ -43,7 +43,7 @@ export const registerUser = createAsyncThunk('auth/register', async (user: UserD
 export const loginUser = createAsyncThunk('auth/login', async (user: UserDataType, thunkAPI) => {
     try {
         return await authService.login(user)
-    } catch (error) {
+    } catch (error: any) {
         const message =
             (error.response &&
                 error.response.data &&

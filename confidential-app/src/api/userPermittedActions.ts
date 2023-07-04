@@ -43,8 +43,52 @@ const getUserWorkouts = () => {
     return userWorkouts
 }
 
+
+const updateUserBasicInfo = (userData) => {
+
+    usersByIdMap.forEach((userInDatabase) => {
+
+        if (userInDatabase.name === user.name) {
+            for (let userInfo in userInDatabase) {
+
+                if (userInfo === 'role') {
+                    userInfo = userInDatabase[userInfo]
+                } else if (userInfo === 'workouts') {
+
+                    userInfo = userInDatabase[userInfo]
+                } else {
+
+                    console.log(userInfo, userData[userInfo])
+                    userInfo = userData[userInfo]
+                }
+            }
+
+        }
+    })
+
+}
+
+const addUserMeasurements = (measurementData: { biceps: number; chest: number; date: number; hips: number; imageUrl: string; waist: number; weight: number }) => {
+    measurementEventByIdMap.forEach((measurementEvent) => {
+        if (measurementEvent.user === user.name) {
+            measurementEvent.biceps.push(measurementData.biceps)
+            measurementEvent.chest.push(measurementData.chest)
+            measurementEvent.date.push(measurementData.date)
+            measurementEvent.hips.push(measurementData.hips)
+            measurementEvent.imageUrl.push(measurementData.imageUrl)
+            measurementEvent.waist.push(measurementData.waist)
+            measurementEvent.weight.push(measurementData.weight)
+        }
+    })
+}
+
+
+
+
 export const userPermittedActions = {
     getUserBasicInfo,
     getUserMeasurements,
-    getUserWorkouts
+    getUserWorkouts,
+    updateUserBasicInfo,
+    addUserMeasurements
 }

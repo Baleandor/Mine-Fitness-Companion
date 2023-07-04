@@ -19,9 +19,6 @@ export default function Navbar() {
         navigate(ROUTE_PATH.HOME)
     }
 
-    const buttonTest = () => {
-        userPermittedActions.getUserBasicInfo()
-    }
 
     return (
         <nav className="flex">
@@ -40,7 +37,7 @@ export default function Navbar() {
             }
 
             <Link to={ROUTE_PATH.EXERCISE_LIBRARY} className="p-2">Exercise Library</Link>
-            <button onClick={buttonTest}>Test</button>
+       
         </nav>
     )
 }

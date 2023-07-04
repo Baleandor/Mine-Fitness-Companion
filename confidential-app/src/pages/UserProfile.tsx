@@ -1,9 +1,6 @@
 import { useNavigate } from "react-router-dom"
-import { measurementEvent } from "../mockBackend/measurementEvent"
-import { workoutOne } from "../mockBackend/workout"
 import dayjs from "dayjs"
 import { ROUTE_PATH } from "../util/urls"
-
 import { userPermittedActions } from "../api/userPermittedActions"
 
 
@@ -71,6 +68,9 @@ export default function UserProfile() {
                 </div>
                 <div>
                     <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS)}>Add Measurements</button>
+                </div>
+                <div>
+                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.CHECK_ALL_MEASUREMENTS)}>Check All Measurements</button>
                 </div>
                 <div>
                     <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS_OVER_TIME)}>Check Measurements Timeline</button>

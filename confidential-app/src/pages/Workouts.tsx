@@ -1,10 +1,8 @@
-import { workoutByIdMap, workoutOne } from "../mockBackend/workout"
-import { exerciseTypes, exerciseTypesByIdMap } from "../mockBackend/exerciseType"
 import { useNavigate } from "react-router-dom"
 import dayjs from "dayjs"
 import { useState } from "react"
 import { userPermittedActions } from "../api/userPermittedActions"
-
+import { ROUTE_PATH } from "../util/urls"
 
 
 export default function Workouts() {
@@ -17,7 +15,7 @@ export default function Workouts() {
 
     const [filterByDate, setFilterByDate] = useState(false)
 
-
+    const [duplicate, setDuplicate] = useState(true)
 
     const toggleDateSearchButton = () => {
         setFilterByDate(!filterByDate)
@@ -25,46 +23,21 @@ export default function Workouts() {
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFilteredWorkout(event.target.value)
-
     }
 
-
-    exerciseTypesByIdMap
-    workoutByIdMap
-
     const filterWorkout = () => {
-        // if (exerciseTypes.hasOwnProperty(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes[filteredWorkout].name)) {
-        //     setDisplayedWorkout(workoutOne)
-        // }
-
-
-
-        setDisplayedWorkout(userPermittedActions.getWorkout(filteredWorkout))
-
-
-
-
-
-        // if (exerciseTypes.deadlift.muscleGroups.includes(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes.deadlift.name)) {
-        //     setDisplayedWorkout(workoutOne)
-        // }
-
-        // if (exerciseTypes.benchPress.muscleGroups.includes(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes.benchPress.name)) {
-        //     setDisplayedWorkout(workoutOne)
-        // }
-
-        // if (exerciseTypes.squat.muscleGroups.includes(filteredWorkout) && workoutOne.get('exercises').includes(exerciseTypes.squat.name)) {
-        //     setDisplayedWorkout(workoutOne)
-        // }
+        setDisplayedWorkout(userPermittedActions.getMatchingWorkouts(filteredWorkout))
     }
 
     const filterWorkoutByDate = () => {
-        workoutOne.get('date').map((date: number | string) => {
-            if (dayjs(date).format('DD/MM/YYYY') === dayjs(filteredWorkout).format('DD/MM/YYYY')) {
-                setDisplayedWorkout(workoutOne)
-            }
-        })
+        setDisplayedWorkout(userPermittedActions.getMatchingWorkouts(filteredWorkout))
     }
+
+    const onDelete = (id: number) => {
+        userPermittedActions.deleteWorkoutById(id)
+        navigate(ROUTE_PATH.USER_PROFILE)
+    }
+
 
     return (
         <div>
@@ -74,32 +47,38 @@ export default function Workouts() {
                     <div>
                         <input type="date" onChange={handleOnChange}></input>
                         <button onClick={filterWorkoutByDate} className="p-1 border rounded border-red-700 mt-1">Search</button>
-                        <button onClick={toggleDateSearchButton} className="p-1 border rounded border-red-700 mt-1">Search via text</button>
+                        <button onClick={toggleDateSearchButton} className="p-1 border rounded border-red-700 ml-1">Search via text</button>
                     </div>
                     :
                     <div>
                         <input onChange={handleOnChange}></input>
                         <button onClick={filterWorkout} className="p-1 border rounded border-red-700 mt-1">Search</button>
-                        <button onClick={toggleDateSearchButton} className="p-1 border rounded border-red-700 mt-1">Search via date</button>
+                        <button onClick={toggleDateSearchButton} className="p-1 border rounded border-red-700 ml-1">Search via date</button>
                     </div>}
+                <button className="p-1 border rounded border-red-700 mt-1" onClick={() => navigate('create')}>Create Workout</button>
             </div>
 
-            <div className="p-1 flex">
+            <div className="p-1">
+                <div className="p-1">Workouts:</div>
                 {
                     displayedWorkout && displayedWorkout != undefined &&
-                    <div className="p-1 flex flex-col border rounder rounded-sm">
-                        <span>Exercises:</span>
-                        {displayedWorkout.exercises.map((exercise: string) => {
+                    <div className="p-1 flex">
+                        {displayedWorkout.map((workout) => {
+
                             return (
-                                <div key={exercise.length} className="p-1">
-                                    <span className="p-1">{exercise}</span>
+                                <div key={workout.id} className="p-1 flex flex-col border rounder rounded-sm mr-1">
+                                    <span>Exercises:</span>
+                                    {workout.exercises.map((exercise: string) => {
+                                        return <span key={exercise.length} className="p-1">{exercise}</span>
+                                    })}
+                                    <span>Date:</span>
+                                    <span className="p-1">{dayjs(Number(workout.date)).format('DD/MM/YYYY')}</span>
+                                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(`edit/${workout.id}`)}>Edit workout</button>
+                                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(`edit/${workout.id}`, { state: duplicate })}>Duplicate workout</button>
+                                    <button className="p-1 border rounded border-red-700" onClick={() => onDelete(workout.id)}>Delete workout</button>
                                 </div>
                             )
                         })}
-                        <span>Date</span>
-                        <span className="p-1">{dayjs(Number(displayedWorkout.date)).format('DD/MM/YYYY')}</span>
-                        <button className="p-1 border rounded border-red-700" onClick={() => navigate(`edit/${workoutOne.get('id')}`)}>Edit workout</button>
-                        <button className="p-1 border rounded border-red-700" onClick={() => navigate(`edit/${workoutOne.get('id')}`)}>Duplicate workout</button>
                     </div>
                 }
             </div>

@@ -1,23 +1,13 @@
-export const exercise = new Map()
 
-exercise.set('id', '1')
-exercise.set('exerciseType', 'deadlift')
-exercise.set('sets', '4')
-exercise.set('repetitions', '10') //optional
-exercise.set('weight', [420, 460, 485, 500])//optional
-exercise.set('time', '') //optional
-exercise.set('distance', '') //optional
 
-//EXERCISEESS map
-//make faux API functions
 
-export const exerciseMeasuringData = [
-    { date: "05/06/2023", weight: 100 },
-    { date: "08/06/2023", weight: 102 },
-    { date: "10/06/2023", weight: 104 },
-    { date: "15/06/2023", weight: 107 },
+export const exerciseProgressData = [
+    { date: 1685960814668, deadlift: 420, squat: 333, 'bench press': 250, sprint: 55 },
+    { date: 1686344400000, deadlift: 460, squat: 375, 'bench press': 300, sprint: 53 },
+    { date: 1687208400000, deadlift: 485, squat: 420, 'bench press': 325, sprint: 50 },
+    { date: 1688072400000, deadlift: 500, squat: 500, 'bench press': 420, sprint: 42 },
+
 ]
-
 
 
 export const exercisesByIdMap = new Map([

@@ -1,13 +1,4 @@
 
-// const workoutOne = new Map()
-
-import { workoutByIdMap } from "./workout"
-
-// workoutOne.set('id', '1')
-// workoutOne.set('user', 'Jotaro')
-// workoutOne.set('exercises', [exerciseTypes.deadlift, exerciseTypes.squat])
-// workoutOne.set('date', [1685960814668])
-
 
 export const userOne = new Map<string, any>()
 

@@ -1,44 +1,41 @@
-import dayjs from "dayjs"
 import { usersByIdMap } from "../mockBackend/users"
 
 
 export type UserDataType = {
-    id: number,
     name: string,
     email: string,
     password: string,
-    dateOfBirth: number,
+    birthDate: number,
     gender: string,
-    height: number,
-    role: string,
-    workouts: string[]
+    height: number
 }
 
 
 
 const register = async (userRegisterData: UserDataType) => {
-
-    const dateOfBirth = dayjs(userRegisterData.dateOfBirth).unix()
     usersByIdMap.set(usersByIdMap.size + 1,
         {
             id: usersByIdMap.size + 1,
             name: userRegisterData.name,
             email: userRegisterData.email,
             password: userRegisterData.password,
-            dateOfBirth: dateOfBirth,
+            dateOfBirth: userRegisterData.birthDate,
             gender: userRegisterData.gender,
             height: userRegisterData.height,
             role: 'user',
             workouts: []
         })
-    console.log(usersByIdMap.get(3)?.dateOfBirth)
-    localStorage.setItem('user', JSON.stringify(userRegisterData))
+    localStorage.setItem('user', JSON.stringify(usersByIdMap.get(usersByIdMap.size)))
 
     return userRegisterData
 }
 
-const login = async (userData: UserDataType) => {
-    localStorage.setItem('user', JSON.stringify(userData))
+const login = (userData: { email: string; password: string }) => {
+    usersByIdMap.forEach((user) => {
+        if (user.email === userData.email && user.password === userData.password) {
+            localStorage.setItem('user', JSON.stringify(user))
+        }
+    })
 }
 
 const logout = () => {

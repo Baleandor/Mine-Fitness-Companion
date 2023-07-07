@@ -1,9 +1,8 @@
 import { z } from 'zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { usersByIdMap } from '../mockBackend/users'
 import { useAppDispatch } from '../hooks/hooks'
-import { loginUser } from '../redux/authSlice'
+import { login } from '../redux/authSlice'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE_PATH } from '../util/urls'
 
@@ -27,12 +26,9 @@ export default function Login() {
 
     const onSubmit: SubmitHandler<LoginFormSchemaType> = (data) => {
 
-        usersByIdMap.forEach((user) => {
-            if (user.email === data.email && user.password === data.password) {
-                dispatch(loginUser(user))
-                navigate(ROUTE_PATH.USER_PROFILE)
-            }
-        })
+        dispatch(login(data))
+        navigate(ROUTE_PATH.USER_PROFILE)
+
     }
 
 

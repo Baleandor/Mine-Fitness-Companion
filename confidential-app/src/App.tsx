@@ -13,12 +13,13 @@ import UpdateUserBasicInfo from './pages/UpdateUserBasicInfo';
 import MeasurementsOverTime from './pages/MeasurementsOverTime';
 import ExerciseLibrary from './pages/ExerciseLibrary';
 import ExerciseLibraryEditExercise from './pages/ExerciseLibraryEditExercise';
-import EditWorkout from './pages/Workouts';
 import Workouts from './pages/Workouts';
 import WeightChartsOverTime from './pages/WeightChartsOverTime';
 import Home from './pages/Home';
 import CheckAllMeasurements from './pages/CheckAllMeasurements';
 import CreateExerciseType from './pages/CreateExerciseType';
+import WorkoutEdit from './pages/WorkoutEdit';
+import CreateWorkout from './pages/CreateWorkout';
 
 
 export default function App() {
@@ -28,17 +29,27 @@ export default function App() {
             <Route index element={<Home />} />
             <Route path={ROUTE_PATH.LOGIN} element={<Login />} />
             <Route path={ROUTE_PATH.REGISTER} element={<Register />} />
-            <Route path={ROUTE_PATH.USER_PROFILE} element={<UserProfile />} />
-            <Route path={ROUTE_PATH.USER_PROFILE_MEASUREMENTS} element={<UpdateMeasurements />} />
-            <Route path={ROUTE_PATH.USER_PROFILE_BASIC_INFO} element={<UpdateUserBasicInfo />} />
-            <Route path={ROUTE_PATH.USER_PROFILE_MEASUREMENTS_OVER_TIME} element={<MeasurementsOverTime />} />
-            <Route path={ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME} element={<WeightChartsOverTime />} />
-            <Route path={ROUTE_PATH.EXERCISE_LIBRARY} element={<ExerciseLibrary />} />
-            <Route path={ROUTE_PATH.EXERCISE_LIBRARY_EDIT_EXERCISE} element={<ExerciseLibraryEditExercise />} />
-            <Route path={ROUTE_PATH.CREATE_EXERCISE_TYPE} element={<CreateExerciseType />} />
-            <Route path={ROUTE_PATH.WORKOUTS} element={<Workouts />} />
-            <Route path={ROUTE_PATH.EDIT_WORKOUT} element={<EditWorkout />} />
-            <Route path={ROUTE_PATH.CHECK_ALL_MEASUREMENTS} element={<CheckAllMeasurements />} />
+
+            <Route path={ROUTE_PATH.USER_PROFILE}>
+                <Route index element={<UserProfile />} />
+                <Route path={ROUTE_PATH.USER_PROFILE_BASIC_INFO} element={<UpdateUserBasicInfo />} />
+                <Route path={ROUTE_PATH.USER_PROFILE_MEASUREMENTS} element={<UpdateMeasurements />} />
+                <Route path={ROUTE_PATH.USER_PROFILE_MEASUREMENTS_OVER_TIME} element={<MeasurementsOverTime />} />
+                <Route path={ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME} element={<WeightChartsOverTime />} />
+                <Route path={ROUTE_PATH.USER_PROFILE_CHECK_ALL_MEASUREMENTS} element={<CheckAllMeasurements />} />
+            </Route>
+
+            <Route path={ROUTE_PATH.EXERCISE_LIBRARY}>
+                <Route index element={<ExerciseLibrary />} />
+                <Route path={ROUTE_PATH.EXERCISE_LIBRARY_EDIT_EXERCISE} element={<ExerciseLibraryEditExercise />} />
+                <Route path={ROUTE_PATH.EXERCISE_LIBRARY_CREATE_EXERCISE_TYPE} element={<CreateExerciseType />} />
+            </Route>
+
+            <Route path={ROUTE_PATH.WORKOUTS}>
+                <Route index element={<Workouts />} />
+                <Route path={ROUTE_PATH.WORKOUTS_EDIT} element={<WorkoutEdit />} />
+                <Route path={ROUTE_PATH.WORKOUTS_CREATE} element={<CreateWorkout />} />
+            </Route>
         </Route>
     ))
 

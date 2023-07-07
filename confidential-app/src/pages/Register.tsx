@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import { ROUTE_PATH } from '../util/urls'
 import { useAppDispatch } from '../hooks/hooks'
 import { registerUser } from '../redux/authSlice'
+import dayjs from 'dayjs'
 
 enum GenderOptions {
     'male',
@@ -39,7 +40,8 @@ export default function Register() {
     const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(registerSchema) })
     const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
         const { name, email, password, gender, dateOfBirth, height } = data
-        const userData = { name, email, password, gender, dateOfBirth, height }
+        const birthDate = dayjs(dateOfBirth).valueOf()
+        const userData = { name, email, password, gender, birthDate, height }
 
         dispatch(registerUser(userData))
         navigate(ROUTE_PATH.HOME)

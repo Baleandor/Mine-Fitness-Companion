@@ -4,6 +4,7 @@ import { ROUTE_PATH } from "../util/urls"
 import { userPermittedActions } from "../api/userPermittedActions"
 
 
+
 export default function UserProfile() {
 
     const userBasicInfo = userPermittedActions.getUserBasicInfo()
@@ -13,7 +14,6 @@ export default function UserProfile() {
     const userWorkouts = userPermittedActions.getUserWorkouts()
 
     const navigate = useNavigate()
-
 
     return (
         <div className="flex justify-between">
@@ -46,7 +46,7 @@ export default function UserProfile() {
                     <span>Current Progress</span>
                 </div>
                 <div>
-                    <img src={userMeasurementInfo.imageUrl} className="h-[150px] w-[150px]"></img>
+                    <img src={userMeasurementInfo.imageUrl[userMeasurementInfo.imageUrl.length - 1]} className="h-[150px] w-[150px]"></img>
                 </div>
                 <div>
                     <span>Weight: {userMeasurementInfo.weight[userMeasurementInfo.weight.length - 1]}</span>
@@ -70,7 +70,7 @@ export default function UserProfile() {
                     <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS)}>Add Measurements</button>
                 </div>
                 <div>
-                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.CHECK_ALL_MEASUREMENTS)}>Check All Measurements</button>
+                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_CHECK_ALL_MEASUREMENTS)}>Check All Measurements</button>
                 </div>
                 <div>
                     <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS_OVER_TIME)}>Check Measurements Timeline</button>
@@ -79,23 +79,24 @@ export default function UserProfile() {
 
             <div className="flex flex-col p-1">
                 <div>
-                    <span>Workouts: {userWorkouts.exercises.length}</span>
+                    <span>Workouts: {userWorkouts ? userWorkouts.exercises.length : 'No workouts!'}</span>
                 </div>
                 <div>
                     <span>Exercises:</span>
                     <div>
-                        <ul className="border rounded-md border-blue-700 p-1 mb-1">
+                        {userWorkouts ? <ul className="border rounded-md border-blue-700 p-1 mb-1">
                             {userWorkouts?.exercises.map((exercise) => {
                                 return <li key={exercise}>{exercise}</li>
                             })}
-                        </ul>
+                        </ul> : 'No exercises!'}
+
                     </div>
                 </div>
                 <div>
-                    <span>Date: {dayjs(userWorkouts.date[userWorkouts.date.length - 1]).format('DD/MM/YYYY')}</span>
+                    <span>Date: {userWorkouts ? dayjs(userWorkouts.date).format('DD/MM/YYYY') : 'No workouts!'}</span>
                 </div>
                 <div>
-                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME)}>View Weight Over Time</button>
+                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME)}>View Weight Progress</button>
                 </div>
                 <div>
                     <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.WORKOUTS)}>View Workouts</button>

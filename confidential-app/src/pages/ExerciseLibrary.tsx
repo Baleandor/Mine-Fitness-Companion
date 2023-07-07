@@ -13,7 +13,7 @@ export default function ExerciseLibrary() {
 
     const navigate = useNavigate()
 
-    const user = useAppSelector((state) => state.auth.value.user)
+    const user = useAppSelector((state) => state.auth.user)
 
     const allExerciseTypes = userPermittedActions.getAllExerciseTypes()
 
@@ -44,7 +44,7 @@ export default function ExerciseLibrary() {
                 <span className="p-1">Search Exercise</span>
                 <input type="search" onChange={handleOnChange} className="p-1" ></input>
                 <button onClick={findExercise} className="p-1 border border-red-400 rounded-md">Find</button>
-                <button className="ml-2 p-1 border border-red-400 rounded-md" onClick={() => navigate(ROUTE_PATH.CREATE_EXERCISE_TYPE)}>Create Exercise Type</button>
+                <button className="ml-2 p-1 border border-red-400 rounded-md" onClick={() => navigate(ROUTE_PATH.EXERCISE_LIBRARY_CREATE_EXERCISE_TYPE)}>Create Exercise Type</button>
             </div>
             <div className="p-1">
                 {searchResult.length > 0 && searchResult.map((result) => {

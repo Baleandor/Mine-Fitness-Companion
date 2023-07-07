@@ -1,39 +1,47 @@
 import { useState } from "react"
-import { measurementData } from "../mockBackend/measurementEvent"
 import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
 import dayjs from "dayjs"
+import { measurementsData } from "../mockBackend/measurementEvent"
 
 export default function MeasurementsOverTime() {
 
-    const [startDate, setStartDate] = useState('')
-    const [endDate, setEndDate] = useState('')
+    const [startDate, setStartDate] = useState(0)
+    const [endDate, setEndDate] = useState(0)
     const [chartDateRange, setChartDateRange] = useState([])
 
     const [showChart, setShowChart] = useState(false)
 
     const handleStartDateOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setStartDate(event.target.value)
+        const newDate = dayjs(event.target.value).valueOf()
+        setStartDate(newDate)
     }
 
     const handleEndDateOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEndDate(event.target.value)
+        const newDate = dayjs(event.target.value).valueOf()
+
+        setEndDate(newDate)
     }
 
     const getDateRange = () => {
-        const dateRage: string[] = []
-        measurementData.forEach((line) => {
-            dateRage.push(line.date)
+        const dateRange = []
+        measurementsData.forEach((line) => {
+            if (line.date >= startDate && line.date <= endDate) {
+                // line.date = dayjs(line.date).format('DD/MM/YYYY')
+                dateRange.push(line)
+            }
         })
+        setChartDateRange(dateRange)
     }
 
-    const toggleChart = () => {
+    const displayDateRangeData = () => {
         getDateRange()
-        setShowChart(!showChart)
-        // console.log(dayjs(startDate).format('DD/MM/YYYY'), dayjs(endDate).format('DD/MM/YYYY'))
+        setShowChart(true)
     }
 
 
     return (
+
+
         <div className="flex flex-col justify-center items-center">
             <div className="p-1">
                 <span>Measurements Over Time</span>
@@ -47,11 +55,12 @@ export default function MeasurementsOverTime() {
                     <span className="p-1">Start Date</span>
                     <input type="date" onChange={handleEndDateOnChange}></input>
                 </div>
-                <button className="p-1 border rounded-md border-red-700" onClick={toggleChart}>Show Chart</button>
+
+                <button className="p-1 border rounded-md border-red-700" onClick={displayDateRangeData}>Search</button>
             </div>
             {
                 showChart &&
-                <LineChart width={600} height={300} data={measurementData}>
+                <LineChart width={600} height={300} data={chartDateRange}>
                     <Line type={"monotone"} dataKey={'weight'} stroke="red" strokeWidth={2}></Line>
                     <Line type={"monotone"} dataKey={'chest'} stroke="blue" strokeWidth={2}></Line>
                     <Line type={"monotone"} dataKey={'waist'} stroke="yellow" strokeWidth={2}></Line>

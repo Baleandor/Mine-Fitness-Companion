@@ -1,8 +1,12 @@
 
+import dayjs from "dayjs"
 import { exerciseTypesByIdMap } from "../mockBackend/exerciseType"
 import { measurementEventByIdMap } from "../mockBackend/measurementEvent"
 import { usersByIdMap } from "../mockBackend/users"
 import { workoutByIdMap } from "../mockBackend/workout"
+import { exercisesByIdMap } from "../mockBackend/exercise"
+
+
 
 const user = JSON.parse(localStorage.getItem('user'))
 
@@ -85,12 +89,18 @@ const createExerciseType = (data: { exerciseName: string; muscleGroups: string }
     exerciseTypesByIdMap.set(newEntryKey, { id: newEntryKey, name: data.exerciseName, muscleGroups: [data.muscleGroups] })
 }
 
-const getWorkout = (filteredWorkout: string) => {
-    let selectedWorkout
+const getMatchingWorkouts = (filteredWorkout: string) => {
+    const matchingWorkouts: { id: number; user: string; exercises: string[]; date: number }[] = []
+    const selectedWorkoutId: number | number[] = []
 
     workoutByIdMap.forEach((workout) => {
-        if (workout.exercises.includes(filteredWorkout) && workout.user === user.name) {
-            selectedWorkout = workout
+        if (workout.exercises.includes(filteredWorkout)
+            || workout.id.toString() === filteredWorkout
+            || workout.date === (dayjs(filteredWorkout).valueOf())
+            && workout.user === user.name
+            && !selectedWorkoutId.includes(workout.id)) {
+            selectedWorkoutId.push(workout.id)
+            matchingWorkouts.push(workout)
             return
         }
     })
@@ -98,18 +108,52 @@ const getWorkout = (filteredWorkout: string) => {
     exerciseTypesByIdMap.forEach((exercise) => {
         if (exercise.muscleGroups.includes(filteredWorkout)) {
             workoutByIdMap.forEach((workout) => {
-                if (workout.exercises.includes(exercise.name) && workout.user === user.name) {
-                    selectedWorkout = workout
+                if (workout.exercises.includes(exercise.name) && workout.user === user.name && !selectedWorkoutId.includes(workout.id)) {
+                    selectedWorkoutId.push(workout.id)
+                    matchingWorkouts.push(workout)
                     return
                 }
             })
         }
     })
 
-    return selectedWorkout
+    return matchingWorkouts
 }
 
+const getWorkout = (id: number) => {
+    return workoutByIdMap.get(id)
+}
 
+const updateWorkout = (updatedWorkoutData: { exercises: string[]; id: number; date: number }) => {
+    workoutByIdMap.set(updatedWorkoutData.id, {
+        id: updatedWorkoutData.id,
+        user: workoutByIdMap.get(user.id)?.user,
+        exercises: updatedWorkoutData.exercises,
+        date: updatedWorkoutData.date
+    })
+}
+
+const deleteWorkoutById = (workoutId: number) => {
+    workoutByIdMap.delete(workoutId)
+}
+
+const createWorkout = (data: { exercises: string[]; date: number }) => {
+    const newWorkoutId = workoutByIdMap.size + 1
+    workoutByIdMap.set(newWorkoutId,
+        { id: newWorkoutId, user: user.name, exercises: data.exercises, date: data.date })
+}
+
+const getAllUserExercises = () => {
+    const userExercises = []
+    if (workoutByIdMap.get(user.id)?.user === user.name) {
+        exercisesByIdMap.forEach((exercise) => {
+
+            workoutByIdMap.get(user.id)?.exercises.includes(exercise.exerciseType) && userExercises.push(exercise)
+        })
+
+    }
+    return userExercises
+}
 
 export const userPermittedActions = {
     getUserBasicInfo,
@@ -122,5 +166,10 @@ export const userPermittedActions = {
     updateExerciseTypeById,
     deleteExerciseTypeById,
     createExerciseType,
-    getWorkout
+    getWorkout,
+    updateWorkout,
+    deleteWorkoutById,
+    createWorkout,
+    getMatchingWorkouts,
+    getAllUserExercises
 }

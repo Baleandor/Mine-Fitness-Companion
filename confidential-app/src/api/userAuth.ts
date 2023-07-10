@@ -31,9 +31,12 @@ const register = async (userRegisterData: UserDataType) => {
 }
 
 const login = (userData: { email: string; password: string }) => {
+
     usersByIdMap.forEach((user) => {
         if (user.email === userData.email && user.password === userData.password) {
             localStorage.setItem('user', JSON.stringify(user))
+        } else {
+            alert(`Invalid data or user doesn't exist!`)
         }
     })
 }

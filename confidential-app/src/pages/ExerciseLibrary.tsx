@@ -9,7 +9,7 @@ export default function ExerciseLibrary() {
 
     const [searchParams, setSearchParams] = useState('')
 
-    const [searchResult, setSearchResult] = useState<string[]>([])
+    const [searchResult, setSearchResult] = useState<{ id: number; name: string; muscleGroups: string[] }[]>([])
 
     const navigate = useNavigate()
 
@@ -52,7 +52,7 @@ export default function ExerciseLibrary() {
                         <div className="border rounded-md border-blue-700 mb-1 p-1" key={result.id}>
                             <span >{result.name}:</span>
                             {result.muscleGroups.length > 1 ?
-                                < span className="ml-2">{result.muscleGroups.join(" ")}</span> :
+                                < span className="ml-2">{result.muscleGroups.join(", ")}</span> :
                                 <span className="ml-2">{result.muscleGroups}</span>}
                             {user && user.role === 'admin' ? <>
                                 <button className="p-1 ml-1 border border-red-400 rounded-md" onClick={() => navigate(`edit/${result.id}`)}>Edit</button>

@@ -4,13 +4,13 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ROUTE_PATH } from "../util/urls"
 import { z } from "zod"
-import dayjs from "dayjs"
+import RHFDatePicker from "../components/RHFDatePicker"
 
 
 
 const editWorkoutSchema = z.object({
     exercises: z.string().nonempty({ message: 'Exercises required!' }),
-    date: z.date({ required_error: "A date is required!" })
+    date: z.number({ required_error: "A date is required!" })
 })
 
 type EditWorkoutSchemaType = z.infer<typeof editWorkoutSchema>
@@ -25,12 +25,12 @@ export default function WorkoutEdit() {
     const { state } = useLocation()
 
     const selectedWorkout = userPermittedActions.getWorkout(Number(id))
-    
 
-    const { register, handleSubmit, formState: { errors } } = useForm<EditWorkoutSchemaType>({
+
+    const { register, handleSubmit, formState: { errors }, control } = useForm<EditWorkoutSchemaType>({
         resolver: zodResolver(editWorkoutSchema), defaultValues: {
-            exercises: selectedWorkout.exercises.toString(),
-            date: state ? '' : selectedWorkout.date
+            exercises: selectedWorkout?.exercises.toString(),
+            date: state ? selectedWorkout?.date : undefined
         }
     })
 
@@ -40,14 +40,14 @@ export default function WorkoutEdit() {
         if (state) {
             const updatedWorkoutData = {
                 exercises: exercises.split(','),
-                date: dayjs(date).valueOf(),
+                date: date,
             }
             userPermittedActions.createWorkout(updatedWorkoutData)
 
         } else {
             const updatedWorkoutData = {
                 exercises: exercises.split(','),
-                date: dayjs(date).valueOf(),
+                date: date,
                 id: Number(id)
             }
             userPermittedActions.updateWorkout(updatedWorkoutData)
@@ -66,7 +66,7 @@ export default function WorkoutEdit() {
             </div>
             <div className="p-1">
                 <span className="p-1">Date</span>
-                <input type="date" {...register('date', { valueAsDate: true })} className="p-1"></input>
+                <RHFDatePicker control={control} name="date" />
                 {errors.date && <p className='text-red-500 p-1'>{errors.date.message}</p>}
             </div>
             <div>

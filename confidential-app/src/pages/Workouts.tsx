@@ -5,17 +5,18 @@ import { userPermittedActions } from "../api/userPermittedActions"
 import { ROUTE_PATH } from "../util/urls"
 
 
+
 export default function Workouts() {
 
     const navigate = useNavigate()
 
-    const [filteredWorkout, setFilteredWorkout] = useState('')
+    const [filteredWorkout, setFilteredWorkout] = useState<string>()
 
     const [displayedWorkout, setDisplayedWorkout] = useState<any>()
 
     const [filterByDate, setFilterByDate] = useState(false)
 
-    const [duplicate, setDuplicate] = useState(true)
+    const [duplicate] = useState(true)
 
     const toggleDateSearchButton = () => {
         setFilterByDate(!filterByDate)
@@ -26,11 +27,11 @@ export default function Workouts() {
     }
 
     const filterWorkout = () => {
-        setDisplayedWorkout(userPermittedActions.getMatchingWorkouts(filteredWorkout))
+        filteredWorkout && setDisplayedWorkout(userPermittedActions.getMatchingWorkouts(filteredWorkout))
     }
 
     const filterWorkoutByDate = () => {
-        setDisplayedWorkout(userPermittedActions.getMatchingWorkouts(filteredWorkout))
+        filteredWorkout && setDisplayedWorkout(userPermittedActions.getMatchingWorkouts(filteredWorkout))
     }
 
     const onDelete = (id: number) => {
@@ -63,7 +64,7 @@ export default function Workouts() {
                 {
                     displayedWorkout && displayedWorkout != undefined &&
                     <div className="p-1 flex">
-                        {displayedWorkout.map((workout) => {
+                        {displayedWorkout.map((workout: { id: number; exercises: string[]; date: number }) => {
 
                             return (
                                 <div key={workout.id} className="p-1 flex flex-col border rounder rounded-sm mr-1">

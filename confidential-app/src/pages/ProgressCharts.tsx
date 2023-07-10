@@ -3,23 +3,11 @@ import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "r
 import dayjs from "dayjs"
 import { measurementsData } from "../mockBackend/measurementEvent"
 
-
-type MeasurementsChartDataType = {
-    date: number;
-    weight: number;
-    chest: number;
-    waist: number;
-    hips: number;
-    biceps: number;
-}[]
-
-
-
 export default function MeasurementsOverTime() {
 
     const [startDate, setStartDate] = useState(0)
     const [endDate, setEndDate] = useState(0)
-    const [chartDateRange, setChartDateRange] = useState<MeasurementsChartDataType>([])
+    const [chartDateRange, setChartDateRange] = useState<any[]>([])
 
     const [showChart, setShowChart] = useState(false)
 
@@ -35,7 +23,7 @@ export default function MeasurementsOverTime() {
     }
 
     const getDateRange = () => {
-        const dateRange: MeasurementsChartDataType = []
+        const dateRange: any[] = []
         measurementsData.forEach((line) => {
             if (line.date >= startDate && line.date <= endDate) {
                 dateRange.push(line)
@@ -49,13 +37,14 @@ export default function MeasurementsOverTime() {
         setShowChart(true)
     }
 
+    console.log(chartDateRange)
 
     return (
 
 
         <div className="flex flex-col justify-center items-center">
             <div className="p-1">
-                <span>Measurements Over Time</span>
+                <span>Progress Chart</span>
             </div>
             <div className="flex">
                 <div className="p-1">
@@ -72,6 +61,9 @@ export default function MeasurementsOverTime() {
             {
                 showChart &&
                 <LineChart width={600} height={300} data={chartDateRange}>
+                    {chartDateRange.map((line) => {
+                        console.log(line)
+                    })}
                     <Line type={"monotone"} dataKey={'weight'} stroke="red" strokeWidth={2}></Line>
                     <Line type={"monotone"} dataKey={'chest'} stroke="blue" strokeWidth={2}></Line>
                     <Line type={"monotone"} dataKey={'waist'} stroke="yellow" strokeWidth={2}></Line>
@@ -84,6 +76,6 @@ export default function MeasurementsOverTime() {
                     <Legend />
                 </LineChart>
             }
-        </div >
+        </div>
     )
 }

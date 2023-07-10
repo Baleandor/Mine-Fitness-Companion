@@ -6,6 +6,7 @@ import { ROUTE_PATH } from '../util/urls'
 import { useAppDispatch } from '../hooks/hooks'
 import { registerUser } from '../redux/authSlice'
 import dayjs from 'dayjs'
+import RHFDatePicker from '../components/RHFDatePicker'
 
 enum GenderOptions {
     'male',
@@ -19,7 +20,7 @@ const registerSchema = z.object({
     password: z.string().min(6),
     repass: z.string(),
     gender: z.string().min(1, "You must select a gender!"),
-    dateOfBirth: z.date({ invalid_type_error: 'You must choose a date of birth!' }),
+    dateOfBirth: z.number({ invalid_type_error: 'You must choose a date of birth!' }),
     height: z.number({ invalid_type_error: "You must enter a number" }).min(145, 'You must be at least 145 tall to join the gym!')
 }).refine((data) => data.password === data.repass, {
     message: "Passwords must match!",
@@ -37,7 +38,7 @@ export default function Register() {
 
     const dispatch = useAppDispatch()
 
-    const { register, handleSubmit, formState: { errors } } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(registerSchema) })
+    const { register, handleSubmit, formState: { errors }, control } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(registerSchema) })
     const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
         const { name, email, password, gender, dateOfBirth, height } = data
         const birthDate = dayjs(dateOfBirth).valueOf()
@@ -87,7 +88,7 @@ export default function Register() {
             </div>
             <div className='p-1 flex flex-col'>
                 <label>Date Of Birth</label>
-                <input type='date' {...register('dateOfBirth', { valueAsDate: true })}></input>
+                <RHFDatePicker control={control} name='dateOfBirth' />
                 {errors.dateOfBirth && <p className='text-red-500 p-1'>{errors.dateOfBirth.message}</p>}
 
             </div>

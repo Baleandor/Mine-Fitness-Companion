@@ -50,6 +50,7 @@ export default function UpdateUserBasicInfo() {
     const onSubmit: SubmitHandler<UpdateUserBasicInfoType> = (data) => {
         const { name, email, password, gender, dateOfBirth, height } = data
         const updateData = { name, email, password, gender, dateOfBirth, height }
+        console.log(dateOfBirth)
         updateUserInfo(updateData)
         navigate(ROUTE_PATH.USER_PROFILE)
     }
@@ -94,7 +95,6 @@ export default function UpdateUserBasicInfo() {
             <div className='p-1 flex flex-col'>
                 <label>Date Of Birth</label>
                 <RHFDatePicker control={control} name="dateOfBirth" />
-
                 {errors.dateOfBirth && <p className='text-red-500 p-1'>{errors.dateOfBirth.message}</p>}
             </div>
             <div className='p-1 flex flex-col'>

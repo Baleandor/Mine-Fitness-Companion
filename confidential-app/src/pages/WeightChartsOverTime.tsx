@@ -2,41 +2,45 @@ import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "r
 import { exerciseProgressData } from "../mockBackend/exercise";
 import dayjs from "dayjs";
 import { useState } from "react";
+import DateRagePicker from "../components/DateRangePicker";
 
+
+type ChartDisplayDataType = {
+    date: number;
+    deadlift: number;
+    squat: number;
+    'bench press': number;
+    sprint: number;
+
+}[]
 
 
 export default function WeightChartsOverTime() {
 
+    const [chartDateRange, setChartDateRange] = useState<ChartDisplayDataType>([])
 
-    const [startDate, setStartDate] = useState(0)
-    const [endDate, setEndDate] = useState(0)
-    const [chartDateRange, setChartDateRange] = useState([])
+    const [dateRange, setDateRange] = useState<number[]>()
 
     const [showChart, setShowChart] = useState(false)
 
-    const handleStartDateOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newDate = dayjs(event.target.value).valueOf()
-        setStartDate(newDate)
-    }
+    const handleDateRageChange = (values: dayjs.Dayjs[]) => {
+        const [startDate, endDate] = values
+        const newDateRange = [dayjs(startDate).valueOf(), dayjs(endDate).valueOf()]
 
-    const handleEndDateOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newDate = dayjs(event.target.value).valueOf()
-
-        setEndDate(newDate)
+        setDateRange(newDateRange)
     }
 
     const getDateRange = () => {
-        const dateRange = []
+        const datesWithinRange: ChartDisplayDataType = []
         exerciseProgressData.forEach((line) => {
-            if (line.date >= startDate && line.date <= endDate) {
-                // line.date = dayjs(line.date).format('DD/MM/YYYY')
-                dateRange.push(line)
+            if (dateRange) {
+                if (line.date >= dateRange[0] && line.date <= dateRange[1]) {
+                    datesWithinRange.push(line)
+                }
             }
         })
-        setChartDateRange(dateRange)
+        setChartDateRange(datesWithinRange)
     }
-
-
 
     const displayDateRangeData = () => {
         getDateRange()
@@ -50,15 +54,7 @@ export default function WeightChartsOverTime() {
                 <span>Exercise Weight Progress Over Time</span>
             </div>
             <div className="flex">
-                <div className="p-1">
-                    <span className="p-1">Start Date</span>
-                    <input type="date" onChange={handleStartDateOnChange}></input>
-                </div>
-                <div className="p-1">
-                    <span className="p-1">Start Date</span>
-                    <input type="date" onChange={handleEndDateOnChange}></input>
-                </div>
-
+                <DateRagePicker handleDateRageChange={handleDateRageChange} />
                 <button className="p-1 border rounded-md border-red-700" onClick={displayDateRangeData}>Search</button>
             </div>
             {

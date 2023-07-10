@@ -10,6 +10,7 @@ interface RHFDatePickerFieldProps {
 
 export default function RHFDatePicker({ control, name }: RHFDatePickerFieldProps) {
 
+    const dateFormat = 'DD/MM/YYYY'
 
     return (
         <Controller
@@ -21,6 +22,7 @@ export default function RHFDatePicker({ control, name }: RHFDatePickerFieldProps
             render={({ field }) => {
                 return (
                     <DatePicker
+                        format={dateFormat}
                         ref={field.ref}
                         name={field.name}
                         onBlur={field.onBlur}

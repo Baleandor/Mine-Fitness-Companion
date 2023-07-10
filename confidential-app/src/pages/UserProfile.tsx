@@ -7,13 +7,14 @@ import { userPermittedActions } from "../api/userPermittedActions"
 
 export default function UserProfile() {
 
+    const navigate = useNavigate()
+
     const userBasicInfo = userPermittedActions.getUserBasicInfo()
 
     const userMeasurementInfo = userPermittedActions.getUserMeasurements()
 
     const userWorkouts = userPermittedActions.getUserWorkouts()
 
-    const navigate = useNavigate()
 
     return (
         <div className="flex justify-between">
@@ -21,21 +22,24 @@ export default function UserProfile() {
                 <div>
                     <span>Basic Personal Data</span>
                 </div>
-                <div>
-                    <span>Name: {userBasicInfo.name}</span>
-                </div>
-                <div>
-                    <span>Email: {userBasicInfo.email}</span>
-                </div>
-                <div>
-                    <span>Gender: {userBasicInfo.gender}</span>
-                </div>
-                <div>
-                    <span>Date of Birth: {dayjs(userBasicInfo.dateOfBirth).format('DD/MM/YYYY')}</span>
-                </div>
-                <div>
-                    <span>Height: {userBasicInfo.height}</span>
-                </div>
+                {userBasicInfo &&
+                    <div>
+                        <div>
+                            <span>Name: {userBasicInfo.name}</span>
+                        </div>
+                        <div>
+                            <span>Email: {userBasicInfo.email}</span>
+                        </div>
+                        <div>
+                            <span>Gender: {userBasicInfo.gender}</span>
+                        </div>
+                        <div>
+                            <span>Date of Birth: {dayjs(userBasicInfo.dateOfBirth).format('DD/MM/YYYY')}</span>
+                        </div>
+                        <div>
+                            <span>Height: {userBasicInfo.height}</span>
+                        </div>
+                    </div>}
                 <div>
                     <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_BASIC_INFO)}>Update Basic Info</button>
                 </div>
@@ -45,27 +49,32 @@ export default function UserProfile() {
                 <div>
                     <span>Current Progress</span>
                 </div>
-                <div>
-                    <img src={userMeasurementInfo.imageUrl[userMeasurementInfo.imageUrl.length - 1]} className="h-[150px] w-[150px]"></img>
-                </div>
-                <div>
-                    <span>Weight: {userMeasurementInfo.weight[userMeasurementInfo.weight.length - 1]}</span>
-                </div>
-                <div>
-                    <span>Chest: {userMeasurementInfo.chest[userMeasurementInfo.chest.length - 1]}</span>
-                </div>
-                <div>
-                    <span>Waist: {userMeasurementInfo.waist[userMeasurementInfo.waist.length - 1]}</span>
-                </div>
-                <div>
-                    <span>Hips: {userMeasurementInfo.hips[userMeasurementInfo.hips.length - 1]}</span>
-                </div>
-                <div>
-                    <span>Biceps: {userMeasurementInfo.biceps[userMeasurementInfo.biceps.length - 1]}</span>
-                </div>
-                <div>
-                    <span>Date: {dayjs(userMeasurementInfo.date[userMeasurementInfo.date.length - 1]).format('DD/MM/YYYY')}</span>
-                </div>
+                {userMeasurementInfo ?
+                    <div>
+                        <div>
+                            <img src={userMeasurementInfo.imageUrl[userMeasurementInfo.imageUrl.length - 1]} className="h-[150px] w-[150px]"></img>
+                        </div>
+                        <div>
+                            <span>Weight: {userMeasurementInfo.weight[userMeasurementInfo.weight.length - 1]}</span>
+                        </div>
+                        <div>
+                            <span>Chest: {userMeasurementInfo.chest[userMeasurementInfo.chest.length - 1]}</span>
+                        </div>
+                        <div>
+                            <span>Waist: {userMeasurementInfo.waist[userMeasurementInfo.waist.length - 1]}</span>
+                        </div>
+                        <div>
+                            <span>Hips: {userMeasurementInfo.hips[userMeasurementInfo.hips.length - 1]}</span>
+                        </div>
+                        <div>
+                            <span>Biceps: {userMeasurementInfo.biceps[userMeasurementInfo.biceps.length - 1]}</span>
+                        </div>
+                        <div>
+                            <span>Date: {dayjs(userMeasurementInfo.date[userMeasurementInfo.date.length - 1]).format('DD/MM/YYYY')}</span>
+                        </div>
+                    </div> :
+                    <div className="p-1">No measurements present!</div>}
+
                 <div>
                     <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS)}>Add Measurements</button>
                 </div>

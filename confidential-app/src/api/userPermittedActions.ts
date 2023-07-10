@@ -63,7 +63,7 @@ const addUserMeasurements = (measurementData: { biceps: number; chest: number; d
 
 const getAllExerciseTypes = () => {
 
-    const allExerciseTypes = []
+    const allExerciseTypes: { id: number; name: string; muscleGroups: string[] }[] = []
 
     exerciseTypesByIdMap.forEach((exerciseType) => {
 

@@ -30,14 +30,14 @@ export default function Login() {
         let userExists = false
         usersByIdMap.forEach((user) => {
             if (user.email === data.email && user.password === data.password) {
-                userExists = true
+                 userExists = true
             }
         })
 
         if (userExists) {
             dispatch(login(data))
             navigate(ROUTE_PATH.HOME)
-        }else {
+        } else {
             alert(`Invalid data or user doesn't exist!`)
         }
 

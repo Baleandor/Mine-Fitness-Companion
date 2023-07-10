@@ -5,9 +5,6 @@ Workout.tsx search via date behaving abnormally. Couldn't shove DatePicker libra
 
 Chart code is mostly the same, turn into into a hook or something.??
 
-Add "item not in database" with searches
-
-Fix types. Polish whatever else you find.
 
 Ask for code review.
 

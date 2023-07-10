@@ -11,6 +11,8 @@ export default function ExerciseLibrary() {
 
     const [searchResult, setSearchResult] = useState<{ id: number; name: string; muscleGroups: string[] }[]>([])
 
+    const [showResults, setShowResults] = useState(true)
+
     const navigate = useNavigate()
 
     const user = useAppSelector((state) => state.auth.user)
@@ -31,7 +33,14 @@ export default function ExerciseLibrary() {
                 search.push(exerciseType)
             }
         }
-        setSearchResult(search)
+        if (search.length > 1) {
+
+            setSearchResult(search)
+        } else {
+            setSearchResult(search)
+
+            setShowResults(false)
+        }
     }
 
     const onDelete = (id: number) => {
@@ -47,20 +56,21 @@ export default function ExerciseLibrary() {
                 <button className="ml-2 p-1 border border-red-400 rounded-md" onClick={() => navigate(ROUTE_PATH.EXERCISE_LIBRARY_CREATE_EXERCISE_TYPE)}>Create Exercise Type</button>
             </div>
             <div className="p-1">
-                {searchResult.length > 0 && searchResult.map((result) => {
+                {searchResult.length > 0 ? searchResult.map((result) => {
                     return (
                         <div className="border rounded-md border-blue-700 mb-1 p-1" key={result.id}>
                             <span >{result.name}:</span>
                             {result.muscleGroups.length > 1 ?
                                 < span className="ml-2">{result.muscleGroups.join(", ")}</span> :
                                 <span className="ml-2">{result.muscleGroups}</span>}
-                            {user && user.role === 'admin' ? <>
+                            {user && user.role === 'admin' && <>
                                 <button className="p-1 ml-1 border border-red-400 rounded-md" onClick={() => navigate(`edit/${result.id}`)}>Edit</button>
                                 <button className="p-1 ml-1 border border-red-400 rounded-md" onClick={() => onDelete(result.id)}>Delete</button>
-                            </> : ''}
+                            </>}
                         </div>
                     )
-                })}
+                }) :
+                    !showResults && <div className="p-1">No results found!</div>}
             </div>
         </div >
     )

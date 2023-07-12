@@ -8,4 +8,5 @@ Chart code is mostly the same, turn into into a hook or something.??
 
 Ask for code review.
 
-Rename the fucking thing
+
+make all redux toolkit calls thunks

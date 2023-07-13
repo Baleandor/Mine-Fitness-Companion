@@ -1,14 +1,14 @@
 
 import dayjs from "dayjs"
-import { exerciseTypesByIdMap } from "../mockBackend/exerciseType"
-import { measurementEventByIdMap } from "../mockBackend/measurementEvent"
-import { usersByIdMap } from "../mockBackend/users"
-import { workoutByIdMap } from "../mockBackend/workout"
-import { exercisesByIdMap } from "../mockBackend/exercise"
+import { exerciseTypesByIdMap } from "./mockData/exerciseType"
+import { measurementEventByIdMap } from "./mockData/measurementEvent"
+import { usersByIdMap } from "./mockData/users"
+import { workoutByIdMap } from "./mockData/workout"
+import { exercisesByIdMap } from "./mockData/exercise"
+import { getUser } from "../util/getUser"
 
 
-
-const user = JSON.parse(localStorage.getItem('user'))
+const user = getUser()
 
 
 const getUserBasicInfo = () => {
@@ -155,6 +155,71 @@ const getAllUserExercises = () => {
     return userExercises
 }
 
+const getAllChartData = () => {
+    const initialLabels: number[] = []
+
+    const getLabels = [...exercisesByIdMap.values()].map((dataRow) => {
+        dataRow.dates.forEach((date) => {
+            if (!initialLabels.includes(date)) {
+                initialLabels.push(date)
+            }
+        })
+    })
+
+    const labels = initialLabels.map((date) => {
+        return dayjs(date).format('DD/MM/YYYY')
+    })
+
+    const datasets = [...exercisesByIdMap.values()].map((dataSet) => {
+        return {
+            label: dataSet.exerciseType,
+            data: dataSet.weight || dataSet.distance
+        }
+    })
+
+
+    return {
+        labels, datasets
+    }
+}
+
+
+const getChartDataWithinRange = (dateRange: number[]) => {
+    const labelsWithinRange: number[] = []
+    const datasets: { label: string; data: number[] }[] = []
+    const includedDatasets: string[] = []
+
+    try {
+        exercisesByIdMap.forEach((line) => {
+            line.dates.forEach((date) => {
+                if (date >= dateRange[0] && date <= dateRange[1] && !includedDatasets.includes(line.exerciseType)) {
+                    datasets.push({
+                        label: line.exerciseType,
+                        data: line.weight || line.distance
+                    })
+                    includedDatasets.push(line.exerciseType)
+                }
+                if (date >= dateRange[0] && date <= dateRange[1] && !labelsWithinRange.includes(date)) {
+                    labelsWithinRange.push(date)
+                }
+            })
+        })
+    } catch (error) {
+        throw new Error(error)
+    }
+
+    const labels = labelsWithinRange.map((date) => {
+        return dayjs(date).format('DD/MM/YYYY')
+    })
+
+
+    return {
+        labels, datasets
+    }
+
+}
+
+
 export const userPermittedActions = {
     getUserBasicInfo,
     getUserMeasurements,
@@ -171,5 +236,7 @@ export const userPermittedActions = {
     deleteWorkoutById,
     createWorkout,
     getMatchingWorkouts,
-    getAllUserExercises
+    getAllUserExercises,
+    getAllChartData,
+    getChartDataWithinRange
 }

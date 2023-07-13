@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from "react-router-dom"
 import RHFDatePicker from "../components/RHFDatePicker"
 import { ROUTE_PATH } from '../util/urls'
-import { userPermittedActions } from '../api/userPermittedActions'
+import { userPermittedActions } from '../backend/userPermittedActions'
 
 
 const updateMeasurementsSchema = z.object({

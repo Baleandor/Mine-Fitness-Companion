@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { userPermittedActions } from "../api/userPermittedActions";
+import { userPermittedActions } from "../backend/userPermittedActions";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "../util/urls";

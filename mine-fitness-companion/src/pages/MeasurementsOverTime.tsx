@@ -1,7 +1,6 @@
 import { useState } from "react"
-import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
 import dayjs from "dayjs"
-import { measurementsData } from "../mockBackend/measurementEvent"
+import { measurementsData } from "../backend/mockData/measurementEvent"
 
 
 type MeasurementsChartDataType = {
@@ -69,21 +68,7 @@ export default function MeasurementsOverTime() {
 
                 <button className="p-1 border rounded-md border-red-700" onClick={displayDateRangeData}>Search</button>
             </div>
-            {
-                showChart &&
-                <LineChart width={600} height={300} data={chartDateRange}>
-                    <Line type={"monotone"} dataKey={'weight'} stroke="red" strokeWidth={2}></Line>
-                    <Line type={"monotone"} dataKey={'chest'} stroke="blue" strokeWidth={2}></Line>
-                    <Line type={"monotone"} dataKey={'waist'} stroke="yellow" strokeWidth={2}></Line>
-                    <Line type={"monotone"} dataKey={'hips'} stroke="brown" strokeWidth={2}></Line>
-                    <Line type={"monotone"} dataKey={'biceps'} stroke="magenta" strokeWidth={2}></Line>
-                    <CartesianGrid stroke="#ccc" />
-                    <XAxis dataKey={'date'} />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                </LineChart>
-            }
+   
         </div >
     )
 }

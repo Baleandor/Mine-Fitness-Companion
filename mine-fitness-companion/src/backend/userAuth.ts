@@ -1,4 +1,4 @@
-import { usersByIdMap } from "../mockBackend/users"
+import { usersByIdMap } from "./mockData/users"
 
 
 export type UserDataType = {
@@ -25,18 +25,18 @@ const register = async (userRegisterData: UserDataType) => {
             role: 'user',
             workouts: []
         })
-    localStorage.setItem('user', JSON.stringify(usersByIdMap.get(usersByIdMap.size)))
+//check for existing user and return proper code
 
     return userRegisterData
 }
 
 const login = (userData: { email: string; password: string }) => {
 
+    // [...usersByIdMap.values()].find
+
     usersByIdMap.forEach((user) => {
         if (user.email === userData.email && user.password === userData.password) {
             localStorage.setItem('user', JSON.stringify(user))
-        } else {
-            alert(`Invalid data or user doesn't exist!`)
         }
     })
 }

@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { UserDataType, authService } from '../api/userAuth'
+import { UserDataType, authService } from '../backend/userAuth'
+import { getUser } from '../util/getUser'
 
 
 export type UserStateType = {
     user: UserDataType | null | any
 }
 
-
 const initialState: UserStateType = {
-    user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
+    user: getUser()
 }
 
 export const registerUser = createAsyncThunk('auth/register', async (user: UserDataType, thunkAPI) => {

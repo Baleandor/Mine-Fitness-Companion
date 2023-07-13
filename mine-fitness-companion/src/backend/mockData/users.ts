@@ -1,16 +1,6 @@
 
 
-export const userOne = new Map<string, any>()
 
-userOne.set('id', '1')
-userOne.set('name', 'Jotaro')
-userOne.set('email', 'jotaro@oraora.com')
-userOne.set('password', 'jolyne')
-userOne.set('role', 'user')
-userOne.set('gender', 'male')
-userOne.set('dateOfBirth', '01-01-1986')
-userOne.set('height', '195')
-userOne.set('workouts', '[workoutOne]')
 
 
 export const usersByIdMap = new Map([

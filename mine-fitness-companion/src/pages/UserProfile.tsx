@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom"
 import dayjs from "dayjs"
 import { ROUTE_PATH } from "../util/urls"
-import { userPermittedActions } from "../api/userPermittedActions"
+import { userPermittedActions } from "../backend/userPermittedActions"
 
 
 

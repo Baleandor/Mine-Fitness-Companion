@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAppSelector } from "../hooks/hooks"
-import { userPermittedActions } from "../api/userPermittedActions"
+import { userPermittedActions } from "../backend/userPermittedActions"
 import { ROUTE_PATH } from "../util/urls"
 
 

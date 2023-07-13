@@ -1,5 +1,5 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import { userPermittedActions } from "../api/userPermittedActions"
+import { userPermittedActions } from "../backend/userPermittedActions"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ROUTE_PATH } from "../util/urls"

@@ -9,8 +9,10 @@ export default function DateRagePicker({ handleDateRageChange }: DateRangePicker
 
     const { RangePicker } = DatePicker
 
+    const dateFormat = 'DD/MM/YYYY'
+
 
     return (
-        <RangePicker onChange={(values) => handleDateRageChange(values)} />
+        <RangePicker onChange={(values) => handleDateRageChange(values)} format={dateFormat} />
     )
 }

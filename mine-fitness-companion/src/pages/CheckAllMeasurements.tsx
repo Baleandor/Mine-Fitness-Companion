@@ -1,5 +1,5 @@
 import dayjs from "dayjs"
-import { userPermittedActions } from "../api/userPermittedActions"
+import { userPermittedActions } from "../backend/userPermittedActions"
 
 
 

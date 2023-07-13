@@ -5,7 +5,7 @@ import { useAppDispatch } from '../hooks/hooks'
 import { login } from '../redux/authSlice'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE_PATH } from '../util/urls'
-import { usersByIdMap } from '../mockBackend/users'
+import { usersByIdMap } from '../backend/mockData/users'
 
 
 
@@ -30,14 +30,16 @@ export default function Login() {
         let userExists = false
         usersByIdMap.forEach((user) => {
             if (user.email === data.email && user.password === data.password) {
-                 userExists = true
+                userExists = true
             }
         })
-
+        
         if (userExists) {
             dispatch(login(data))
             navigate(ROUTE_PATH.HOME)
         } else {
+            
+            console.log('chicken dinner')
             alert(`Invalid data or user doesn't exist!`)
         }
 

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from "recharts"
 import dayjs from "dayjs"
-import { measurementsData } from "../mockBackend/measurementEvent"
+import { measurementsData } from "../backend/mockData/measurementEvent"
 
 export default function MeasurementsOverTime() {
 

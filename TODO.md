@@ -12,7 +12,7 @@ Refactor all faux BE calls into redux dispatches.
 check for existing user when Registering.
 Track statuses for errors when making calls
 
-
+Ask for measurements over time help
 
 Workout.tsx search via date behaving abnormally. Couldn't shove DatePicker library in there.
 

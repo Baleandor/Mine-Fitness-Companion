@@ -1,52 +1,51 @@
-import { useState } from "react"
-import dayjs from "dayjs"
-import { measurementsData } from "../backend/mockData/measurementEvent"
+import { useEffect, useState } from "react"
+import dayjs, { Dayjs } from "dayjs"
+import DateRagePicker from "../components/DateRangePicker";
+import { userPermittedActions } from "../backend/userPermittedActions";
+import LineChart from "../components/LineChart";
 
 
-type MeasurementsChartDataType = {
-    date: number;
-    weight: number;
-    chest: number;
-    waist: number;
-    hips: number;
-    biceps: number;
-}[]
+type ChartDataType = {
+    labels: string[];
+    datasets: {
+        label: string;
+        data: number[];
+    }[];
+}
 
 
 
 export default function MeasurementsOverTime() {
 
-    const [startDate, setStartDate] = useState(0)
-    const [endDate, setEndDate] = useState(0)
-    const [chartDateRange, setChartDateRange] = useState<MeasurementsChartDataType>([])
+    const [dateRange, setDateRange] = useState<number[]>()
 
-    const [showChart, setShowChart] = useState(false)
+    const [chartData, setChartData] = useState<ChartDataType>()
 
-    const handleStartDateOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newDate = dayjs(event.target.value).valueOf()
-        setStartDate(newDate)
-    }
 
-    const handleEndDateOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newDate = dayjs(event.target.value).valueOf()
 
-        setEndDate(newDate)
-    }
+    useEffect(() => {
+        const loadAllChartData = userPermittedActions.getUserMeasurementsChartData()
+        setChartData(loadAllChartData)
+    }, [])
 
-    const getDateRange = () => {
-        const dateRange: MeasurementsChartDataType = []
-        measurementsData.forEach((line) => {
-            if (line.date >= startDate && line.date <= endDate) {
-                dateRange.push(line)
-            }
-        })
-        setChartDateRange(dateRange)
+    const handleDateRangeChange = (values: Dayjs[]) => {
+        if (values == undefined || values.length === 0) {
+            setChartData(userPermittedActions.getUserMeasurementsChartData())
+        } else {
+            const [startDate, endDate] = values
+            const newDateRange = [dayjs(startDate).valueOf(), dayjs(endDate).valueOf()]
+            setDateRange(newDateRange)
+            userPermittedActions.getUserMeasurementsChartRangeData(newDateRange)
+        }
     }
 
     const displayDateRangeData = () => {
-        getDateRange()
-        setShowChart(true)
+        if (dateRange) {
+            // const newDateRange = userPermittedActions.getChartDataWithinRange(dateRange)
+            // setChartData(newDateRange)
+        }
     }
+
 
 
     return (
@@ -54,21 +53,14 @@ export default function MeasurementsOverTime() {
 
         <div className="flex flex-col justify-center items-center">
             <div className="p-1">
-                <span>Measurements Over Time</span>
+                <span>Measurements Progress Over Time</span>
             </div>
             <div className="flex">
-                <div className="p-1">
-                    <span className="p-1">Start Date</span>
-                    <input type="date" onChange={handleStartDateOnChange}></input>
-                </div>
-                <div className="p-1">
-                    <span className="p-1">Start Date</span>
-                    <input type="date" onChange={handleEndDateOnChange}></input>
-                </div>
-
-                <button className="p-1 border rounded-md border-red-700" onClick={displayDateRangeData}>Search</button>
+                <DateRagePicker handleDateRageChange={handleDateRangeChange} />
+                <button className="p-1 border rounded-md border-red-700" onClick={displayDateRangeData}>Filter</button>
             </div>
-   
-        </div >
+            {chartData?.labels.length === 0 && <div className="p-1 text-red-600 text-3xl">No data found!</div>}
+            {chartData && <LineChart chartData={chartData} />}
+        </div>
     )
 }

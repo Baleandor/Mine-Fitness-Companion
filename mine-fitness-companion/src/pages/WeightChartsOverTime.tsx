@@ -21,13 +21,13 @@ export default function WeightChartsOverTime() {
     const [dateRange, setDateRange] = useState<number[]>()
 
     useEffect(() => {
-        const loadAllChartData = userPermittedActions.getAllChartData()
+        const loadAllChartData = userPermittedActions.getAllExerciseWeightChartData()
         setChartData(loadAllChartData)
     }, [])
 
     const handleDateRangeChange = (values: Dayjs[]) => {
         if (values == undefined || values.length === 0) {
-            setChartData(userPermittedActions.getAllChartData())
+            setChartData(userPermittedActions.getAllExerciseWeightChartData())
         } else {
             const [startDate, endDate] = values
             const newDateRange = [dayjs(startDate).valueOf(), dayjs(endDate).valueOf()]
@@ -37,7 +37,7 @@ export default function WeightChartsOverTime() {
 
     const displayDateRangeData = () => {
         if (dateRange) {
-            const newDateRange = userPermittedActions.getChartDataWithinRange(dateRange)
+            const newDateRange = userPermittedActions.getExerciseWeightChartDataWithinRange(dateRange)
             setChartData(newDateRange)
         }
     }

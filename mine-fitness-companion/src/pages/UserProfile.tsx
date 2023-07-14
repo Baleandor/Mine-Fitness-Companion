@@ -70,7 +70,7 @@ export default function UserProfile() {
                             <span>Biceps: {userMeasurementInfo.biceps[userMeasurementInfo.biceps.length - 1]}</span>
                         </div>
                         <div>
-                            <span>Date: {dayjs(userMeasurementInfo.date[userMeasurementInfo.date.length - 1]).format('DD/MM/YYYY')}</span>
+                            <span>Date: {dayjs(userMeasurementInfo.dates[userMeasurementInfo.dates.length - 1]).format('DD/MM/YYYY')}</span>
                         </div>
                     </div> :
                     <div className="p-1">No measurements present!</div>}

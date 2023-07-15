@@ -342,46 +342,58 @@ const getUserMeasurementsChartRangeData = (dateRange: number[]) => {
 
     try {
         const labelsWithinRange: number[] = []
-        const datasets: { label: string; data: number[] }[] = []
-        const includedDatasets: string[] = []
+        const datasets: { label: string, data: number[] }[] = []
+        const dateIndexes = []
+        const temporaryMap = new Map<any, any>([
+            ['label', []]
+        ])
 
         const datasetEntries = Object.entries(measurementEventByIdMap.get(user.id))
         const userDates = measurementEventByIdMap.get(user.id)?.dates
 
-
         if (datasetEntries && userDates) {
 
             for (let i = 0; i < userDates.length; i++) {
-
                 if (userDates[i] >= dateRange[0] && userDates[i] <= dateRange[1]) {
-
+                    temporaryMap.set('label', [...temporaryMap.get('label'), userDates[i]])
                     labelsWithinRange.push(userDates[i])
-
-                    for (let j = 2; j < datasetEntries.length - 1; j++) {
-                        let currentDatasetEntry = datasetEntries[j][0]
-                        console.log(datasets.includes(currentDatasetEntry))
-                        if (datasets.includes(currentDatasetEntry)) {
-                            datasets[datasetEntries[j][0]] += datasetEntries[j][1][i]
-                            datasets[datasetEntries[j][0]]
-                        } else {
-                            datasets.push({
-                                label: datasetEntries[j][0],
-                                data: datasetEntries[j][1][i]
-                            })
-                        }
-                    }
-
+                    dateIndexes.push(i)
                 }
             }
+
+            dateIndexes.forEach((entry) => {
+                for (let i = 2; i < datasetEntries.length - 1; i++) {
+                    const labelName = datasetEntries[i][0]
+                    const labelData = datasetEntries[i][1][entry]
+
+                    if ([...temporaryMap.keys()].find((element) => element === labelName)) {
+                        temporaryMap.set(labelName, [...temporaryMap.get(labelName), (labelData)])
+                    } else {
+                        temporaryMap.set(labelName, [labelData])
+                    }
+                }
+            })
         }
 
-        return userDates
+        [...temporaryMap.entries()].map((entry) => {
+            if (entry[0] !== 'label') {
+                datasets.push({
+                    label: entry[0],
+                    data: entry[1]
+                })
+            }
+        })
 
+        const labels = labelsWithinRange.map((date) => {
+            return dayjs(date).format('DD/MM/YYYY')
+        })
+
+
+        return { labels, datasets }
 
     } catch (error) {
         throw new Error(error)
     }
-
 }
 
 

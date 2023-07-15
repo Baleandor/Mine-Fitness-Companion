@@ -12,22 +12,31 @@ export type UserDataType = {
 
 
 
-const register = async (userRegisterData: UserDataType) => {
-    usersByIdMap.set(usersByIdMap.size + 1,
-        {
-            id: usersByIdMap.size + 1,
-            name: userRegisterData.name,
-            email: userRegisterData.email,
-            password: userRegisterData.password,
-            dateOfBirth: userRegisterData.birthDate,
-            gender: userRegisterData.gender,
-            height: userRegisterData.height,
-            role: 'user',
-            workouts: []
-        })
-//check for existing user and return proper code
+const register = (userRegisterData: UserDataType) => {
+    try {
+        const { name, email, password, gender, birthDate, height } = userRegisterData
+        if ([...usersByIdMap.values()].find(element => element.email === email) === undefined) {
+            usersByIdMap.set(usersByIdMap.size + 1,
+                {
+                    id: usersByIdMap.size + 1,
+                    name: name,
+                    email: email,
+                    password: password,
+                    dateOfBirth: birthDate,
+                    gender: gender,
+                    height: height,
+                    role: 'user',
+                    workouts: []
+                })
+            return userRegisterData
 
-    return userRegisterData
+        } else {
+            throw new Error('User already exists!')
+        }
+
+    } catch (err) {
+        throw new Error(err.message)
+    }
 }
 
 const login = (userData: { email: string; password: string }) => {

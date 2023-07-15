@@ -1,10 +1,13 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js/auto";
 import { Line } from "react-chartjs-2";
+import { useLocation } from "react-router-dom";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 
 export default function LineChart({ chartData }) {
+
+    const { state } = useLocation()
 
 
     return (
@@ -12,8 +15,9 @@ export default function LineChart({ chartData }) {
             scales: {
                 y: {
                     ticks: {
-                        callback: (value, index, ticks) => {
-                            return value + 'kg'
+                        callback: (value, index, ticks,) => {
+
+                            return state ? value + 'kg' : value + 'cm'
                         }
                     }
                 }

@@ -35,14 +35,13 @@ export default function MeasurementsOverTime() {
             const [startDate, endDate] = values
             const newDateRange = [dayjs(startDate).valueOf(), dayjs(endDate).valueOf()]
             setDateRange(newDateRange)
-            userPermittedActions.getUserMeasurementsChartRangeData(newDateRange)
         }
     }
 
     const displayDateRangeData = () => {
         if (dateRange) {
-            // const newDateRange = userPermittedActions.getChartDataWithinRange(dateRange)
-            // setChartData(newDateRange)
+            const newDateRange = userPermittedActions.getUserMeasurementsChartRangeData(dateRange)
+            setChartData(newDateRange)
         }
     }
 

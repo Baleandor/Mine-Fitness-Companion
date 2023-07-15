@@ -4,7 +4,6 @@ LOOK INTO RTK QUERY
 
 return 404 message from "BE" when query is not found
 
-refactor authSlice 'get user' into a function with a try/catch when parsing localStorage
 
 User data is somehow either cached or doesn't update when it has to. It does so on page refresh.
 

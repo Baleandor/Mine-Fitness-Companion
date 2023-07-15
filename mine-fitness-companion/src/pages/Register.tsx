@@ -20,7 +20,7 @@ const registerSchema = z.object({
     password: z.string().min(6),
     repass: z.string(),
     gender: z.string().min(1, "You must select a gender!"),
-    dateOfBirth: z.number({ invalid_type_error: 'You must choose a date of birth!' }),
+    birthDate: z.number({ invalid_type_error: 'You must choose a date of birth!' }),
     height: z.number({ invalid_type_error: "You must enter a number" }).min(145, 'You must be at least 145 tall to join the gym!')
 }).refine((data) => data.password === data.repass, {
     message: "Passwords must match!",
@@ -40,12 +40,13 @@ export default function Register() {
 
     const { register, handleSubmit, formState: { errors }, control } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(registerSchema) })
     const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
-        const { name, email, password, gender, dateOfBirth, height } = data
-        const birthDate = dayjs(dateOfBirth).valueOf()
-        const userData = { name, email, password, gender, birthDate, height }
+        try {
+            dispatch(registerUser(data))
+            navigate(ROUTE_PATH.HOME)
 
-        dispatch(registerUser(userData))
-        navigate(ROUTE_PATH.HOME)
+        } catch (err) {
+            throw new Error(err)
+        }
     }
 
 
@@ -88,8 +89,8 @@ export default function Register() {
             </div>
             <div className='p-1 flex flex-col'>
                 <label>Date Of Birth</label>
-                <RHFDatePicker control={control} name='dateOfBirth' />
-                {errors.dateOfBirth && <p className='text-red-500 p-1'>{errors.dateOfBirth.message}</p>}
+                <RHFDatePicker control={control} name='birthDate' />
+                {errors.birthDate && <p className='text-red-500 p-1'>{errors.dateOfBirth.message}</p>}
 
             </div>
             <div className='p-1 flex flex-col'>

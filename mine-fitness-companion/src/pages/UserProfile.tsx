@@ -2,12 +2,16 @@ import { useNavigate } from "react-router-dom"
 import dayjs from "dayjs"
 import { ROUTE_PATH } from "../util/urls"
 import { userPermittedActions } from "../backend/userPermittedActions"
+import { useState } from "react"
 
 
 
 export default function UserProfile() {
 
     const navigate = useNavigate()
+
+    const [isWeightChart] = useState(true)
+
 
     const userBasicInfo = userPermittedActions.getUserBasicInfo()
 
@@ -105,7 +109,7 @@ export default function UserProfile() {
                     <span>Date: {userWorkouts ? dayjs(userWorkouts.date).format('DD/MM/YYYY') : 'No workouts!'}</span>
                 </div>
                 <div>
-                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME)}>View Weight Progress</button>
+                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME, { state: isWeightChart })}>View Weight Progress</button>
                 </div>
                 <div>
                     <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.WORKOUTS)}>View Workouts</button>

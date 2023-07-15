@@ -33,13 +33,11 @@ export default function Login() {
                 userExists = true
             }
         })
-        
+
         if (userExists) {
             dispatch(login(data))
             navigate(ROUTE_PATH.HOME)
         } else {
-            
-            console.log('chicken dinner')
             alert(`Invalid data or user doesn't exist!`)
         }
 

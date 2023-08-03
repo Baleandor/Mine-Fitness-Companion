@@ -1,7 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
-import { logout } from "../redux/authSlice";
 import { ROUTE_PATH } from "../util/urls";
+import { useEffect } from "react";
+import { isLoggedOut } from "../redux/isUserLoggedIn";
+import { useUserLogoutMutation } from "../redux/userApi";
 
 
 
@@ -13,11 +15,19 @@ export default function Navbar() {
 
     const navigate = useNavigate()
 
-    const user = useAppSelector((state) => state.auth.user)
+    const isUserLoggedIn = useAppSelector((state) => state.isLoggedIn)
+
+    const [userLogout] = useUserLogoutMutation()
+
+    useEffect(() => {
+        if (isUserLoggedIn === false) {
+            navigate(ROUTE_PATH.HOME)
+        }
+    }, [isUserLoggedIn])
 
     const onLogout = () => {
-        dispatch(logout())
-        navigate(ROUTE_PATH.HOME)
+        dispatch(isLoggedOut())
+        userLogout(isUserLoggedIn)
     }
 
 
@@ -25,7 +35,7 @@ export default function Navbar() {
         <nav className="flex">
             <Link to={ROUTE_PATH.HOME} className="p-2">Home</Link>
 
-            {user != null || undefined ?
+            {isUserLoggedIn ?
                 <>
                     <Link to={ROUTE_PATH.USER_PROFILE} className="p-2">Profile</Link>
                     <button className="p-2" onClick={onLogout}>Logout</button>

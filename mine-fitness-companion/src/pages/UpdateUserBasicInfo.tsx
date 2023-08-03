@@ -4,7 +4,8 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import RHFDatePicker from "../components/RHFDatePicker"
 import { ROUTE_PATH } from "../util/urls"
-import { userPermittedActions } from "../backend/userPermittedActions"
+import { getUser } from "../util/getSession"
+import { useUpdateBasicInfoMutation } from "../redux/basicInfoApi"
 
 
 enum GenderOptions {
@@ -12,7 +13,7 @@ enum GenderOptions {
     'female'
 }
 
-const user = JSON.parse(localStorage.getItem('user'))
+// const user = getUser()
 
 const updateUserBasicInfoSchema = z.object({
     name: z.string({ required_error: 'Name is required!' }).min(4, 'Name must be at least 4 characters long!'),
@@ -24,11 +25,6 @@ const updateUserBasicInfoSchema = z.object({
     dateOfBirth: z.number({ required_error: "A date of birth is required!" }),
     height: z.number({ invalid_type_error: "You must enter a number" }).min(145, 'You must be at least 145 tall to join the gym!')
 }).refine(
-    (data) => data.currentPassword === user.password, {
-    message: 'Incorrect current password',
-    path: ['currentPassword']
-}
-).refine(
     (data) => data.password === data.repass, {
     message: "Passwords must match!",
     path: ["repass"]
@@ -43,16 +39,20 @@ export default function UpdateUserBasicInfo() {
 
     const navigate = useNavigate()
 
-    const updateUserInfo = userPermittedActions.updateUserBasicInfo
+    const [updateBasicInfo] = useUpdateBasicInfoMutation()
 
     const { register, handleSubmit, formState: { errors }, control } = useForm<UpdateUserBasicInfoType>({ resolver: zodResolver(updateUserBasicInfoSchema) })
 
     const onSubmit: SubmitHandler<UpdateUserBasicInfoType> = (data) => {
-        const { name, email, password, gender, dateOfBirth, height } = data
-        const updateData = { name, email, password, gender, dateOfBirth, height }
-        console.log(dateOfBirth)
-        updateUserInfo(updateData)
-        navigate(ROUTE_PATH.USER_PROFILE)
+        const { name, email, currentPassword, password, gender, dateOfBirth, height } = data
+        const updateData = { name, email, password, currentPassword, gender, dateOfBirth, height }
+        try {
+
+            updateBasicInfo(updateData)
+            navigate(ROUTE_PATH.USER_PROFILE)
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 
 

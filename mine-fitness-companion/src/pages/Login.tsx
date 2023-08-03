@@ -1,11 +1,12 @@
 import { z } from 'zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAppDispatch } from '../hooks/hooks'
-import { login } from '../redux/authSlice'
+import { useAppDispatch, useAppSelector } from '../hooks/hooks'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE_PATH } from '../util/urls'
-import { usersByIdMap } from '../backend/mockData/users'
+import { useUserLoginMutation } from '../redux/userApi'
+import { isLoggedIn } from '../redux/isUserLoggedIn'
+import { useEffect } from 'react'
 
 
 
@@ -17,31 +18,29 @@ const loginSchema = z.object({
 type LoginFormSchemaType = z.infer<typeof loginSchema>
 
 
+
 export default function Login() {
+
+    const userLoggedIn = useAppSelector((state) => state.isLoggedIn)
 
     const navigate = useNavigate()
 
-    const { register, handleSubmit, formState: { errors } } = useForm<LoginFormSchemaType>({ resolver: zodResolver(loginSchema) })
+    useEffect(() => {
+        if (userLoggedIn) {
+
+            navigate(ROUTE_PATH.HOME)
+        }
+    }, [userLoggedIn])
+
+    const [userLogin] = useUserLoginMutation()
 
     const dispatch = useAppDispatch()
 
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginFormSchemaType>({ resolver: zodResolver(loginSchema) })
+
     const onSubmit: SubmitHandler<LoginFormSchemaType> = (data) => {
-
-        let userExists = false
-        usersByIdMap.forEach((user) => {
-            if (user.email === data.email && user.password === data.password) {
-                userExists = true
-            }
-        })
-
-        if (userExists) {
-            dispatch(login(data))
-            navigate(ROUTE_PATH.HOME)
-        } else {
-            alert(`Invalid data or user doesn't exist!`)
-        }
-
-
+        userLogin(data)
+        dispatch(isLoggedIn())
     }
 
 
@@ -64,3 +63,5 @@ export default function Login() {
         </form>
     )
 }
+
+

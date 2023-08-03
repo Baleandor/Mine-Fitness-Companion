@@ -1,28 +1,31 @@
 import dayjs from "dayjs"
-import { userPermittedActions } from "../backend/userPermittedActions"
+
+import { useGetMeasurementsQuery } from "../redux/measurementsApi"
+import { getUser } from "../util/getSession"
 
 
 
 export default function CheckAllMeasurements() {
 
-    const userMeasurements = userPermittedActions.getUserMeasurements()
+    // const user = getUser()
+
+    const { data } = useGetMeasurementsQuery(user)
+
+
 
     return (
         <div className="flex flex-col">
 
-            {userMeasurements ? Object.keys(userMeasurements).map((entry) => {
-                if (entry === 'date') {
-                    return <div className="border rounded-md border-red-400 mb-2 p-1" key={entry}>{`${entry}: ${userMeasurements[entry].map(date => {
-                        return ` ${dayjs(date).format('DD/MM/YYYY')}`
+            {data ? Object.keys(data).map((entry) => {
+                if (entry === 'dates') {
+                    return <div className="border rounded-md border-red-400 mb-2 p-1" key={entry}>{`${entry}: ${data[entry].map((date: number) => {
+                        return dayjs(date).format('DD/MM/YYYY')
                     })}`}</div>
                 } else {
-                    return <div className="border rounded-md border-red-400 mb-2 p-1" key={entry}>{`${entry}: ${userMeasurements[entry]}`}</div>
+                    return <div className="border rounded-md border-red-400 mb-2 p-1" key={entry}>{`${entry}: ${data[entry]}`}</div>
                 }
             }) :
                 <div className="p-1">No measurements found!</div>}
-
-
-
         </div>
     )
 }

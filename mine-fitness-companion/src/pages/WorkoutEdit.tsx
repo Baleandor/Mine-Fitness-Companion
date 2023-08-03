@@ -1,10 +1,11 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom"
-import { userPermittedActions } from "../backend/userPermittedActions"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ROUTE_PATH } from "../util/urls"
 import { z } from "zod"
 import RHFDatePicker from "../components/RHFDatePicker"
+import { useEffect } from "react"
+import { useCreateWorkoutMutation, useGetWorkoutByIdQuery, useUpdateWorkoutMutation } from "../redux/workoutsApi"
 
 
 
@@ -24,37 +25,62 @@ export default function WorkoutEdit() {
 
     const { state } = useLocation()
 
-    const selectedWorkout = userPermittedActions.getWorkout(Number(id))
+    const { data: workoutById } = useGetWorkoutByIdQuery(id)
 
+    const [updateWorkout] = useUpdateWorkoutMutation()
 
-    const { register, handleSubmit, formState: { errors }, control } = useForm<EditWorkoutSchemaType>({
-        resolver: zodResolver(editWorkoutSchema), defaultValues: {
-            exercises: selectedWorkout?.exercises.toString(),
-            date: state ? selectedWorkout?.date : undefined
+    const [createWorkout] = useCreateWorkoutMutation()
+
+    useEffect(() => {
+        if (workoutById?.exercises.toString()) {
+            if (state) {
+                setValue("exercises", workoutById.exercises.toString())
+            } else {
+                setValue("exercises", workoutById.exercises.toString())
+
+                setValue("date", workoutById.date)
+            }
         }
+
+    }, [])
+
+    // , defaultValues: {
+    //     exercises: workoutById?.exercises.toString(),
+    //     date: state ? undefined : workoutById?.date
+    // }
+
+    const { register, handleSubmit, formState: { errors }, control, setValue } = useForm<EditWorkoutSchemaType>({
+        resolver: zodResolver(editWorkoutSchema)
     })
 
     const onSubmit: SubmitHandler<EditWorkoutSchemaType> = (data) => {
+        try {
+            const { exercises, date } = data
+            if (state) {
+                const updatedWorkoutData = {
+                    exercises: exercises.split(','),
+                    date: date,
+                }
+                createWorkout(updatedWorkoutData)
 
-        const { exercises, date } = data
-        if (state) {
-            const updatedWorkoutData = {
-                exercises: exercises.split(','),
-                date: date,
-            }
-            userPermittedActions.createWorkout(updatedWorkoutData)
+            } else {
+                const updatedWorkoutData = {
+                    exercises: exercises.split(','),
+                    date: date,
+                    id: Number(id)
+                }
+                updateWorkout(updatedWorkoutData)
 
-        } else {
-            const updatedWorkoutData = {
-                exercises: exercises.split(','),
-                date: date,
-                id: Number(id)
+
+
             }
-            userPermittedActions.updateWorkout(updatedWorkoutData)
+            navigate(ROUTE_PATH.WORKOUTS)
+
+        } catch (error) {
+            throw new Error(error)
         }
-
-        navigate(ROUTE_PATH.USER_PROFILE)
     }
+
 
 
     return (
@@ -70,7 +96,7 @@ export default function WorkoutEdit() {
                 {errors.date && <p className='text-red-500 p-1'>{errors.date.message}</p>}
             </div>
             <div>
-                <button className="p-1 border rounded-md border-red-400">Update Workout</button>
+                <button className="p-1 border rounded-md border-red-400">{state ? 'Duplicate Workout' : 'Update Workout'}</button>
             </div>
         </form>
     )

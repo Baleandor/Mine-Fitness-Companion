@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAppSelector } from "../hooks/hooks"
-import { userPermittedActions } from "../backend/userPermittedActions"
 import { ROUTE_PATH } from "../util/urls"
+import { useDeleteExerciseMutation, useGetAllExercisesQuery } from "../redux/exerciseApi"
 
 
 export default function ExerciseLibrary() {
@@ -17,7 +17,13 @@ export default function ExerciseLibrary() {
 
     const user = useAppSelector((state) => state.auth.user)
 
-    const allExerciseTypes = userPermittedActions.getAllExerciseTypes()
+    const { data } = useGetAllExercisesQuery(user)
+
+    const [deleteExercise] = useDeleteExerciseMutation()
+
+    useEffect(() => {
+        setSearchResult(data)
+    }, [data])
 
     const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchParams(event.target.value.toLocaleLowerCase())
@@ -25,7 +31,7 @@ export default function ExerciseLibrary() {
 
     const findExercise = () => {
         const search = []
-        for (let exerciseType of allExerciseTypes) {
+        for (let exerciseType of data) {
             if (searchParams.includes(exerciseType.name)) {
                 search.push(exerciseType)
             }
@@ -34,17 +40,15 @@ export default function ExerciseLibrary() {
             }
         }
         if (search.length > 1) {
-
             setSearchResult(search)
         } else {
-            setSearchResult(search)
-
             setShowResults(false)
+            setSearchResult([])
         }
     }
 
     const onDelete = (id: number) => {
-        userPermittedActions.deleteExerciseTypeById(Number(id))
+        deleteExercise(Number(id))
     }
 
     return (
@@ -52,11 +56,11 @@ export default function ExerciseLibrary() {
             <div>
                 <span className="p-1">Search Exercise</span>
                 <input type="search" onChange={handleOnChange} className="p-1" ></input>
-                <button onClick={findExercise} className="p-1 border border-red-400 rounded-md">Find</button>
+                <button onClick={findExercise} className="p-1 border border-red-400 rounded-md">Filter</button>
                 <button className="ml-2 p-1 border border-red-400 rounded-md" onClick={() => navigate(ROUTE_PATH.EXERCISE_LIBRARY_CREATE_EXERCISE_TYPE)}>Create Exercise Type</button>
             </div>
             <div className="p-1">
-                {searchResult.length > 0 ? searchResult.map((result) => {
+                {searchResult && searchResult.length > 0 ? searchResult.map((result) => {
                     return (
                         <div className="border rounded-md border-blue-700 mb-1 p-1" key={result.id}>
                             <span >{result.name}:</span>

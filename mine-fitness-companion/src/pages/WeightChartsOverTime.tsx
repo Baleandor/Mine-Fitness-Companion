@@ -1,17 +1,11 @@
 
 import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
-import DateRagePicker from "../components/DateRangePicker";
+import DateRangePicker from "../components/DateRangePicker";
 import { userPermittedActions } from "../backend/userPermittedActions";
 import LineChart from "../components/LineChart";
+import { ChartDataType } from "../util/types";
 
-type ChartDataType = {
-    labels: string[];
-    datasets: {
-        label: string;
-        data: number[];
-    }[];
-}
 
 
 export default function WeightChartsOverTime() {
@@ -49,7 +43,7 @@ export default function WeightChartsOverTime() {
                 <span>Exercise Weight Progress Over Time</span>
             </div>
             <div className="flex">
-                <DateRagePicker handleDateRageChange={handleDateRangeChange} />
+                <DateRangePicker handleDateRangeChange={handleDateRangeChange} />
                 <button className="p-1 border rounded-md border-red-700" onClick={displayDateRangeData}>Filter</button>
             </div>
             {chartData?.labels.length === 0 && <div className="p-1 text-red-600 text-3xl">No data found!</div>}

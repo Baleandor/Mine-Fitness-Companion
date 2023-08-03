@@ -5,48 +5,51 @@ import { measurementEventByIdMap } from "./mockData/measurementEvent"
 import { usersByIdMap } from "./mockData/users"
 import { workoutByIdMap } from "./mockData/workout"
 import { exercisesByIdMap } from "./mockData/exercise"
-import { getUser } from "../util/getUser"
+import { getUser } from "../util/getSession"
+import { BasicInfoType, ExercisesType, MeasurementDataType, NewMeasurementDataType } from "../util/types"
+
+// const user = getUser()
 
 
-const user = getUser()
+const getUserBasicInfo = (userEmail: string) => {
 
+    const user = [...usersByIdMap.values()].find(user => user.email === userEmail)
 
-const getUserBasicInfo = () => {
-    try {
-        if (user != null) {
-            return usersByIdMap.get(user.id)
-        }
-    } catch (err) {
-        throw new Error(err.message)
-    }
+    return user
 }
 
 const getUserMeasurements = () => {
-    try {
-        if (user != null) {
-            return measurementEventByIdMap.get(user.id)
-        }
 
-    } catch (err) {
-        throw new Error(err.message)
+    if (user != null) {
+        let latestMeasurement: MeasurementDataType | undefined
+        measurementEventByIdMap.forEach((measurementEvent) => {
+            if (measurementEvent.user === user.name) {
+                if (latestMeasurement === undefined) {
+                    latestMeasurement = measurementEvent
+                } else if (latestMeasurement?.measurements[0].date < measurementEvent.measurements[0].date) {
+                    latestMeasurement = measurementEvent
+                }
+            }
+        })
+        return latestMeasurement
     }
+
+
 }
 
 const getUserWorkouts = () => {
-    try {
-        if (user != null) {
-            return workoutByIdMap.get(user.id)
-        }
-    } catch (err) {
-        throw new Error(err.message)
+
+    if (user != null) {
+        return workoutByIdMap.get(user.id)
     }
+
 
 }
 
 
-const updateUserBasicInfo = (userData: { name: string; email: string; password: any; gender: string; dateOfBirth: number; height: number }) => {
-
-    try {
+const updateUserBasicInfo = (userData: BasicInfoType) => {
+    const currentUser = usersByIdMap.get(user.id)
+    if (userData.currentPassword === currentUser?.password) {
         usersByIdMap.set(user.id,
             {
                 id: user.id,
@@ -59,341 +62,327 @@ const updateUserBasicInfo = (userData: { name: string; email: string; password: 
                 height: userData.height,
                 workouts: []
             })
-    } catch (err) {
-        throw new Error(err.message)
+    } else {
+        throw new Error('Entered current password is invalid!')
     }
+
+
 }
 
 
-const addUserMeasurements = (measurementData: { biceps: number; chest: number; date: number; hips: number; imageUrl: string; waist: number; weight: number }) => {
+const addUserMeasurements = (measurementData: NewMeasurementDataType) => {
 
-    try {
-        measurementEventByIdMap.set(user.id, {
-            user: user.name,
-            imageUrl: [measurementEventByIdMap.get(user.id), measurementData.imageUrl],
-            biceps: [measurementEventByIdMap.get(user.id), measurementData.biceps],
-            chest: [measurementEventByIdMap.get(user.id), measurementData.chest],
-            date: [measurementEventByIdMap.get(user.id), measurementData.date],
-            hips: [measurementEventByIdMap.get(user.id), measurementData.hips],
-            waist: [measurementEventByIdMap.get(user.id), measurementData.waist],
-            weight: [measurementEventByIdMap.get(user.id), measurementData.weight],
-            workouts: []
-        })
-    } catch (err) {
-        throw new Error(err.message)
-    }
+
+    measurementEventByIdMap.set(measurementEventByIdMap.size + 1, {
+        user: user.name,
+        imageUrl: [measurementData.imageUrl],
+        measurements: [{
+            weight: measurementData.weight,
+            chest: measurementData.chest,
+            waist: measurementData.waist,
+            hips: measurementData.hips,
+            biceps: measurementData.biceps,
+            date: measurementData.date
+        }]
+    })
+
 }
 
 const getAllExerciseTypes = () => {
 
-    try {
-        const allExerciseTypes: { id: number; name: string; muscleGroups: string[] }[] = []
 
-        exerciseTypesByIdMap.forEach((exerciseType) => {
+    const allExerciseTypes: ExercisesType[] = []
 
-            allExerciseTypes.push(exerciseType)
-        })
-        return allExerciseTypes
+    exerciseTypesByIdMap.forEach((exerciseType) => {
 
-    } catch (err) {
-        throw new Error(err.message)
-    }
+        allExerciseTypes.push(exerciseType)
+    })
+    return allExerciseTypes
+
+
 }
 
 const getExerciseType = (id: number) => {
-    try {
-        return exerciseTypesByIdMap.get(id)
 
-    } catch (err) {
-        throw new Error(err.message)
-    }
+    return exerciseTypesByIdMap.get(id)
+
+
 }
 
-const updateExerciseTypeById = (id: number, data: { exerciseName: string; muscleGroups: string }) => {
+const updateExerciseTypeById = (data: { id: number, exerciseName: string; muscleGroups: string }) => {
 
-    try {
-        return exerciseTypesByIdMap.set(id, { id: id, name: data.exerciseName, muscleGroups: [data.muscleGroups] })
 
-    } catch (err) {
-        throw new Error(err.message)
-    }
+    exerciseTypesByIdMap.set(data.id, { id: data.id, name: data.exerciseName, muscleGroups: [data.muscleGroups] })
+    return exerciseTypesByIdMap.get(data.id)
+
+
 }
 
 const deleteExerciseTypeById = (id: number) => {
 
-    try {
-        return exerciseTypesByIdMap.delete(id)
 
-    } catch (err) {
-        throw new Error(err.message)
-    }
+    return exerciseTypesByIdMap.delete(id)
+
+
 }
 
 const createExerciseType = (data: { exerciseName: string; muscleGroups: string }) => {
-    try {
 
-        const newEntryKey = exerciseTypesByIdMap.size + 1
-        exerciseTypesByIdMap.set(newEntryKey, { id: newEntryKey, name: data.exerciseName, muscleGroups: [data.muscleGroups] })
-    } catch (err) {
-        throw new Error(err.message)
-    }
+
+    const newEntryKey = exerciseTypesByIdMap.size + 1
+    exerciseTypesByIdMap.set(newEntryKey, { id: newEntryKey, name: data.exerciseName, muscleGroups: [data.muscleGroups] })
+    return exerciseTypesByIdMap.get(newEntryKey)
+
 }
 
+
+
 const getMatchingWorkouts = (filteredWorkout: string) => {
-    try {
-        const matchingWorkouts: { id: number; user: string; exercises: string[]; date: number }[] = []
-        const selectedWorkoutId: number | number[] = []
 
-        workoutByIdMap.forEach((workout) => {
-            if (workout.exercises.includes(filteredWorkout)
-                || workout.id.toString() === filteredWorkout
-                || workout.date === (dayjs(filteredWorkout).valueOf())
-                && workout.user === user.name
-                && !selectedWorkoutId.includes(workout.id)) {
-                selectedWorkoutId.push(workout.id)
-                matchingWorkouts.push(workout)
-                return
-            }
-        })
+    const matchingWorkouts: { id: number; user: string; exercises: string[]; date: number }[] = []
+    const selectedWorkoutId: number | number[] = []
 
-        exerciseTypesByIdMap.forEach((exercise) => {
-            if (exercise.muscleGroups.includes(filteredWorkout)) {
-                workoutByIdMap.forEach((workout) => {
-                    if (workout.exercises.includes(exercise.name) && workout.user === user.name && !selectedWorkoutId.includes(workout.id)) {
-                        selectedWorkoutId.push(workout.id)
-                        matchingWorkouts.push(workout)
-                        return
-                    }
-                })
-            }
-        })
+    workoutByIdMap.forEach((workout) => {
+        if ((workout.exercises.includes(filteredWorkout)
+            || workout.date === (dayjs(filteredWorkout).valueOf()))
+            && workout.user === user.name
+            && !selectedWorkoutId.includes(workout.id)) {
+            selectedWorkoutId.push(workout.id)
+            matchingWorkouts.push(workout)
+            return
+        }
+    })
 
-        return matchingWorkouts
-    } catch (err) {
-        throw new Error(err.message)
-    }
+    exerciseTypesByIdMap.forEach((exercise) => {
+        if (exercise.muscleGroups.includes(filteredWorkout)) {
+            workoutByIdMap.forEach((workout) => {
+                if (workout.exercises.includes(exercise.name) && workout.user === user.name && !selectedWorkoutId.includes(workout.id)) {
+                    selectedWorkoutId.push(workout.id)
+                    matchingWorkouts.push(workout)
+                    return
+                }
+            })
+        }
+    })
+
+    return matchingWorkouts
+
 }
 
 const getWorkout = (id: number) => {
-    try {
-        return workoutByIdMap.get(id)
 
-    } catch (err) {
-        throw new Error(err.message)
-    }
+    return workoutByIdMap.get(id)
+
+
 }
 
 const updateWorkout = (updatedWorkoutData: { exercises: string[]; id: number; date: number }) => {
-    try {
 
-        workoutByIdMap.set(updatedWorkoutData.id, {
-            id: updatedWorkoutData.id,
-            user: workoutByIdMap.get(user.id)?.user,
-            exercises: updatedWorkoutData.exercises,
-            date: updatedWorkoutData.date
-        })
-    } catch (err) {
-        throw new Error(err.message)
-    }
+    workoutByIdMap.set(updatedWorkoutData.id, {
+        id: updatedWorkoutData.id,
+        user: workoutByIdMap.get(user.id)?.user,
+        exercises: updatedWorkoutData.exercises,
+        date: updatedWorkoutData.date
+    })
+
+
 }
 
 const deleteWorkoutById = (workoutId: number) => {
-    try {
-        workoutByIdMap.delete(workoutId)
 
-    } catch (err) {
-        throw new Error(err.message)
-    }
+    workoutByIdMap.delete(workoutId)
+
+
 }
 
 const createWorkout = (data: { exercises: string[]; date: number }) => {
-    try {
 
-        const newWorkoutId = workoutByIdMap.size + 1
-        workoutByIdMap.set(newWorkoutId,
-            { id: newWorkoutId, user: user.name, exercises: data.exercises, date: data.date })
-    } catch (err) {
-        throw new Error(err.message)
-    }
+    const newWorkoutId = workoutByIdMap.size + 1
+    workoutByIdMap.set(newWorkoutId,
+        { id: newWorkoutId, user: user.name, exercises: data.exercises, date: data.date })
+
+    return workoutByIdMap.get(newWorkoutId)
+
 }
 
 const getAllUserExercises = () => {
-    try {
 
-        const userExercises: ({ id: number; exerciseType: string; sets: number; repetitions: number; weight: number[]; dates: number[]; time?: undefined; distance?: undefined } | { id: number; exerciseType: string; sets: number; time: number; distance: number[]; dates: number[]; repetitions?: undefined; weight?: undefined })[] = []
-        if (workoutByIdMap.get(user.id)?.user === user.name) {
-            exercisesByIdMap.forEach((exercise) => {
 
-                workoutByIdMap.get(user.id)?.exercises.includes(exercise.exerciseType) && userExercises.push(exercise)
-            })
+    const userExercises: ({ id: number; exerciseType: string; sets: number; repetitions: number; weight: number[]; dates: number[]; time?: undefined; distance?: undefined } | { id: number; exerciseType: string; sets: number; time: number; distance: number[]; dates: number[]; repetitions?: undefined; weight?: undefined })[] = []
+    if (workoutByIdMap.get(user.id)?.user === user.name) {
+        exercisesByIdMap.forEach((exercise) => {
 
-        }
-        return userExercises
-    } catch (err) {
-        throw new Error(err.message)
+            workoutByIdMap.get(user.id)?.exercises.includes(exercise.exerciseType) && userExercises.push(exercise)
+        })
+
     }
+    return userExercises
+
 }
 
 const getAllExerciseWeightChartData = () => {
-    try {
-
-        const labels = getChartLabels(exercisesByIdMap)
-        const datasets = [...exercisesByIdMap.values()].map((dataSet) => {
-            return {
-                label: dataSet.exerciseType,
-                data: dataSet.weight || dataSet.distance
-            }
-        })
 
 
+    const labels = getChartLabels(exercisesByIdMap)
+    const datasets = [...exercisesByIdMap.values()].map((dataSet) => {
         return {
-            labels, datasets
+            label: dataSet.exerciseType,
+            data: dataSet.weight || dataSet.distance
         }
-    } catch (err) {
-        throw new Error(err.message)
+    })
+
+
+    return {
+        labels, datasets
     }
+
 }
 
 
 const getExerciseWeightChartDataWithinRange = (dateRange: number[]) => {
 
-    try {
-        const labelsWithinRange: number[] = []
-        const datasets: { label: string; data: number[] }[] = []
-        const includedDatasets: string[] = []
-        exercisesByIdMap.forEach((line) => {
-            line.dates.forEach((date) => {
-                if (date >= dateRange[0] && date <= dateRange[1] && !includedDatasets.includes(line.exerciseType)) {
-                    datasets.push({
-                        label: line.exerciseType,
-                        data: line.weight || line.distance
-                    })
-                    includedDatasets.push(line.exerciseType)
-                }
-                if (date >= dateRange[0] && date <= dateRange[1] && !labelsWithinRange.includes(date)) {
-                    labelsWithinRange.push(date)
-                }
-            })
+
+    const labelsWithinRange: number[] = []
+    const datasets: { label: string; data: number[] }[] = []
+    const includedDatasets: string[] = []
+    exercisesByIdMap.forEach((line) => {
+        line.dates.forEach((date) => {
+            if (date >= dateRange[0] && date <= dateRange[1] && !includedDatasets.includes(line.exerciseType)) {
+                datasets.push({
+                    label: line.exerciseType,
+                    data: line.weight || line.distance
+                })
+                includedDatasets.push(line.exerciseType)
+            }
+            if (date >= dateRange[0] && date <= dateRange[1] && !labelsWithinRange.includes(date)) {
+                labelsWithinRange.push(date)
+            }
         })
-        const labels = labelsWithinRange.map((date) => {
-            return dayjs(date).format('DD/MM/YYYY')
-        })
+    })
+    const labels = labelsWithinRange.map((date) => {
+        return dayjs(date).format('DD/MM/YYYY')
+    })
 
 
-        return {
-            labels, datasets
-        }
-    } catch (error) {
-        throw new Error(error)
+    return {
+        labels, datasets
     }
+
 
 
 }
 
 
-const getChartLabels = (dataMap: any[]) => {
-    try {
+const getChartLabels = (dataMap: any) => {
 
-        const initialLabels: number[] = []
-        const getLabels = [...dataMap.values()].map((dataRow) => {
-            dataRow.dates.forEach((date: number) => {
-                if (!initialLabels.includes(date)) {
-                    initialLabels.push(date)
-                }
-            })
+
+    const initialLabels: number[] = []
+    const getLabels = [...dataMap.values()].map((dataRow) => {
+        dataRow.dates.forEach((date: number) => {
+            if (!initialLabels.includes(date)) {
+                initialLabels.push(date)
+            }
         })
+    })
 
-        const labels = initialLabels.map((date) => {
-            return dayjs(date).format('DD/MM/YYYY')
-        })
+    const labels = initialLabels.map((date) => {
+        return dayjs(date).format('DD/MM/YYYY')
+    })
 
-        return labels
-    } catch (err) {
-        throw new Error(err.message)
-    }
+    return labels
+
 }
 
 const getUserMeasurementsChartData = () => {
-    try {
-
-        const datasets = []
-
-        const labels = getChartLabels(measurementEventByIdMap)
-
-        const datasetEntries = Object.entries(measurementEventByIdMap.get(user.id))
-
-        for (let i = 2; i < datasetEntries.length - 1; i++) {
-            datasets.push({
-                label: datasetEntries[i][0],
-                data: datasetEntries[i][1]
-            })
-        }
 
 
-        return {
-            labels, datasets
-        }
-    } catch (err) {
-        throw new Error(err.message)
-    }
-}
+    const datasets: { label: string, data: number[] }[] = []
 
-const getUserMeasurementsChartRangeData = (dateRange: number[]) => {
+    const includedLabels: string[] = []
 
-    try {
-        const labelsWithinRange: number[] = []
-        const datasets: { label: string, data: number[] }[] = []
-        const dateIndexes = []
-        const temporaryMap = new Map<any, any>([
-            ['label', []]
-        ])
+    const labels: number[] = []
 
-        const datasetEntries = Object.entries(measurementEventByIdMap.get(user.id))
-        const userDates = measurementEventByIdMap.get(user.id)?.dates
-
-        if (datasetEntries && userDates) {
-
-            for (let i = 0; i < userDates.length; i++) {
-                if (userDates[i] >= dateRange[0] && userDates[i] <= dateRange[1]) {
-                    temporaryMap.set('label', [...temporaryMap.get('label'), userDates[i]])
-                    labelsWithinRange.push(userDates[i])
-                    dateIndexes.push(i)
-                }
-            }
-
-            dateIndexes.forEach((entry) => {
-                for (let i = 2; i < datasetEntries.length - 1; i++) {
-                    const labelName = datasetEntries[i][0]
-                    const labelData = datasetEntries[i][1][entry]
-
-                    if ([...temporaryMap.keys()].find((element) => element === labelName)) {
-                        temporaryMap.set(labelName, [...temporaryMap.get(labelName), (labelData)])
+    measurementEventByIdMap?.forEach((entry) => {
+        if (entry.user === user.name) {
+            labels.push(entry.measurements[0].date)
+            Object.entries(entry.measurements[0]).map((measurement) => {
+                if (measurement[0] !== 'date') {
+                    if (!includedLabels.includes(measurement[0])) {
+                        datasets.push({ label: measurement[0], data: [measurement[1]] })
+                        includedLabels.push(measurement[0])
                     } else {
-                        temporaryMap.set(labelName, [labelData])
+                        datasets.forEach((set) => {
+                            if (set.label === measurement[0]) {
+                                set.data.push(measurement[1])
+                            }
+                        })
                     }
                 }
             })
         }
 
-        [...temporaryMap.entries()].map((entry) => {
-            if (entry[0] !== 'label') {
-                datasets.push({
-                    label: entry[0],
-                    data: entry[1]
+    })
+    return {
+        labels, datasets
+    }
+
+}
+
+const getUserMeasurementsChartRangeData = (dateRange?: number[]) => {
+
+
+    const labelsWithinRange: number[] = []
+    const datasets: { label: string, data: number[] }[] = []
+    const includedLabels: string[] = []
+
+    const userMeasurements: { weight: number; chest: number; waist: number; hips: number; biceps: number; date: number }[][] = []
+
+    measurementEventByIdMap.forEach((measurement) => {
+        if (measurement.user === user.name) {
+            userMeasurements.push(measurement.measurements)
+        }
+    })
+
+    if (userMeasurements.length < 1) {
+        return { labels: [], datasets }
+    }
+
+
+    if (userMeasurements.length >= 1 && dateRange) {
+        userMeasurements.forEach((measurement) => {
+            if (measurement[0].date >= dateRange[0] && measurement[0].date <= dateRange[1]) {
+                labelsWithinRange.push(measurement[0].date)
+                measurement.map((measurementData) => {
+                    Object.entries(measurementData).forEach((dataPiece) => {
+                        if (dataPiece[0] !== 'date') {
+                            if (!includedLabels.includes(dataPiece[0])) {
+                                datasets.push({ label: dataPiece[0], data: [dataPiece[1]] })
+                                includedLabels.push(dataPiece[0])
+                            } else {
+                                datasets.forEach((set) => {
+                                    if (set.label === dataPiece[0]) {
+                                        set.data.push(dataPiece[1])
+                                    }
+                                })
+                            }
+                        }
+                    })
                 })
             }
         })
 
-        const labels = labelsWithinRange.map((date) => {
-            return dayjs(date).format('DD/MM/YYYY')
-        })
-
-
-        return { labels, datasets }
-
-    } catch (error) {
-        throw new Error(error)
     }
+
+
+
+    const labels = labelsWithinRange.map((date) => {
+        return dayjs(date).format('DD/MM/YYYY')
+    })
+
+
+    return { labels, datasets }
+
+
 }
 
 

@@ -3,10 +3,9 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE_PATH } from '../util/urls'
-import { useAppDispatch } from '../hooks/hooks'
-import { registerUser } from '../redux/authSlice'
-import dayjs from 'dayjs'
 import RHFDatePicker from '../components/RHFDatePicker'
+import { useUserRegisterMutation } from '../redux/userApi'
+
 
 enum GenderOptions {
     'male',
@@ -36,17 +35,12 @@ export default function Register() {
 
     const navigate = useNavigate()
 
-    const dispatch = useAppDispatch()
+    const [userRegister] = useUserRegisterMutation()
 
     const { register, handleSubmit, formState: { errors }, control } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(registerSchema) })
     const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
-        try {
-            dispatch(registerUser(data))
-            navigate(ROUTE_PATH.HOME)
-
-        } catch (err) {
-            throw new Error(err)
-        }
+        userRegister(data)
+        navigate(ROUTE_PATH.HOME)
     }
 
 
@@ -90,7 +84,7 @@ export default function Register() {
             <div className='p-1 flex flex-col'>
                 <label>Date Of Birth</label>
                 <RHFDatePicker control={control} name='birthDate' />
-                {errors.birthDate && <p className='text-red-500 p-1'>{errors.dateOfBirth.message}</p>}
+                {errors.birthDate && <p className='text-red-500 p-1'>{errors.birthDate.message}</p>}
 
             </div>
             <div className='p-1 flex flex-col'>

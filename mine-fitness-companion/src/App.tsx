@@ -20,9 +20,10 @@ import CheckAllMeasurements from './pages/CheckAllMeasurements';
 import CreateExerciseType from './pages/CreateExerciseType';
 import WorkoutEdit from './pages/WorkoutEdit';
 import CreateWorkout from './pages/CreateWorkout';
-
+import { supabase } from './util/supabase';
 
 export default function App() {
+
 
     const router = createBrowserRouter(createRoutesFromElements(
         <Route path={ROUTE_PATH.HOME} element={<Root />} errorElement={<NotFound />}>

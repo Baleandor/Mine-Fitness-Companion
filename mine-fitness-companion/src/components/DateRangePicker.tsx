@@ -2,10 +2,10 @@ import { DatePicker } from 'antd'
 import dayjs from 'dayjs'
 
 type DateRangePickerPropsType = {
-    handleDateRageChange: (values: dayjs.Dayjs[]) => void
+    handleDateRangeChange: (values: dayjs.Dayjs[]) => void
 }
 
-export default function DateRagePicker({ handleDateRageChange }: DateRangePickerPropsType) {
+export default function DateRangePicker({ handleDateRangeChange }: DateRangePickerPropsType) {
 
     const { RangePicker } = DatePicker
 
@@ -13,6 +13,6 @@ export default function DateRagePicker({ handleDateRageChange }: DateRangePicker
 
 
     return (
-        <RangePicker onChange={(values) => handleDateRageChange(values)} format={dateFormat} />
+        <RangePicker onChange={(values) => handleDateRangeChange(values)} format={dateFormat} />
     )
 }

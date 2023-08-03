@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { ROUTE_PATH } from "../util/urls"
-import { userPermittedActions } from "../backend/userPermittedActions"
+import { useCreateExerciseMutation } from "../redux/exerciseApi"
 
 
 const createExerciseSchema = z.object({
@@ -18,11 +18,17 @@ export default function CreateExerciseType() {
 
     const navigate = useNavigate()
 
+    const [createExercise] = useCreateExerciseMutation()
+
     const { register, handleSubmit, formState: { errors } } = useForm<CreateExerciseSchemaType>({ resolver: zodResolver(createExerciseSchema) })
 
     const onSubmit: SubmitHandler<CreateExerciseSchemaType> = (data) => {
-        userPermittedActions.createExerciseType(data)
-        navigate(ROUTE_PATH.EXERCISE_LIBRARY)
+        try {
+            createExercise(data)
+            navigate(ROUTE_PATH.EXERCISE_LIBRARY)
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 
 

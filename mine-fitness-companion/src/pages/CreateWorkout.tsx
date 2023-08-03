@@ -1,11 +1,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import { userPermittedActions } from "../backend/userPermittedActions";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "../util/urls";
 import RHFDatePicker from "../components/RHFDatePicker";
+import { useCreateWorkoutMutation } from "../redux/workoutsApi";
 
 
 const createWorkoutSchema = z.object({
@@ -19,6 +19,8 @@ export default function CreateWorkout() {
 
     const navigate = useNavigate()
 
+    const [createWorkout] = useCreateWorkoutMutation()
+
     const { register, handleSubmit, formState: { errors }, control } = useForm<createWorkoutSchemaType>({ resolver: zodResolver(createWorkoutSchema) })
     const onSubmit: SubmitHandler<createWorkoutSchemaType> = (data) => {
         const { exercises, date } = data
@@ -27,7 +29,7 @@ export default function CreateWorkout() {
             date: dayjs(date).valueOf()
         }
 
-        userPermittedActions.createWorkout(createWorkoutData)
+        createWorkout(createWorkoutData)
         navigate(ROUTE_PATH.WORKOUTS)
     }
 

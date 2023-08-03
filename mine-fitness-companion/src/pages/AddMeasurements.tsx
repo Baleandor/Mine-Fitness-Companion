@@ -4,7 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from "react-router-dom"
 import RHFDatePicker from "../components/RHFDatePicker"
 import { ROUTE_PATH } from '../util/urls'
-import { userPermittedActions } from '../backend/userPermittedActions'
+import { useAddMeasurementsMutation } from '../redux/measurementsApi'
+import { useAppDispatch } from '../hooks/hooks'
+
+
 
 
 const updateMeasurementsSchema = z.object({
@@ -22,14 +25,22 @@ type UpdateMeasurementsFormType = z.infer<typeof updateMeasurementsSchema>
 
 export default function UpdateMeasurements() {
 
+    const [updateBasicInfo] = useAddMeasurementsMutation()
+
+
 
     const navigate = useNavigate()
 
     const { register, handleSubmit, formState: { errors }, control } = useForm<UpdateMeasurementsFormType>({ resolver: zodResolver(updateMeasurementsSchema) })
 
     const onSubmit: SubmitHandler<UpdateMeasurementsFormType> = (data) => {
-        userPermittedActions.addUserMeasurements(data)
-        navigate(ROUTE_PATH.USER_PROFILE)
+        try {
+
+            updateBasicInfo(data)
+            navigate(ROUTE_PATH.USER_PROFILE)
+        } catch (error) {
+            throw new Error(error)
+        }
     }
 
 

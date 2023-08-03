@@ -1,19 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { UserDataType, authService } from '../backend/userAuth'
-import { getUser } from '../util/getUser'
 
 
 export type UserStateType = {
-    user: UserDataType | null | any
+    userEmail: string | null
 }
 
 const initialState: UserStateType = {
-    user: getUser()
+    userEmail: null
 }
 
 export const registerUser = createAsyncThunk('auth/register', async (user: UserDataType, thunkAPI) => {
     try {
-        return await authService.register(user)
+        return authService.register(user)
     } catch (error: any) {
         const message =
             (error.response &&
@@ -44,26 +43,27 @@ export const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        login: (state, action) => {
-            state.user = action.payload
-            authService.login(action.payload)
-        },
-        logout: (state) => {
-            state.user = null
-            authService.logout()
+            userEmail: (state, action) => {
+            state.userEmail = action.payload
         }
     },
-    extraReducers: (builder) => {
-        builder
-            .addCase(registerUser.fulfilled, (state, action) => {
-                state.user = action.payload
-            })
-            .addCase(registerUser.rejected, (state) => {
-                state.user = null
-            })
-    }
+    // extraReducers: (builder) => {
+    //     builder
+    //         .addCase(registerUser.fulfilled, (state, action) => {
+    //             state.userId = action.payload
+    //         })
+    //         .addCase(registerUser.rejected, (state) => {
+    //             state.userId = null
+    //         })
+    //         .addCase(loginUser.fulfilled, (state) => {
+    //             state.userId = getUser()
+    //         })
+    //         .addCase(loginUser.rejected, (state) => {
+    //             state.userId = null
+    //         })
+    // }
 })
 
-export const { logout, login } = authSlice.actions
+export const {  userEmail } = authSlice.actions
 
 export default authSlice.reducer

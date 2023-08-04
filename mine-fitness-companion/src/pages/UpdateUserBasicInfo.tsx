@@ -4,7 +4,6 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import RHFDatePicker from "../components/RHFDatePicker"
 import { ROUTE_PATH } from "../util/urls"
-import { getUser } from "../util/getSession"
 import { useUpdateBasicInfoMutation } from "../redux/basicInfoApi"
 
 
@@ -13,12 +12,11 @@ enum GenderOptions {
     'female'
 }
 
-// const user = getUser()
+
 
 const updateUserBasicInfoSchema = z.object({
     name: z.string({ required_error: 'Name is required!' }).min(4, 'Name must be at least 4 characters long!'),
     email: z.string({ required_error: 'Email is required!' }).email({ message: 'Enter a valid email!' }),
-    currentPassword: z.string().min(1, { message: 'You must enter your current password!' }),
     password: z.string().min(6, { message: 'Password must be at least 6 characters long!' }),
     repass: z.string().min(6, { message: 'Password must be at least 6 characters long!' }),
     gender: z.string().min(1, "You must select a gender!"),
@@ -44,15 +42,13 @@ export default function UpdateUserBasicInfo() {
     const { register, handleSubmit, formState: { errors }, control } = useForm<UpdateUserBasicInfoType>({ resolver: zodResolver(updateUserBasicInfoSchema) })
 
     const onSubmit: SubmitHandler<UpdateUserBasicInfoType> = (data) => {
-        const { name, email, currentPassword, password, gender, dateOfBirth, height } = data
-        const updateData = { name, email, password, currentPassword, gender, dateOfBirth, height }
-        try {
+        const { name, email, password, gender, dateOfBirth, height } = data
+        const updateData = { name, email, password, gender, dateOfBirth, height }
 
-            updateBasicInfo(updateData)
-            navigate(ROUTE_PATH.USER_PROFILE)
-        } catch (error) {
-            throw new Error(error)
-        }
+
+        updateBasicInfo(updateData).then(() => navigate(ROUTE_PATH.USER_PROFILE))
+
+
     }
 
 
@@ -73,9 +69,6 @@ export default function UpdateUserBasicInfo() {
             </div>
             <div className='p-1 flex flex-col'>
                 <span>Update Password</span>
-                <span>Current Password</span>
-                <input  {...register('currentPassword')} type="password"></input>
-                {errors.currentPassword && <p className='text-red-500 p-1'>{errors.currentPassword.message}</p>}
                 <span>New Password</span>
                 <input  {...register('password')} type="password"></input>
                 {errors.password && <p className='text-red-500 p-1'>{errors.password.message}</p>}

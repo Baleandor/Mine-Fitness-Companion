@@ -39,8 +39,8 @@ export default function Register() {
 
     const { register, handleSubmit, formState: { errors }, control } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(registerSchema) })
     const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
-        userRegister(data)
-        navigate(ROUTE_PATH.HOME)
+        userRegister(data).then(() => navigate(ROUTE_PATH.HOME))
+
     }
 
 

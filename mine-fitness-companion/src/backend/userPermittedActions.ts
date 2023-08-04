@@ -293,7 +293,7 @@ const getChartLabels = (dataMap: any) => {
 
 }
 
-const getUserMeasurementsChartData = () => {
+const getUserMeasurementsChartData = (dataMap: any[]) => {
 
 
     const datasets: { label: string, data: number[] }[] = []
@@ -302,24 +302,23 @@ const getUserMeasurementsChartData = () => {
 
     const labels: number[] = []
 
-    measurementEventByIdMap?.forEach((entry) => {
-        if (entry.user === user.name) {
-            labels.push(entry.measurements[0].date)
-            Object.entries(entry.measurements[0]).map((measurement) => {
-                if (measurement[0] !== 'date') {
-                    if (!includedLabels.includes(measurement[0])) {
-                        datasets.push({ label: measurement[0], data: [measurement[1]] })
-                        includedLabels.push(measurement[0])
-                    } else {
-                        datasets.forEach((set) => {
-                            if (set.label === measurement[0]) {
-                                set.data.push(measurement[1])
-                            }
-                        })
-                    }
+    dataMap.forEach((entry) => {
+
+        labels.push(entry.measurements[0].date)
+        Object.entries(entry.measurements[0]).map((measurement) => {
+            if (measurement[0] !== 'date') {
+                if (!includedLabels.includes(measurement[0])) {
+                    datasets.push({ label: measurement[0], data: [measurement[1]] })
+                    includedLabels.push(measurement[0])
+                } else {
+                    datasets.forEach((set) => {
+                        if (set.label === measurement[0]) {
+                            set.data.push(measurement[1])
+                        }
+                    })
                 }
-            })
-        }
+            }
+        })
 
     })
     return {

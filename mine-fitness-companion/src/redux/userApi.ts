@@ -32,7 +32,6 @@ export const userApi = createApi({
                             gender: userData.gender,
                             birthDate: userData.birthDate,
                             height: userData.height,
-                            workouts: [],
                             role: 'user'
                         }
                     }

@@ -36,8 +36,8 @@ export default function UpdateMeasurements() {
     const onSubmit: SubmitHandler<UpdateMeasurementsFormType> = (data) => {
         try {
 
-            updateBasicInfo(data)
-            navigate(ROUTE_PATH.USER_PROFILE)
+            updateBasicInfo(data).then(() => navigate(ROUTE_PATH.USER_PROFILE))
+
         } catch (error) {
             throw new Error(error)
         }

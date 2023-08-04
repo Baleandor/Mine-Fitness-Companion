@@ -1,43 +1,88 @@
-import { createApi } from '@reduxjs/toolkit/query/react'
+import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
 import { userPermittedActions } from '../backend/userPermittedActions'
 import { RTKQ_TAGS } from '../util/rtkqTags';
+import { supabase } from '../util/supabase';
+import dayjs from 'dayjs';
+
+const user = await supabase.auth.getUser()
 
 
-
-const measurementsBaseQuery = () =>
-    async () => {
-        try {
-            const data = await userPermittedActions.getUserMeasurements()
-            return { data }
-        } catch (error) {
-            throw new Error(error)
-        }
-    }
 
 export const measureApi = createApi({
     reducerPath: 'measureApi',
-    baseQuery: measurementsBaseQuery(),
+    baseQuery: fakeBaseQuery(),
     tagTypes: [RTKQ_TAGS.MEASUREMENTS],
     endpoints: (builder) => ({
         getMeasurements: builder.query({
-            query: () => measurementsBaseQuery(),
+            queryFn: async () => {
+                let { data: measurements, error } = await supabase
+                    .from('measurements')
+                    .select("*")
+                    .eq('user_id', user.data.user?.id)
+
+                let latestMeasure
+                if (measurements != undefined) {
+                    const testData = [...Object.values(measurements)].sort((a, b) => {
+
+                        return a.date - b.date
+                    })
+                    latestMeasure = testData[testData.length - 1]
+                }
+                return { data: latestMeasure || error }
+            },
             providesTags: [RTKQ_TAGS.MEASUREMENTS]
         }),
         addMeasurements: builder.mutation({
-            queryFn: (data) => ({ data: userPermittedActions.addUserMeasurements(data) }),
+            queryFn: async (measurementData) => {
+
+                const { data, error } = await supabase
+                    .from('measurements')
+                    .insert([
+                        {
+                            image_url: measurementData.imageUrl,
+                            weight: measurementData.weight,
+                            chest: measurementData.chest,
+                            waist: measurementData.waist,
+                            hips: measurementData.hips,
+                            biceps: measurementData.biceps,
+                            date: measurementData.date,
+                            user_id: user.data.user?.id
+                        },
+                    ])
+                    .select()
+
+                return { data: data || error }
+            },
             invalidatesTags: [RTKQ_TAGS.MEASUREMENTS]
 
         }),
         getMeasurementsChartsData: builder.query({
-            queryFn: () => ({ data: userPermittedActions.getUserMeasurementsChartData() }),
+            queryFn: async () => {
+                let { data: measurements, error } = await supabase
+                    .from('measurements')
+                    .select("*")
+                    .eq('user_id', user.data.user?.id)
+
+
+
+
+                return { data: measurements }
+            },
             providesTags: [RTKQ_TAGS.MEASUREMENTS]
         }),
         getMeasurementsChartsDataRange: builder.query({
-            queryFn: (dateRange) => ({ data: userPermittedActions.getUserMeasurementsChartRangeData(dateRange) }),
+            queryFn: async (dateRange) => {
+                let { data: measurements, error } = await supabase
+                    .from('measurements')
+                    .select("*")
+                    .eq('user_id', user.data.user?.id)
+                    .gte('date', dateRange[0])
+                    .lte('date', dateRange[1])
+
+
+                return { data: measurements }
+            },
             providesTags: [RTKQ_TAGS.MEASUREMENTS]
-        }),
-        getUserProfile: builder.query({
-            queryFn: () => ({ data: '' })
         })
     })
 })

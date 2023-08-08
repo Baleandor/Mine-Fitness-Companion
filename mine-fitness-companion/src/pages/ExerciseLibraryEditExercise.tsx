@@ -22,13 +22,15 @@ export default function ExerciseLibraryEditExercise() {
 
     const { data: exerciseId } = useGetExerciseByIdQuery(exercise_id)
 
+
+
     const [updateExerciseById] = useUpdateExerciseByIdMutation()
 
     const { register, handleSubmit, formState: { errors } } = useForm<UpdateExerciseSchemaType>({ resolver: zodResolver(updateExerciseSchema) })
 
     const onSubmit: SubmitHandler<UpdateExerciseSchemaType> = (data) => {
         if (exerciseId) {
-            const updatedData = { id: exerciseId.id, ...data }
+            const updatedData = { id: exerciseId[0].id, exerciseName: data.exerciseName, muscleGroups: data.muscleGroups.split(',') }
             updateExerciseById(updatedData)
             navigate(ROUTE_PATH.EXERCISE_LIBRARY)
         }
@@ -40,15 +42,13 @@ export default function ExerciseLibraryEditExercise() {
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center p-1">
             <div className="p-1">
                 <span className="p-1">Exercise Name</span>
-                <input {...register('exerciseName')} placeholder={exerciseId?.name} className="p-1"></input>
+                {exerciseId && exerciseId[0] && <input {...register('exerciseName')} placeholder={exerciseId[0].name} className="p-1"></input>}
                 {errors.exerciseName && <p className='text-red-500 p-1'>{errors.exerciseName.message}</p>}
-
             </div>
             <div className="p-1">
                 <span className="p-1">Exercise Target Muscles</span>
-                <input {...register('muscleGroups')} placeholder={exerciseId?.muscleGroups.join(', ')} className="p-1"></input>
+                {exerciseId && exerciseId[0] && <input {...register('muscleGroups')} placeholder={exerciseId[0].muscle_groups.join(', ')} className="p-1"></input>}
                 {errors.muscleGroups && <p className='text-red-500 p-1'>{errors.muscleGroups.message}</p>}
-
             </div>
             <div>
                 <button className="p-1 border rounded-md border-red-400">Update Exercise</button>

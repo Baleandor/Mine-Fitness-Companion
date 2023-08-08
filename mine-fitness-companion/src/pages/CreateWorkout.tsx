@@ -6,16 +6,18 @@ import { useNavigate } from "react-router-dom";
 import { ROUTE_PATH } from "../util/urls";
 import RHFDatePicker from "../components/RHFDatePicker";
 import { useCreateWorkoutMutation } from "../redux/workoutsApi";
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 
 
 const createWorkoutSchema = z.object({
     exercises: z.string().nonempty({ message: 'Exercises required!' }),
-    date: z.number({ required_error: "A date is required!" })
+    date: z.string({ required_error: "A date is required!" })
 })
 
 type createWorkoutSchemaType = z.infer<typeof createWorkoutSchema>
 
 export default function CreateWorkout() {
+    dayjs.extend(customParseFormat)
 
     const navigate = useNavigate()
 
@@ -26,11 +28,12 @@ export default function CreateWorkout() {
         const { exercises, date } = data
         const createWorkoutData = {
             exercises: exercises.split(','),
-            date: dayjs(date).valueOf()
+            date: dayjs(date, 'DD/MM/YYYY').valueOf()
         }
 
-        createWorkout(createWorkoutData)
-        navigate(ROUTE_PATH.WORKOUTS)
+
+        createWorkout(createWorkoutData).then(() => navigate(ROUTE_PATH.WORKOUTS))
+
     }
 
 

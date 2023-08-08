@@ -1,6 +1,7 @@
 import DatePicker from "antd/es/date-picker"
 import dayjs from "dayjs"
 import { Control, Controller } from "react-hook-form"
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 
 
 interface RHFDatePickerFieldProps {
@@ -9,6 +10,7 @@ interface RHFDatePickerFieldProps {
 }
 
 export default function RHFDatePicker({ control, name }: RHFDatePickerFieldProps) {
+    dayjs.extend(customParseFormat)
 
     const dateFormat = 'DD/MM/YYYY'
 
@@ -26,9 +28,9 @@ export default function RHFDatePicker({ control, name }: RHFDatePickerFieldProps
                         ref={field.ref}
                         name={field.name}
                         onBlur={field.onBlur}
-                        value={field.value ? dayjs(field.value) : null}
+                        value={field.value ? dayjs(field.value, 'DD/MM/YYYY') : null}
                         onChange={(date) => {
-                            field.onChange(date ? date.valueOf() : null);
+                            field.onChange(date ? dayjs(date).format('DD/MM/YYYY') : null);
                         }}
                     />
                 );

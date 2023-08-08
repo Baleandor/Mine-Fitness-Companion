@@ -24,8 +24,13 @@ export default function CreateExerciseType() {
 
     const onSubmit: SubmitHandler<CreateExerciseSchemaType> = (data) => {
         try {
-            createExercise(data)
-            navigate(ROUTE_PATH.EXERCISE_LIBRARY)
+            const { exerciseName, muscleGroups } = data
+            const createExerciseData = {
+                name: exerciseName,
+                muscle_groups: [muscleGroups]
+            }
+            createExercise(createExerciseData).then(() => navigate(ROUTE_PATH.EXERCISE_LIBRARY))
+
         } catch (error) {
             throw new Error(error)
         }

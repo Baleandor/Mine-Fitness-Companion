@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom"
 import RHFDatePicker from "../components/RHFDatePicker"
 import { ROUTE_PATH } from '../util/urls'
 import { useAddMeasurementsMutation } from '../redux/measurementsApi'
-import { useAppDispatch } from '../hooks/hooks'
+import dayjs from 'dayjs'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 
 
 
@@ -17,17 +18,16 @@ const updateMeasurementsSchema = z.object({
     waist: z.number({ invalid_type_error: "You must provide a valid number" }),
     hips: z.number({ invalid_type_error: "You must provide a valid number" }),
     biceps: z.number({ invalid_type_error: "You must provide a valid number" }),
-    date: z.number({ required_error: "A date is required!" })
+    date: z.string({ required_error: "A date is required!" })
 })
 
 type UpdateMeasurementsFormType = z.infer<typeof updateMeasurementsSchema>
 
 
 export default function UpdateMeasurements() {
+    dayjs.extend(customParseFormat)
 
     const [updateBasicInfo] = useAddMeasurementsMutation()
-
-
 
     const navigate = useNavigate()
 
@@ -35,8 +35,13 @@ export default function UpdateMeasurements() {
 
     const onSubmit: SubmitHandler<UpdateMeasurementsFormType> = (data) => {
         try {
+            const { imageUrl, weight, chest, waist, hips, biceps, date } = data
+            const newDate = dayjs(date, 'DD/MM/YYYY').valueOf()
 
-            updateBasicInfo(data).then(() => navigate(ROUTE_PATH.USER_PROFILE))
+            const measurementData = {
+                imageUrl, weight, chest, waist, hips, biceps, newDate
+            }
+            updateBasicInfo(measurementData).then(() => navigate(ROUTE_PATH.USER_PROFILE))
 
         } catch (error) {
             throw new Error(error)

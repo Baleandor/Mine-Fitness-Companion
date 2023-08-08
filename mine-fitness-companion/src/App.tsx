@@ -14,13 +14,10 @@ import MeasurementsOverTime from './pages/MeasurementsOverTime';
 import ExerciseLibrary from './pages/ExerciseLibrary';
 import ExerciseLibraryEditExercise from './pages/ExerciseLibraryEditExercise';
 import Workouts from './pages/Workouts';
-import WeightChartsOverTime from './pages/WeightChartsOverTime';
 import Home from './pages/Home';
-import CheckAllMeasurements from './pages/CheckAllMeasurements';
 import CreateExerciseType from './pages/CreateExerciseType';
 import WorkoutEdit from './pages/WorkoutEdit';
 import CreateWorkout from './pages/CreateWorkout';
-import { supabase } from './util/supabase';
 
 export default function App() {
 
@@ -36,8 +33,6 @@ export default function App() {
                 <Route path={ROUTE_PATH.USER_PROFILE_BASIC_INFO} element={<UpdateUserBasicInfo />} />
                 <Route path={ROUTE_PATH.USER_PROFILE_MEASUREMENTS} element={<UpdateMeasurements />} />
                 <Route path={ROUTE_PATH.USER_PROFILE_MEASUREMENTS_OVER_TIME} element={<MeasurementsOverTime />} />
-                <Route path={ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME} element={<WeightChartsOverTime />} />
-                <Route path={ROUTE_PATH.USER_PROFILE_CHECK_ALL_MEASUREMENTS} element={<CheckAllMeasurements />} />
             </Route>
 
             <Route path={ROUTE_PATH.EXERCISE_LIBRARY}>

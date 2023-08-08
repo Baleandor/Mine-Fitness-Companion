@@ -19,7 +19,7 @@ const registerSchema = z.object({
     password: z.string().min(6),
     repass: z.string(),
     gender: z.string().min(1, "You must select a gender!"),
-    birthDate: z.number({ invalid_type_error: 'You must choose a date of birth!' }),
+    birthDate: z.string({ invalid_type_error: 'You must choose a date of birth!' }),
     height: z.number({ invalid_type_error: "You must enter a number" }).min(145, 'You must be at least 145 tall to join the gym!')
 }).refine((data) => data.password === data.repass, {
     message: "Passwords must match!",
@@ -39,6 +39,7 @@ export default function Register() {
 
     const { register, handleSubmit, formState: { errors }, control } = useForm<RegisterFormSchemaType>({ resolver: zodResolver(registerSchema) })
     const onSubmit: SubmitHandler<RegisterFormSchemaType> = (data) => {
+        console.log(data)
         userRegister(data).then(() => navigate(ROUTE_PATH.HOME))
 
     }

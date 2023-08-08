@@ -6,18 +6,22 @@ import { z } from "zod"
 import RHFDatePicker from "../components/RHFDatePicker"
 import { useEffect } from "react"
 import { useCreateWorkoutMutation, useGetWorkoutByIdQuery, useUpdateWorkoutMutation } from "../redux/workoutsApi"
+import dayjs from "dayjs"
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 
 
 
 const editWorkoutSchema = z.object({
     exercises: z.string().nonempty({ message: 'Exercises required!' }),
-    date: z.number({ required_error: "A date is required!" })
+    date: z.string({ required_error: "A date is required!" })
 })
 
 type EditWorkoutSchemaType = z.infer<typeof editWorkoutSchema>
 
 
 export default function WorkoutEdit() {
+
+    dayjs.extend(customParseFormat)
 
     const { id } = useParams()
 
@@ -32,25 +36,26 @@ export default function WorkoutEdit() {
     const [createWorkout] = useCreateWorkoutMutation()
 
     useEffect(() => {
-        if (workoutById?.exercises.toString()) {
-            if (state) {
-                setValue("exercises", workoutById.exercises.toString())
-            } else {
-                setValue("exercises", workoutById.exercises.toString())
+        // if (workoutById != undefined) {
+        //     if (state) {
+        //         setValue("exercises", workoutById[0].exercises.join(', '))
+        //     } else {
+        //         setValue("exercises", workoutById[0].exercises.toString())
 
-                setValue("date", workoutById.date)
-            }
-        }
+        //         setValue("date", workoutById[0].date)
+        //     }
+        // }
+        //IT DUN MATTER IF I USE SETVALUE OR DEFAULTVALUE
 
     }, [])
 
-    // , defaultValues: {
-    //     exercises: workoutById?.exercises.toString(),
-    //     date: state ? undefined : workoutById?.date
-    // }
+
 
     const { register, handleSubmit, formState: { errors }, control, setValue } = useForm<EditWorkoutSchemaType>({
-        resolver: zodResolver(editWorkoutSchema)
+        resolver: zodResolver(editWorkoutSchema), defaultValues: {
+            exercises: workoutById && workoutById[0]?.exercises.toString(),
+            date: state ? undefined : workoutById && dayjs(workoutById[0]?.date).format('DD/MM/YYYY')
+        }
     })
 
     const onSubmit: SubmitHandler<EditWorkoutSchemaType> = (data) => {
@@ -59,20 +64,18 @@ export default function WorkoutEdit() {
             if (state) {
                 const updatedWorkoutData = {
                     exercises: exercises.split(','),
-                    date: date,
+                    date: dayjs(date, 'DD/MM/YYYY').valueOf(),
                 }
                 createWorkout(updatedWorkoutData)
 
             } else {
                 const updatedWorkoutData = {
                     exercises: exercises.split(','),
-                    date: date,
-                    id: Number(id)
+                    date: dayjs(date, 'DD/MM/YYYY').valueOf(),
+                    id: id
                 }
+
                 updateWorkout(updatedWorkoutData)
-
-
-
             }
             navigate(ROUTE_PATH.WORKOUTS)
 
@@ -80,7 +83,6 @@ export default function WorkoutEdit() {
             throw new Error(error)
         }
     }
-
 
 
     return (

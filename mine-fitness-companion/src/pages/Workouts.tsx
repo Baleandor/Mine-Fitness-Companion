@@ -1,36 +1,35 @@
 import { useNavigate } from "react-router-dom"
 import dayjs, { Dayjs } from "dayjs"
 import { useEffect, useState } from "react"
-import { getUser } from "../util/getSession"
 import DateSearchPicker from "../components/DateSearchPicker"
-import { useDeleteWorkoutMutation, useFilterQuery, useFilterViaDateMutation, useGetAllWorkoutsQuery } from "../redux/workoutsApi"
-
-
+import { useDeleteWorkoutMutation, useFilterQuery, useFilterViaDateQuery, useGetAllWorkoutsQuery } from "../redux/workoutsApi"
+import { useAppSelector } from "../hooks/hooks"
+import { skipToken } from "@reduxjs/toolkit/dist/query"
 
 
 
 export default function Workouts() {
 
-    // const user = getUser()
+    const isUserLoggedIn = useAppSelector((state) => state.isLoggedIn)
 
     const navigate = useNavigate()
 
-    const [filteredWorkout, setFilteredWorkout] = useState<string>()
+    const [filteredWorkout, setFilteredWorkout] = useState<string>('')
 
     const [displayedWorkouts, setDisplayedWorkouts] = useState<any[]>([])
 
     const [filterByDate, setFilterByDate] = useState(false)
 
-    const { data } = useGetAllWorkoutsQuery(user)
+    const { data } = useGetAllWorkoutsQuery(isUserLoggedIn)
 
-    const { data: filteredWorkoutData } = useFilterQuery(filteredWorkout)
+    const { data: filteredWorkoutData } = useFilterQuery(filteredWorkout ?? skipToken)
 
-    const [filterViaDate] = useFilterViaDateMutation()
+    const { data: filteredViaDateWorkout } = useFilterViaDateQuery(filteredWorkout ?? skipToken)
 
     const [deleteWorkout] = useDeleteWorkoutMutation()
 
     useEffect(() => {
-        setDisplayedWorkouts([data])
+        setDisplayedWorkouts(data)
     }, [data])
 
 
@@ -45,13 +44,18 @@ export default function Workouts() {
     }
 
     const filterWorkout = () => {
-        filteredWorkout && setDisplayedWorkouts(filteredWorkoutData)
+        if (filterByDate) {
+            filteredWorkout && setDisplayedWorkouts(filteredViaDateWorkout)
+
+        } else {
+
+            filteredWorkout && setDisplayedWorkouts(filteredWorkoutData)
+        }
     }
 
     const handleDateChange = (values: Dayjs | null) => {
         const newSearchDate = dayjs(values).format('DD/MM/YYYY')
         setFilteredWorkout(newSearchDate)
-        filterViaDate(newSearchDate)
     }
 
     const onDelete = (id: number) => {
@@ -59,7 +63,6 @@ export default function Workouts() {
     }
 
 
-    console.log(displayedWorkouts)
     return (
         <div>
             <div className="flex flex-col items-center p-1">
@@ -82,9 +85,9 @@ export default function Workouts() {
             <div className="p-1">
                 <div className="p-1">Workouts:</div>
                 {
-                    (displayedWorkouts != undefined && displayedWorkouts?.length > 0) && data != undefined ?
+                    (displayedWorkouts?.length > 0) && data != undefined ?
                         <div className="p-1 flex">
-                            {(data != undefined && displayedWorkouts != undefined && displayedWorkouts?.length > 0) && displayedWorkouts.map((workout: { id: number; exercises: string[]; date: number }) => {
+                            {displayedWorkouts.map((workout: { id: number; exercises: string[]; date: number }) => {
                                 return (
                                     <div key={workout.id} className="p-1 flex flex-col border rounder rounded-sm mr-1">
                                         <span>Exercises:</span>

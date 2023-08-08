@@ -47,11 +47,7 @@ export const userApi = createApi({
             },
             invalidatesTags: [RTKQ_TAGS.USER]
         }),
-        userProfile: builder.query({
-            queryFn: (email) => ({ data: '' }),
-            providesTags: [RTKQ_TAGS.USER]
-        })
     })
 })
 
-export const { useUserLoginMutation, useUserRegisterMutation, useUserLogoutMutation, useUserProfileQuery } = userApi
+export const { useUserLoginMutation, useUserRegisterMutation, useUserLogoutMutation } = userApi

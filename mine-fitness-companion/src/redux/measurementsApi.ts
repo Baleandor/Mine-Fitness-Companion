@@ -1,8 +1,6 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
-import { userPermittedActions } from '../backend/userPermittedActions'
 import { RTKQ_TAGS } from '../util/rtkqTags';
 import { supabase } from '../util/supabase';
-import dayjs from 'dayjs';
 
 const user = await supabase.auth.getUser()
 
@@ -45,7 +43,7 @@ export const measureApi = createApi({
                             waist: measurementData.waist,
                             hips: measurementData.hips,
                             biceps: measurementData.biceps,
-                            date: measurementData.date,
+                            date: measurementData.newDate,
                             user_id: user.data.user?.id
                         },
                     ])

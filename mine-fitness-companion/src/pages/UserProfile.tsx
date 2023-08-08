@@ -1,11 +1,9 @@
 import { useNavigate } from "react-router-dom"
 import dayjs from "dayjs"
 import { ROUTE_PATH } from "../util/urls"
-import { useEffect, useState } from "react"
 import { useGetMeasurementsQuery } from '../redux/measurementsApi'
 import { useAppSelector } from "../hooks/hooks"
 import { useGetBasicInfoQuery } from "../redux/basicInfoApi"
-import { useGetAllWorkoutsQuery } from "../redux/workoutsApi"
 
 
 
@@ -16,14 +14,9 @@ export default function UserProfile() {
 
     const navigate = useNavigate()
 
-    const [isWeightChart] = useState(true)
-
-
     const { data: basicInfo } = useGetBasicInfoQuery(isLoggedIn)
 
     const { data: measurements } = useGetMeasurementsQuery(isLoggedIn)
-
-    const { data: allWorkouts } = useGetAllWorkoutsQuery(isLoggedIn)
 
 
     return (
@@ -42,7 +35,7 @@ export default function UserProfile() {
                             if (entry[0] === 'birthDate') {
 
                                 return <div key={entry[0]}>
-                                    <span>birthday: {dayjs(entry[1]).format('DD/MM/YYYY')}</span>
+                                    <span>birthday: {entry[1]}</span>
                                 </div>
                             }
                             if (entry[0] === 'height') {
@@ -71,10 +64,10 @@ export default function UserProfile() {
                             if (measurementEntry[0] === 'user_id' || measurementEntry[0] === 'id') {
                                 return
                             }
-                            if (measurementEntry[0] === 'image_url') {
+                            if (measurementEntry[0] === 'image_url' && typeof measurementEntry[1] === "string") {
                                 return <img key={measurementEntry[0]} src={measurementEntry[1]} className="w-60 h-60"></img>
                             }
-                            if (measurementEntry[0] === 'date') {
+                            if (measurementEntry[0] === 'date' && typeof measurementEntry[1] === "number") {
                                 return <div key={measurementEntry[0]}>{measurementEntry[0]}: {dayjs(measurementEntry[1]).format('DD/MM/YYYY')} </div>
                             }
                             if (measurementEntry[0] === 'weight') {
@@ -88,27 +81,17 @@ export default function UserProfile() {
                     <div className="p-1">No measurements present!</div>}
 
                 <div>
-                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS)}>Add Measurements</button>
+                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS)}>Add New Measurements</button>
                 </div>
                 <div>
-                    <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_CHECK_ALL_MEASUREMENTS)}>Check All Measurements</button>
-                </div>
-                <div>
-                    <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS_OVER_TIME)}>Check Measurements Timeline</button>
+                    <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_MEASUREMENTS_OVER_TIME)}>Check Measurements Progress</button>
                 </div>
             </div>
 
             <div className="flex flex-col p-1">
                 <div>
-                    <span>Workouts: {allWorkouts ? allWorkouts.exercises.length : 'No workouts!'}</span>
-                </div>
-                <div>
                     <button className="p-1 border rounded border-red-700 mb-1" onClick={() => navigate(ROUTE_PATH.WORKOUTS)}>View Workouts</button>
                 </div>
-                <div>
-                    <button className="p-1 border rounded border-red-700" onClick={() => navigate(ROUTE_PATH.USER_PROFILE_WEIGHT_OVER_TIME, { state: isWeightChart })}>View Weight Progress</button>
-                </div>
-
             </div>
         </div>
     )

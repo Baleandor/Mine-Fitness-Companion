@@ -1,9 +1,9 @@
 
-IMPLEMENT СУПАBASE(D)
-
-Implement supabase getUser to load basic user data
 
 
+Website needs refresh after use change in order to load newly logged in user.
+
+workoutEdit STILL BEHAVES LIKE A CUNT
 
 
 

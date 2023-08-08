@@ -1,11 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 
-
 export type UserStateType = boolean
 
 const initialState: UserStateType = Boolean(localStorage.getItem('sb-quydiknawtvporagkwoj-auth-token'))
-
 
 
 export const userLoggedInSlice = createSlice({

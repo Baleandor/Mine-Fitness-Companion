@@ -1,40 +1,69 @@
-import { createApi } from "@reduxjs/toolkit/dist/query/react"
-import { userPermittedActions } from "../backend/userPermittedActions"
+import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/dist/query/react"
 import { RTKQ_TAGS } from "../util/rtkqTags"
+import { supabase } from "../util/supabase"
 
-const allExercisesBaseQuery = () =>
-    async () => {
-        try {
-            const data = await userPermittedActions.getAllExerciseTypes()
-            return { data }
-        } catch (error) {
-            throw new Error(error)
-        }
-    }
+
 
 export const exercisesApi = createApi({
     reducerPath: 'exercisesApi',
-    baseQuery: allExercisesBaseQuery(),
+    baseQuery: fakeBaseQuery(),
     tagTypes: [RTKQ_TAGS.EXERCISES],
     endpoints: (builder) => ({
         getAllExercises: builder.query({
-            query: () => allExercisesBaseQuery(),
+            queryFn: async () => {
+                let { data: exercise, error } = await supabase
+                    .from('exercise')
+                    .select('*')
+                return { data: exercise }
+            },
             providesTags: [RTKQ_TAGS.EXERCISES]
         }),
         deleteExercise: builder.mutation({
-            queryFn: (id) => ({ data: userPermittedActions.deleteExerciseTypeById(id) }),
+            queryFn: async (id) => {
+                const { error } = await supabase
+                    .from('exercise')
+                    .delete()
+                    .eq('id', id)
+
+                return { error }
+            },
             invalidatesTags: [RTKQ_TAGS.EXERCISES]
         }),
         createExercise: builder.mutation({
-            queryFn: (newExerciseData) => ({ data: userPermittedActions.createExerciseType(newExerciseData) }),
+            queryFn: async (newExerciseData) => {
+
+                const { data, error } = await supabase
+                    .from('exercise')
+                    .insert([
+                        { name: newExerciseData.name, muscle_groups: newExerciseData.muscle_groups },
+                    ])
+                    .select()
+
+                return { data: data }
+            },
             invalidatesTags: [RTKQ_TAGS.EXERCISES]
         }),
         getExerciseById: builder.query({
-            queryFn: (exercise_id) => ({ data: userPermittedActions.getExerciseType(Number(exercise_id)) }),
+            queryFn: async (exercise_id) => {
+                let { data: exercise, error } = await supabase
+                    .from('exercise')
+                    .select("*")
+                    .eq('id', exercise_id)
+
+                return { data: exercise }
+            },
             providesTags: [RTKQ_TAGS.EXERCISES]
         }),
         updateExerciseById: builder.mutation({
-            queryFn: (exercise) => ({ data: userPermittedActions.updateExerciseTypeById(exercise) }),
+            queryFn: async (exercise) => {
+                const { data, error } = await supabase
+                    .from('exercise')
+                    .update({ name: exercise.exerciseName, muscle_groups: exercise.muscleGroups })
+                    .eq('id', exercise.id)
+                    .select()
+
+                return { data: data }
+            },
             invalidatesTags: [RTKQ_TAGS.EXERCISES]
         })
     })

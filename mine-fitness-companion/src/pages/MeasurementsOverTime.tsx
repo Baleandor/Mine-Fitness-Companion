@@ -4,7 +4,6 @@ import DateRangePicker from "../components/DateRangePicker";
 import LineChart from "../components/LineChart";
 import { useGetMeasurementsChartsDataQuery, useGetMeasurementsChartsDataRangeQuery } from "../redux/measurementsApi";
 import { useAppSelector } from "../hooks/hooks";
-import { userPermittedActions } from "../backend/userPermittedActions";
 import { userChartData } from "../util/userChartData";
 import { skipToken } from "@reduxjs/toolkit/dist/query";
 
@@ -16,9 +15,19 @@ type MeasurementChartDataType = {
         label: string;
         data: number[];
     }[];
-} | undefined
+}
 
-
+type QueriedMeasurementDataType = {
+    biceps: number,
+    chest: number,
+    date: number,
+    hips: number,
+    id: number,
+    image_url: string,
+    user_id: string,
+    waist: number,
+    weight: number
+}[]
 
 
 export default function MeasurementsOverTime() {

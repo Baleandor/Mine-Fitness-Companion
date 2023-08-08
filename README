@@ -1,0 +1,7 @@
+This is a simple fitness logger. 
+ It allows users to login, register, and logout. 
+ Users can edit their personal information.
+ Users can add new measurements with a picture and also track them over a period of time.
+ Users can CRUD their own workouts and filter them by exercises included or date.
+ Users can search through the Exercise Library and look up what muscle groups an exercise.
+Admins can perform the exact same actions along with CRUD for exercises in the exercises library.

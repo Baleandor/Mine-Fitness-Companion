@@ -4,9 +4,9 @@ import { supabase } from "../util/supabase"
 import dayjs from "dayjs"
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 
-const user = await supabase.auth.getUser()
 
 dayjs.extend(customParseFormat)
+
 
 
 
@@ -17,8 +17,9 @@ export const workoutsApi = createApi({
     endpoints: (builder) => ({
         getAllWorkouts: builder.query({
             queryFn: async () => {
+                const user = await supabase.auth.getUser()
 
-                let { data: workouts, error } = await supabase
+                let { data: workouts } = await supabase
                     .from('workouts')
                     .select('*')
                     .eq('user_id', user.data.user?.id)
@@ -29,10 +30,12 @@ export const workoutsApi = createApi({
         }),
         filter: builder.query({
             queryFn: async (filterData) => {
+                const user = await supabase.auth.getUser()
 
-                const { data, error } = await supabase
+                const { data } = await supabase
                     .from('workouts')
                     .select()
+                    .eq('user_id', user.data.user?.id)
                     .contains('exercises', [filterData])
 
                 return { data: data }
@@ -41,10 +44,13 @@ export const workoutsApi = createApi({
         }),
         filterViaDate: builder.query({
             queryFn: async (filterDate) => {
+                const user = await supabase.auth.getUser()
+
                 let date = dayjs(filterDate, 'DD/MM/YYYY').valueOf()
-                let { data: workouts, error } = await supabase
+                let { data: workouts } = await supabase
                     .from('workouts')
                     .select("*")
+                    .eq('user_id', user.data.user?.id)
                     .eq('date', date)
 
                 return { data: workouts }
@@ -53,7 +59,7 @@ export const workoutsApi = createApi({
         }),
         getWorkoutById: builder.query({
             queryFn: async (id) => {
-                let { data: workouts, error } = await supabase
+                let { data: workouts } = await supabase
                     .from('workouts')
                     .select("*")
                     .eq('id', id)
@@ -65,7 +71,7 @@ export const workoutsApi = createApi({
         updateWorkout: builder.mutation({
             queryFn: async (updatedWorkoutData) => {
 
-                const { data, error } = await supabase
+                const { data } = await supabase
                     .from('workouts')
                     .update({ exercises: updatedWorkoutData.exercises, date: updatedWorkoutData.date })
                     .eq('id', updatedWorkoutData.id)
@@ -77,8 +83,9 @@ export const workoutsApi = createApi({
         }),
         createWorkout: builder.mutation({
             queryFn: async (newWorkoutData) => {
+                const user = await supabase.auth.getUser()
 
-                const { data, error } = await supabase
+                const { data } = await supabase
                     .from('workouts')
                     .insert([
                         { exercises: newWorkoutData.exercises, date: newWorkoutData.date, user_id: user.data.user?.id },
@@ -90,7 +97,7 @@ export const workoutsApi = createApi({
             invalidatesTags: [RTKQ_TAGS.WORKOUTS]
         }),
         deleteWorkout: builder.mutation({
-            queryFn: async (id) => {
+            queryFn: async (id: string) => {
 
                 const { error } = await supabase
                     .from('workouts')

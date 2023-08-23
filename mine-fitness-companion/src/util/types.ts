@@ -45,4 +45,21 @@ export type ExercisesType = {
     muscleGroups: string[]
 }
 
+export type QueriedMeasurementDataType = {
+    biceps: number,
+    chest: number,
+    date: number,
+    hips: number,
+    id: number,
+    image_url: string,
+    user_id: string,
+    waist: number,
+    weight: number
+}
 
+export type WorkoutType = {
+    date: number,
+    exercises: string[],
+    id: string,
+    user_id: string
+}

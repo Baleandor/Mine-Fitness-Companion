@@ -2,21 +2,21 @@ import { useNavigate } from "react-router-dom"
 import dayjs from "dayjs"
 import { ROUTE_PATH } from "../util/urls"
 import { useGetMeasurementsQuery } from '../redux/measurementsApi'
-import { useAppSelector } from "../hooks/hooks"
 import { useGetBasicInfoQuery } from "../redux/basicInfoApi"
+import { isLoggedIn } from "../redux/userSlice"
+import { skipToken } from "@reduxjs/toolkit/dist/query"
 
 
 
 
 export default function UserProfile() {
 
-    const isLoggedIn = useAppSelector((state) => state.isLoggedIn)
 
     const navigate = useNavigate()
 
-    const { data: basicInfo } = useGetBasicInfoQuery(isLoggedIn)
+    const { data: basicInfo } = useGetBasicInfoQuery()
 
-    const { data: measurements } = useGetMeasurementsQuery(isLoggedIn)
+    const { data: measurements } = useGetMeasurementsQuery(isLoggedIn ?? skipToken)
 
 
     return (

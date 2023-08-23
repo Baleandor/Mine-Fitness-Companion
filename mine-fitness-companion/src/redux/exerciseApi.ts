@@ -11,7 +11,7 @@ export const exercisesApi = createApi({
     endpoints: (builder) => ({
         getAllExercises: builder.query({
             queryFn: async () => {
-                let { data: exercise, error } = await supabase
+                let { data: exercise } = await supabase
                     .from('exercise')
                     .select('*')
                 return { data: exercise }

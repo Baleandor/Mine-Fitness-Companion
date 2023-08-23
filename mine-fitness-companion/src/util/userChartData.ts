@@ -1,12 +1,14 @@
 import dayjs from "dayjs"
+import { QueriedMeasurementDataType } from "./types"
 
-export const userChartData = (chartDataMap: any[]) => {
+export const userChartData = (chartDataMap: QueriedMeasurementDataType[]) => {
 
     const startingLabels: number[] = []
     const datasets: { label: string, data: number[] }[] = []
 
     const includedLabels: string[] = []
     chartDataMap.forEach((dataEntry) => {
+
         startingLabels.push(dataEntry.date)
 
         Object.entries(dataEntry).map((measurement) => {
@@ -30,6 +32,7 @@ export const userChartData = (chartDataMap: any[]) => {
     const labels = startingLabels.map((date) => {
         return dayjs(date).format('DD/MM/YYYY')
     })
+
 
     return { labels, datasets }
 }

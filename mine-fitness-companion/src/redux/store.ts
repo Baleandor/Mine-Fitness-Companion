@@ -4,7 +4,7 @@ import { exercisesApi } from './exerciseApi'
 import { workoutsApi } from './workoutsApi'
 import { userApi } from './userApi'
 import { basicInfoApi } from './basicInfoApi'
-import isUserLoggedInReducer from './isUserLoggedIn'
+import isUserLoggedInReducer from './userSlice'
 
 
 export const store = configureStore({
@@ -16,7 +16,7 @@ export const store = configureStore({
         [userApi.reducerPath]: userApi.reducer,
         [exercisesApi.reducerPath]: exercisesApi.reducer,
     },
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false}).concat([
         measureApi.middleware,
         basicInfoApi.middleware,
         workoutsApi.middleware,

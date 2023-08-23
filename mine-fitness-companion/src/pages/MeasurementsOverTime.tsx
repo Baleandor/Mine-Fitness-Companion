@@ -17,17 +17,7 @@ type MeasurementChartDataType = {
     }[];
 }
 
-type QueriedMeasurementDataType = {
-    biceps: number,
-    chest: number,
-    date: number,
-    hips: number,
-    id: number,
-    image_url: string,
-    user_id: string,
-    waist: number,
-    weight: number
-}[]
+
 
 
 export default function MeasurementsOverTime() {
@@ -39,7 +29,7 @@ export default function MeasurementsOverTime() {
 
     const [chartData, setChartData] = useState<MeasurementChartDataType>({ labels: [], datasets: [] })
 
-    const { data } = useGetMeasurementsChartsDataQuery(isUserLoggedIn)
+    const { data } = useGetMeasurementsChartsDataQuery(isUserLoggedIn ?? skipToken)
 
     const { data: newRange } = useGetMeasurementsChartsDataRangeQuery(dateRange ?? skipToken)
 
@@ -51,22 +41,16 @@ export default function MeasurementsOverTime() {
     }, [data])
 
     const handleDateRangeChange = (values: Dayjs[]) => {
-        if (values == undefined || values.length === 0) {
-            setChartData(userChartData(data))
-        } else {
-            const [startDate, endDate] = values
-            const newDateRange = [dayjs(startDate).valueOf(), dayjs(endDate).valueOf()]
 
+        const [startDate, endDate] = values
 
-            setDateRange(newDateRange)
-        }
+        const newDateRange = [dayjs(startDate).valueOf(), dayjs(endDate).valueOf()]
+
+        setDateRange(newDateRange)
     }
 
     const displayDateRangeData = () => {
-        if (dateRange) {
-
-            setChartData(userChartData(newRange))
-        }
+        setChartData(userChartData(newRange))
     }
 
 

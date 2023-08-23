@@ -3,13 +3,14 @@ import { useNavigate } from "react-router-dom"
 import { ROUTE_PATH } from "../util/urls"
 import { useDeleteExerciseMutation, useGetAllExercisesQuery } from "../redux/exerciseApi"
 import { supabase } from "../util/supabase"
+import { skipToken } from "@reduxjs/toolkit/dist/query"
 
 
 
 const { data: user } = await supabase.auth.getUser()
-const userRole = user.user?.user_metadata.role
 
 export default function ExerciseLibrary() {
+    const userRole = user.user?.user_metadata.role
 
     const [searchParams, setSearchParams] = useState('')
 
@@ -20,7 +21,7 @@ export default function ExerciseLibrary() {
     const navigate = useNavigate()
 
 
-    const { data } = useGetAllExercisesQuery(user)
+    const { data } = useGetAllExercisesQuery(user ?? skipToken)
 
     const [deleteExercise] = useDeleteExerciseMutation()
 
@@ -59,9 +60,9 @@ export default function ExerciseLibrary() {
             <div>
                 <span className="p-1">Search Exercise</span>
                 <input type="search" onChange={handleOnChange} className="p-1" ></input>
-                <button onClick={findExercise} className="p-1 border border-red-400 rounded-md">Filter</button>
+                <button onClick={findExercise} className="p-1 border border-red-400 rounded-md">Search</button>
                 {user && userRole === 'admin' &&
-                    <button className="ml-2 p-1 border border-red-400 rounded-md" onClick={() => navigate(ROUTE_PATH.EXERCISE_LIBRARY_CREATE_EXERCISE_TYPE)}>Create Exercise Type</button>
+                    <button className="ml-2 p-1 border border-red-400 rounded-md" onClick={() => navigate(ROUTE_PATH.EXERCISE_LIBRARY_CREATE_EXERCISE_TYPE)}>Create Exercise</button>
                 }
             </div>
             <div className="p-1">

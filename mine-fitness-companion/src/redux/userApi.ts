@@ -1,6 +1,7 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
 import { RTKQ_TAGS } from '../util/rtkqTags';
 import { supabase } from '../util/supabase';
+import { AuthSession } from '@supabase/supabase-js';
 
 
 
@@ -9,15 +10,28 @@ export const userApi = createApi({
     baseQuery: fakeBaseQuery(),
     tagTypes: [RTKQ_TAGS.USER],
     endpoints: (builder) => ({
-        userLogin: builder.mutation({
+        userLogin: builder.mutation<AuthSession | null, any>({
             queryFn: async (userData) => {
+                try {
+                    let { data, error } = await supabase.auth.signInWithPassword({
+                        email: userData.email,
+                        password: userData.password
+                    })
 
-                let { data, error } = await supabase.auth.signInWithPassword({
-                    email: userData.email,
-                    password: userData.password
-                })
+                    if (error) {
+                        throw new Error(error.message)
+                    }
 
-                return { data: data.session || error }
+         
+
+                    return { data: data.session }
+                } catch (error: any) {
+
+                    return { error: error?.message }
+
+                }
+
+
             },
             invalidatesTags: [RTKQ_TAGS.USER]
         }),
@@ -36,6 +50,7 @@ export const userApi = createApi({
                         }
                     }
                 })
+
                 return { data: data || error }
             },
             invalidatesTags: [RTKQ_TAGS.USER]

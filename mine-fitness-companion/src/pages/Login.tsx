@@ -1,11 +1,11 @@
 import { z } from 'zod'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useAppDispatch, useAppSelector } from '../hooks/hooks'
+import { useAppDispatch } from '../hooks/hooks'
 import { useNavigate } from 'react-router-dom'
 import { ROUTE_PATH } from '../util/urls'
 import { useUserLoginMutation } from '../redux/userApi'
-import { isLoggedIn } from '../redux/isUserLoggedIn'
+import { isLoggedIn } from '../redux/userSlice'
 import { useEffect } from 'react'
 
 
@@ -21,28 +21,31 @@ type LoginFormSchemaType = z.infer<typeof loginSchema>
 
 export default function Login() {
 
-    const userLoggedIn = useAppSelector((state) => state.isLoggedIn)
 
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if (userLoggedIn) {
+    const [userLogin, { data, error: loginError }] = useUserLoginMutation()
 
+    useEffect(() => {
+        if (data) {
+            dispatch(isLoggedIn())
             navigate(ROUTE_PATH.HOME)
         }
-    }, [userLoggedIn])
+    }, [data])
 
-    const [userLogin] = useUserLoginMutation()
 
     const dispatch = useAppDispatch()
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormSchemaType>({ resolver: zodResolver(loginSchema) })
 
     const onSubmit: SubmitHandler<LoginFormSchemaType> = (data) => {
-        userLogin(data)
-        dispatch(isLoggedIn())
-    }
 
+
+
+        userLogin(data)
+
+
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="bg-slate-700 flex flex-col flex-wrap content-center justify-center p-2 text-slate-200">
@@ -60,6 +63,8 @@ export default function Login() {
             <div>
                 <input type='submit' className='p-1 border rounded border-slate-300'></input>
             </div>
+            {loginError != undefined && <p>{loginError.message}</p>}
+
         </form>
     )
 }

@@ -2,7 +2,7 @@ import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react'
 import { RTKQ_TAGS } from '../util/rtkqTags';
 import { supabase } from '../util/supabase';
 
-const user = await supabase.auth.getUser()
+
 
 
 
@@ -13,27 +13,30 @@ export const measureApi = createApi({
     endpoints: (builder) => ({
         getMeasurements: builder.query({
             queryFn: async () => {
-                let { data: measurements, error } = await supabase
+                const user = await supabase.auth.getUser()
+                let { data: measurements } = await supabase
                     .from('measurements')
                     .select("*")
                     .eq('user_id', user.data.user?.id)
 
                 let latestMeasure
                 if (measurements != undefined) {
-                    const testData = [...Object.values(measurements)].sort((a, b) => {
+                    const lastMeasurement = [...Object.values(measurements)].sort((a, b) => {
 
                         return a.date - b.date
                     })
-                    latestMeasure = testData[testData.length - 1]
+                    latestMeasure = lastMeasurement[lastMeasurement.length - 1]
                 }
-                return { data: latestMeasure || error }
+                return { data: latestMeasure }
             },
             providesTags: [RTKQ_TAGS.MEASUREMENTS]
         }),
         addMeasurements: builder.mutation({
             queryFn: async (measurementData) => {
+                const user = await supabase.auth.getUser()
+             
 
-                const { data, error } = await supabase
+                const { data } = await supabase
                     .from('measurements')
                     .insert([
                         {
@@ -49,14 +52,17 @@ export const measureApi = createApi({
                     ])
                     .select()
 
-                return { data: data || error }
+                return { data: data }
             },
             invalidatesTags: [RTKQ_TAGS.MEASUREMENTS]
 
         }),
         getMeasurementsChartsData: builder.query({
             queryFn: async () => {
-                let { data: measurements, error } = await supabase
+                const user = await supabase.auth.getUser()
+               
+
+                let { data: measurements } = await supabase
                     .from('measurements')
                     .select("*")
                     .eq('user_id', user.data.user?.id)
@@ -69,8 +75,11 @@ export const measureApi = createApi({
             providesTags: [RTKQ_TAGS.MEASUREMENTS]
         }),
         getMeasurementsChartsDataRange: builder.query({
-            queryFn: async (dateRange) => {
-                let { data: measurements, error } = await supabase
+            queryFn: async (dateRange: number[]) => {
+                const user = await supabase.auth.getUser()
+            
+
+                let { data: measurements } = await supabase
                     .from('measurements')
                     .select("*")
                     .eq('user_id', user.data.user?.id)

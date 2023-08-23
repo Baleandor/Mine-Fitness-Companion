@@ -5,6 +5,7 @@ import DateSearchPicker from "../components/DateSearchPicker"
 import { useDeleteWorkoutMutation, useFilterQuery, useFilterViaDateQuery, useGetAllWorkoutsQuery } from "../redux/workoutsApi"
 import { useAppSelector } from "../hooks/hooks"
 import { skipToken } from "@reduxjs/toolkit/dist/query"
+import { WorkoutType } from "../util/types"
 
 
 
@@ -16,7 +17,7 @@ export default function Workouts() {
 
     const [filteredWorkout, setFilteredWorkout] = useState<string>('')
 
-    const [displayedWorkouts, setDisplayedWorkouts] = useState<any[]>([])
+    const [displayedWorkouts, setDisplayedWorkouts] = useState<WorkoutType[]>([])
 
     const [filterByDate, setFilterByDate] = useState(false)
 
@@ -29,7 +30,9 @@ export default function Workouts() {
     const [deleteWorkout] = useDeleteWorkoutMutation()
 
     useEffect(() => {
-        setDisplayedWorkouts(data)
+        if (data != undefined) {
+            setDisplayedWorkouts(data)
+        }
     }, [data])
 
 
@@ -45,11 +48,12 @@ export default function Workouts() {
 
     const filterWorkout = () => {
         if (filterByDate) {
-            filteredWorkout && setDisplayedWorkouts(filteredViaDateWorkout)
+
+            (filteredWorkout && filteredViaDateWorkout != undefined) && setDisplayedWorkouts(filteredViaDateWorkout)
 
         } else {
 
-            filteredWorkout && setDisplayedWorkouts(filteredWorkoutData)
+            (filteredWorkout && filteredWorkoutData != undefined) && setDisplayedWorkouts(filteredWorkoutData)
         }
     }
 
@@ -58,7 +62,7 @@ export default function Workouts() {
         setFilteredWorkout(newSearchDate)
     }
 
-    const onDelete = (id: number) => {
+    const onDelete = (id: string) => {
         deleteWorkout(id)
     }
 
@@ -87,7 +91,7 @@ export default function Workouts() {
                 {
                     (displayedWorkouts?.length > 0) && data != undefined ?
                         <div className="p-1 flex">
-                            {displayedWorkouts.map((workout: { id: number; exercises: string[]; date: number }) => {
+                            {displayedWorkouts.map((workout) => {
                                 return (
                                     <div key={workout.id} className="p-1 flex flex-col border rounder rounded-sm mr-1">
                                         <span>Exercises:</span>

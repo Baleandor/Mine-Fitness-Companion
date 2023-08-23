@@ -36,26 +36,19 @@ export default function WorkoutEdit() {
     const [createWorkout] = useCreateWorkoutMutation()
 
     useEffect(() => {
-        // if (workoutById != undefined) {
-        //     if (state) {
-        //         setValue("exercises", workoutById[0].exercises.join(', '))
-        //     } else {
-        //         setValue("exercises", workoutById[0].exercises.toString())
+        if (workoutById != undefined) {
+            if (state) {
+                setValue("exercises", workoutById[0].exercises.join(', '))
+            } else {
+                setValue("exercises", workoutById[0].exercises.toString())
 
-        //         setValue("date", workoutById[0].date)
-        //     }
-        // }
-        //IT DUN MATTER IF I USE SETVALUE OR DEFAULTVALUE
-
-    }, [])
-
-
+                setValue("date", dayjs(workoutById[0]?.date).format('DD/MM/YYYY'))
+            }
+        }
+    }, [workoutById])
 
     const { register, handleSubmit, formState: { errors }, control, setValue } = useForm<EditWorkoutSchemaType>({
-        resolver: zodResolver(editWorkoutSchema), defaultValues: {
-            exercises: workoutById && workoutById[0]?.exercises.toString(),
-            date: state ? undefined : workoutById && dayjs(workoutById[0]?.date).format('DD/MM/YYYY')
-        }
+        resolver: zodResolver(editWorkoutSchema)
     })
 
     const onSubmit: SubmitHandler<EditWorkoutSchemaType> = (data) => {

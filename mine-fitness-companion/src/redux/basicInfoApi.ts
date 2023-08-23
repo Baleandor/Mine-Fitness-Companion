@@ -1,6 +1,7 @@
 import { createApi, fakeBaseQuery } from "@reduxjs/toolkit/dist/query/react"
 import { RTKQ_TAGS } from "../util/rtkqTags"
 import { supabase } from "../util/supabase"
+import dayjs from "dayjs"
 
 
 
@@ -9,7 +10,7 @@ export const basicInfoApi = createApi({
     baseQuery: fakeBaseQuery(),
     tagTypes: [RTKQ_TAGS.BASIC_INFO],
     endpoints: (builder) => ({
-        getBasicInfo: builder.query({
+        getBasicInfo: builder.query<any, void>({
             queryFn: async () => {
 
                 const { data: { user } } = await supabase.auth.getUser()
@@ -26,7 +27,7 @@ export const basicInfoApi = createApi({
                     data: {
                         name: userData.name,
                         gender: userData.gender,
-                        birthDate: userData.dateOfBirth,
+                        birthDate: dayjs(userData.dateOfBirth).valueOf(),
                         height: userData.height
                     }
                 })

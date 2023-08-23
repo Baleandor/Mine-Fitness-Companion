@@ -7,12 +7,13 @@ const initialState: UserStateType = Boolean(localStorage.getItem('sb-quydiknawtv
 
 
 export const userLoggedInSlice = createSlice({
-    name: 'isLoggedIn',
+    name: 'userSlice',
     initialState,
     reducers: {
         isLoggedIn: state => state = true,
 
-        isLoggedOut: state => state = false
+        isLoggedOut: state => state = false,
+
     }
 })
 

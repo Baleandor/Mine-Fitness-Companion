@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/hooks";
 import { ROUTE_PATH } from "../util/urls";
 import { useEffect } from "react";
-import { isLoggedOut } from "../redux/isUserLoggedIn";
+import { isLoggedOut } from "../redux/userSlice";
 import { useUserLogoutMutation } from "../redux/userApi";
 
 

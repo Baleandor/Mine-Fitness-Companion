@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { ROUTE_PATH } from "../util/urls"
 import { useGetExerciseByIdQuery, useUpdateExerciseByIdMutation } from "../redux/exerciseApi"
+import { skipToken } from "@reduxjs/toolkit/dist/query"
 
 
 const updateExerciseSchema = z.object({
@@ -20,7 +21,7 @@ export default function ExerciseLibraryEditExercise() {
 
     const navigate = useNavigate()
 
-    const { data: exerciseId } = useGetExerciseByIdQuery(exercise_id)
+    const { data: exerciseId } = useGetExerciseByIdQuery(exercise_id ?? skipToken)
 
 
 

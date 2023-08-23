@@ -20,7 +20,7 @@ const updateUserBasicInfoSchema = z.object({
     password: z.string().min(6, { message: 'Password must be at least 6 characters long!' }),
     repass: z.string().min(6, { message: 'Password must be at least 6 characters long!' }),
     gender: z.string().min(1, "You must select a gender!"),
-    dateOfBirth: z.number({ required_error: "A date of birth is required!" }),
+    dateOfBirth: z.string({ required_error: "A date of birth is required!" }),
     height: z.number({ invalid_type_error: "You must enter a number" }).min(145, 'You must be at least 145 tall to join the gym!')
 }).refine(
     (data) => data.password === data.repass, {
@@ -44,7 +44,6 @@ export default function UpdateUserBasicInfo() {
     const onSubmit: SubmitHandler<UpdateUserBasicInfoType> = (data) => {
         const { name, email, password, gender, dateOfBirth, height } = data
         const updateData = { name, email, password, gender, dateOfBirth, height }
-
 
         updateBasicInfo(updateData).then(() => navigate(ROUTE_PATH.USER_PROFILE))
 

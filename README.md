@@ -1,5 +1,7 @@
 # Fitness Logger App Documentation
 
+# DISCLAIMER! If the app does not connect to the supabase backend, it means the free instance of that database has been frozen and I need to unfreeze it manually. Please contact me via email so that I can do so when needed. Thanks!
+
 ## Summary
 
 The Fitness Logger app is a simple and user-friendly application designed to help users track their fitness journey. It offers features such as user authentication, registration, personal information management, measurement tracking, workout management, exercise lookup, and admin privileges for exercise library management. The app is built using React and utilizes several essential libraries such as Ant Design, Redux Toolkit, React Router, Supabase, and more.
